@@ -87,8 +87,8 @@ void RobotContainer::ConfigureBindings()
     
 
   //Climber
-  m_topDriver.B().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
-  m_topDriver.RightTrigger(0.9) && m_topDriver.B().OnTrue(new CmdRampDrop()) ;
+  //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
+  m_topDriver.B().OnTrue(new CmdRampDrop());
 
 
   //Coral

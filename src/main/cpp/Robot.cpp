@@ -12,6 +12,7 @@
 #include "frc/geometry/Pose2d.h"
 #include "frc/smartdashboard/SmartDashboard.h"
 #include "photon/PhotonPoseEstimator.h"
+#include <cameraserver/CameraServer.h>
 
 RobotContainer robotcontainer; // <--- global variable
 
@@ -27,6 +28,7 @@ Robot::Robot() {
   // wpi::WebServer::GetInstance().Start(5800,
   //                                     frc::filesystem::GetDeployDirectory());
   pdp.ClearStickyFaults();
+  frc::CameraServer::StartAutomaticCapture();
 }
 
 void Robot::RobotPeriodic() {
