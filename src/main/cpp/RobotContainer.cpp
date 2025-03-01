@@ -61,6 +61,12 @@ void RobotContainer::ConfigureBindings()
         })
     );
 
+    joystick.RightTrigger(0.5).WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& {
+            return drive.WithVelocityX(-joystick.GetLeftY() * CreepSpeed) // Drive forward with negative Y (forward)
+                .WithVelocityY(-joystick.GetLeftX() * CreepSpeed) // Drive left with negative X (left)
+                .WithRotationalRate(-joystick.GetRightX() * CreepAngularRate); // Drive counterclockwise with negative X (left)
+        }));
+
     joystick.A().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
     joystick.B().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& {
         return point.WithModuleDirection(frc::Rotation2d{-joystick.GetLeftY(), -joystick.GetLeftX()});
@@ -93,6 +99,7 @@ void RobotContainer::ConfigureBindings()
 
   // m_topDriver.Y().ToggleOnTrue(new CmdPivotAngle(0.0, 0.0)); //Change Later
   // m_topDriver.Y().ToggleOnFalse(new CmdPivotAngle(0.0, 0.0)); //Change Later
+
 
   if(!m_topDriver.Y().Get())
   {

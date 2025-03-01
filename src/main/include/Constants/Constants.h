@@ -48,8 +48,8 @@ inline const frc::AprilTagFieldLayout TAG_LAYOUT =
 
 #define ELEV_PULLY_DIAM 1.25_in
 
-#define ELEV_POSITION_1 -0.15_tr
-#define ELEV_POSITION_2 -2_tr
+#define ELEV_POSITION_1 -0.05_tr
+#define ELEV_POSITION_2 -1.5_tr
 #define ELEV_POSITION_3 -3_tr
 #define ELEV_POSITION_4 -5.6_tr
 #define ELEV_POSITION_5 -5_tr
