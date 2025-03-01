@@ -9,6 +9,7 @@
 
 #include <frc/DigitalInput.h>
 #include <frc/DigitalOutput.h>
+#include <frc/Relay.h>
 
 
 class Climber : public frc2::SubsystemBase 
@@ -28,6 +29,12 @@ class Climber : public frc2::SubsystemBase
 
     bool GetClimberBeamBreak();
 
+    void DropRamp();
+
+    void ResetRamp();
+
+    void OffRamp();
+
     private:
 
     ctre::phoenix6::hardware::TalonFX m_climber{CLIMBER_CAN_ID}; //Constant 
@@ -36,5 +43,6 @@ class Climber : public frc2::SubsystemBase
 
     bool m_isClimberActivated;
 
+    frc::Relay                        m_ramp{0};
 };
 

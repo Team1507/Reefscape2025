@@ -14,6 +14,7 @@
 #include "Commands/CmdAlgaeManualPower.h"
 #include "Commands/CmdPivotZero.h"
 #include "Commands/CmdElevatorToPosition.h"
+#include "Commands/CmdRampDrop.h"
 
 #include "Subsystems/Elevator.h"
 #include "Subsystems/Claw.h"
@@ -86,7 +87,9 @@ void RobotContainer::ConfigureBindings()
     
 
   //Climber
-  m_topDriver.Back().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
+  m_topDriver.B().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
+  m_topDriver.RightTrigger(0.9) && m_topDriver.B().OnTrue(new CmdRampDrop()) ;
+
 
   //Coral
   joystick.RightBumper().WhileTrue(new CmdClawOuttake(-1.0));

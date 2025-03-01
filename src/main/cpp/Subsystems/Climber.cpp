@@ -35,3 +35,18 @@ bool Climber::GetClimberBeamBreak()
 {
     return m_climberBeamBreak.Get();
 }
+
+void Climber::DropRamp()
+{
+    m_ramp.kForward;
+}
+
+void Climber::ResetRamp()
+{
+    m_ramp.kReverse;
+}
+
+void Climber::OffRamp()
+{
+    m_ramp.kOff;
+}
