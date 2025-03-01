@@ -83,13 +83,13 @@ void RobotContainer::ConfigureBindings()
   m_topDriver.Back().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
 
   //Coral
-  //m_topDriver.RightBumper().WhileTrue(new CmdClawOuttake(frc::SmartDashboard::PutNumber("ClawOut Power", -0.9)));
-  joystick.RightBumper().OnTrue(new CmdClawActivate(-1.0));
+  joystick.RightBumper().WhileTrue(new CmdClawOuttake(-1.0));
+  m_topDriver.RightTrigger(0.5).OnTrue(new CmdClawActivate(-1.0));
   
   //Algae
   //m_topDriver.LeftBumper().WhileTrue(new CmdAlgaeOuttake(frc::SmartDashboard::PutNumber("AlgaeOut Power", 1)));
-  joystick.LeftBumper().OnTrue(new CmdAlgaeIntake(0));
-  m_topDriver.B().WhileTrue(new CmdAlgaeSetPosition(15));
+  joystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
+  m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
 
   // m_topDriver.Y().ToggleOnTrue(new CmdPivotAngle(0.0, 0.0)); //Change Later
   // m_topDriver.Y().ToggleOnFalse(new CmdPivotAngle(0.0, 0.0)); //Change Later

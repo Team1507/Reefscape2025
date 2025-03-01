@@ -30,6 +30,6 @@ class CmdAlgaeIntake
   double m_power;
   frc::Timer m_timer;
 
-  enum class Mode { Intake, ShootOut };
+  enum class Mode { Intake };
   Mode m_mode;
 };

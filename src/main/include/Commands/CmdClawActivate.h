@@ -34,10 +34,6 @@ class CmdClawActivate
     NotDetected,
     RunBackwardUntilClawSeen,
     StopMotor,
-    // ShootOut states
-    ShootOutStart,
-    ShootOutRunning,
-    ShootOutStop,
     EndState
   };
 
@@ -45,10 +41,7 @@ class CmdClawActivate
   ClawState currentState = ClawState::EndState;
 
   // Overall operation mode.
-  enum class OperationMode {
-    Intake,
-    ShootOut
-  };
+  enum class OperationMode {Intake};
 
   OperationMode m_operationMode;
 

@@ -92,7 +92,7 @@ class Elevator : public frc2::SubsystemBase {
   
   // units::meter_t elevTolerance = 0.01_m;
 
-  units::turn_t targetPosition = 0_tr;
+  units::turn_t targetPosition = 0.2_tr;
   units::turn_t temp_High = 0_tr;
   units::turn_t temp_Low = 0_tr;
   bool homing;
