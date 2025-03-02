@@ -38,15 +38,15 @@ bool Climber::GetClimberBeamBreak()
 
 void Climber::DropRamp()
 {
-    m_ramp.kForward;
+    m_ramp.Set(frc::Relay::kForward);
 }
 
 void Climber::ResetRamp()
 {
-    m_ramp.kReverse;
+    m_ramp.Set(frc::Relay::kReverse);
 }
 
 void Climber::OffRamp()
 {
-    m_ramp.kOff;
+    m_ramp.Set(frc::Relay::kOff);
 }
