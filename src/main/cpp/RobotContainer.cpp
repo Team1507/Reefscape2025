@@ -50,41 +50,30 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::ConfigureBindings()
 {
+    driveSub.SetDefaultCommand(driveSub.DriveTeleop(
+      [this] {
+        return str::NegateIfRed(
+            frc::ApplyDeadband<double>(-driverJoystick.GetLeftY(), .1) *
+            consts::swerve::physical::PHY_CHAR.MaxLinearSpeed());
+      },
+      [this] {
+        return str::NegateIfRed(
+            frc::ApplyDeadband<double>(-driverJoystick.GetLeftX(), .1) *
+            consts::swerve::physical::PHY_CHAR.MaxLinearSpeed());
+      },
+      [this] {
+        return frc::ApplyDeadband<double>(-driverJoystick.GetRightX(), .1) *
+               360_deg_per_s;
+      }));
 
-      // Note that X is defined as forward according to WPILib convention,
-    // and Y is defined as to the left according to WPILib convention.
-    drivetrain.SetDefaultCommand(
-        // Drivetrain will execute this command periodically
-        drivetrain.ApplyRequest([this]() -> auto&& {
-            return drive.WithVelocityX(-joystick.GetLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                .WithVelocityY(-joystick.GetLeftX() * MaxSpeed) // Drive left with negative X (left)
-                .WithRotationalRate(-joystick.GetRightX() * MaxAngularRate); // Drive counterclockwise with negative X (left)
-        })
-    );
+    driverJoystick.LeftTrigger().WhileTrue(frc2::cmd::Either(
+      driveSub.AlignToAlgae(), driveSub.AlignToReef([] { return true; }),
+      [this] { return !m_claw.GetClawPhotoEyeFirst(); }));
+    driverJoystick.RightTrigger().WhileTrue(frc2::cmd::Either(
+      driveSub.AlignToProcessor(), driveSub.AlignToReef([] { return false; }),
+      [this] { return !m_claw.GetClawPhotoEyeFirst(); }));
 
-    joystick.RightTrigger(0.5).WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& {
-            return drive.WithVelocityX(-joystick.GetLeftY() * CreepSpeed) // Drive forward with negative Y (forward)
-                .WithVelocityY(-joystick.GetLeftX() * CreepSpeed) // Drive left with negative X (left)
-                .WithRotationalRate(-joystick.GetRightX() * CreepAngularRate); // Drive counterclockwise with negative X (left)
-        }));
 
-    joystick.A().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& { return brake; }));
-    joystick.B().WhileTrue(drivetrain.ApplyRequest([this]() -> auto&& {
-        return point.WithModuleDirection(frc::Rotation2d{-joystick.GetLeftY(), -joystick.GetLeftX()});
-    }));
-
-    // Run SysId routines when holding back/start and X/Y.
-    // Note that each routine should be run exactly once in a single log.
-    // (joystick.Back() && joystick.Y()).WhileTrue(drivetrain.SysIdDynamic(frc2::sysid::Direction::kForward));
-    // (joystick.Back() && joystick.X()).WhileTrue(drivetrain.SysIdDynamic(frc2::sysid::Direction::kReverse));
-    // (joystick.Start() && joystick.Y()).WhileTrue(drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kForward));
-    // (joystick.Start() && joystick.X()).WhileTrue(drivetrain.SysIdQuasistatic(frc2::sysid::Direction::kReverse));
-
-    // // reset the field-centric heading on left bumper press
-    joystick.A().OnTrue(drivetrain.RunOnce([this] { drivetrain.SeedFieldCentric(); }));
-
-    drivetrain.RegisterTelemetry([this](auto const &state) { logger.Telemeterize(state); });
-    
 
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
@@ -92,12 +81,12 @@ void RobotContainer::ConfigureBindings()
 
 
   //Coral
-  joystick.RightBumper().WhileTrue(new CmdClawOuttake(-1.0));
+  driverJoystick.RightBumper().WhileTrue(new CmdClawOuttake(-1.0));
   m_topDriver.RightTrigger(0.5).OnTrue(new CmdClawActivate(-1.0));
   
   //Algae
   //m_topDriver.LeftBumper().WhileTrue(new CmdAlgaeOuttake(frc::SmartDashboard::PutNumber("AlgaeOut Power", 1)));
-  joystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
+  driverJoystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
   m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
 
   // m_topDriver.Y().ToggleOnTrue(new CmdPivotAngle(0.0, 0.0)); //Change Later
@@ -122,96 +111,99 @@ void RobotContainer::ConfigureBindings()
 
 }
 
+void RobotContainer::ConfigureSysIdBinds() {
+  tuningTable->PutBoolean("SteerPidTuning", false);
+  tuningTable->PutBoolean("DrivePidTuning", false);
+  tuningTable->PutBoolean("SteerSysIdVolts", false);
+  tuningTable->PutBoolean("SteerSysIdTorqueCurrent", false);
+  tuningTable->PutBoolean("DriveSysId", false);
+  tuningTable->PutBoolean("WheelRadius", false);
+  tuningTable->PutBoolean("Quasistatic", true);
+  tuningTable->PutBoolean("Forward", true);
+  steerTuneBtn.OnTrue(
+      driveSub.TuneSteerPID([this] { return !steerTuneBtn.Get(); }));
+  driveTuneBtn.OnTrue(
+      driveSub.TuneDrivePID([this] { return !driveTuneBtn.Get(); }));
+   steerSysIdVoltsBtn.WhileTrue(SteerVoltsSysIdCommands(
+      [this] { return tuningTable->GetBoolean("Forward", true); },
+      [this] { return tuningTable->GetBoolean("Quasistatic", true); }));
+
+  steerSysIdTorqueCurrentBtn.WhileTrue(SteerTorqueCurrentSysIdCommands(
+      [this] { return tuningTable->GetBoolean("Forward", true); },
+      [this] { return tuningTable->GetBoolean("Quasistatic", true); }));
+
+  driveSysIdBtn.WhileTrue(DriveSysIdCommands(
+      [this] { return tuningTable->GetBoolean("Forward", true); },
+      [this] { return tuningTable->GetBoolean("Quasistatic", true); }));
+
+  wheelRadiusBtn.WhileTrue(WheelRadiusSysIdCommands(
+      [this] { return tuningTable->GetBoolean("Forward", true); }));
+}
+
+frc2::CommandPtr RobotContainer::SteerVoltsSysIdCommands(
+    std::function<bool()> fwd, std::function<bool()> quasistatic) {
+  return frc2::cmd::Either(
+      frc2::cmd::Either(
+          driveSub.SysIdSteerQuasistaticVoltage(
+              frc2::sysid::Direction::kForward),
+          driveSub.SysIdSteerDynamicVoltage(frc2::sysid::Direction::kForward),
+          quasistatic),
+      frc2::cmd::Either(
+          driveSub.SysIdSteerQuasistaticVoltage(
+              frc2::sysid::Direction::kReverse),
+          driveSub.SysIdSteerDynamicVoltage(frc2::sysid::Direction::kReverse),
+          quasistatic),
+      fwd);
+}
+
+frc2::CommandPtr RobotContainer::SteerTorqueCurrentSysIdCommands(
+    std::function<bool()> fwd, std::function<bool()> quasistatic) {
+  return frc2::cmd::Either(
+      frc2::cmd::Either(driveSub.SysIdSteerQuasistaticTorqueCurrent(
+                            frc2::sysid::Direction::kForward),
+                        driveSub.SysIdSteerDynamicTorqueCurrent(
+                            frc2::sysid::Direction::kForward),
+                        quasistatic),
+      frc2::cmd::Either(driveSub.SysIdSteerQuasistaticTorqueCurrent(
+                            frc2::sysid::Direction::kReverse),
+                        driveSub.SysIdSteerDynamicTorqueCurrent(
+                            frc2::sysid::Direction::kReverse),
+                        quasistatic),
+      fwd);
+}
+
+frc2::CommandPtr RobotContainer::DriveSysIdCommands(
+    std::function<bool()> fwd, std::function<bool()> quasistatic) {
+  return frc2::cmd::Either(
+      frc2::cmd::Either(driveSub.SysIdDriveQuasistaticTorqueCurrent(
+                            frc2::sysid::Direction::kForward),
+                        driveSub.SysIdDriveDynamicTorqueCurrent(
+                            frc2::sysid::Direction::kForward),
+                        quasistatic),
+      frc2::cmd::Either(driveSub.SysIdDriveQuasistaticTorqueCurrent(
+                            frc2::sysid::Direction::kReverse),
+                        driveSub.SysIdDriveDynamicTorqueCurrent(
+                            frc2::sysid::Direction::kReverse),
+                        quasistatic),
+      fwd);
+}
+
+frc2::CommandPtr RobotContainer::WheelRadiusSysIdCommands(
+    std::function<bool()> fwd) {
+  return frc2::cmd::Either(
+      driveSub.WheelRadius(frc2::sysid::Direction::kForward),
+      driveSub.WheelRadius(frc2::sysid::Direction::kReverse), fwd);
+}
+
 frc2::Command* RobotContainer::GetAutonomousCommand() 
 {
   return nullptr;
 }
 
-// void RobotContainer::ConfigureSysIdBinds() {
-//   tuningTable->PutBoolean("SteerPidTuning", false);
-//   tuningTable->PutBoolean("DrivePidTuning", false);
-//   tuningTable->PutBoolean("SteerSysIdVolts", false);
-//   tuningTable->PutBoolean("SteerSysIdTorqueCurrent", false);
-//   tuningTable->PutBoolean("DriveSysId", false);
-//   tuningTable->PutBoolean("WheelRadius", false);
+Drive& RobotContainer::GetDrive() {
+    return driveSub;
+}
 
-//   steerTuneBtn.OnTrue(
-//       driveSub.TuneSteerPID([this] { return !steerTuneBtn.Get(); }));
-//   driveTuneBtn.OnTrue(
-//       driveSub.TuneDrivePID([this] { return !driveTuneBtn.Get(); }));
-//   steerSysIdVoltsBtn.WhileTrue(SteerVoltsSysIdCommands(
-//       [this] { return tuningTable->GetBoolean("Forward", true); },
-//       [this] { return tuningTable->GetBoolean("Quasistatic", true); }));
-
-//   steerSysIdTorqueCurrentBtn.WhileTrue(SteerTorqueCurrentSysIdCommands(
-//       [this] { return tuningTable->GetBoolean("Forward", true); },
-//       [this] { return tuningTable->GetBoolean("Quasistatic", true); }));
-
-// }
-
-// frc2::CommandPtr RobotContainer::SteerVoltsSysIdCommands(
-//     std::function<bool()> fwd, std::function<bool()> quasistatic) {
-//   return frc2::cmd::Either(
-//       frc2::cmd::Either(
-//           driveSub.SysIdSteerQuasistaticVoltage(
-//               frc2::sysid::Direction::kForward),
-//           driveSub.SysIdSteerDynamicVoltage(frc2::sysid::Direction::kForward),
-//           quasistatic),
-//       frc2::cmd::Either(
-//           driveSub.SysIdSteerQuasistaticVoltage(
-//               frc2::sysid::Direction::kReverse),
-//           driveSub.SysIdSteerDynamicVoltage(frc2::sysid::Direction::kReverse),
-//           quasistatic),
-//       fwd);
-// }
-
-// frc2::CommandPtr RobotContainer::SteerTorqueCurrentSysIdCommands(
-//     std::function<bool()> fwd, std::function<bool()> quasistatic) {
-//   return frc2::cmd::Either(
-//       frc2::cmd::Either(driveSub.SysIdSteerQuasistaticTorqueCurrent(
-//                             frc2::sysid::Direction::kForward),
-//                         driveSub.SysIdSteerDynamicTorqueCurrent(
-//                             frc2::sysid::Direction::kForward),
-//                         quasistatic),
-//       frc2::cmd::Either(driveSub.SysIdSteerQuasistaticTorqueCurrent(
-//                             frc2::sysid::Direction::kReverse),
-//                         driveSub.SysIdSteerDynamicTorqueCurrent(
-//                             frc2::sysid::Direction::kReverse),
-//                         quasistatic),
-//       fwd);
-// }
-
-// frc2::CommandPtr RobotContainer::DriveSysIdCommands(
-//     std::function<bool()> fwd, std::function<bool()> quasistatic) {
-//   return frc2::cmd::Either(
-//       frc2::cmd::Either(driveSub.SysIdDriveQuasistaticTorqueCurrent(
-//                             frc2::sysid::Direction::kForward),
-//                         driveSub.SysIdDriveDynamicTorqueCurrent(
-//                             frc2::sysid::Direction::kForward),
-//                         quasistatic),
-//       frc2::cmd::Either(driveSub.SysIdDriveQuasistaticTorqueCurrent(
-//                             frc2::sysid::Direction::kReverse),
-//                         driveSub.SysIdDriveDynamicTorqueCurrent(
-//                             frc2::sysid::Direction::kReverse),
-//                         quasistatic),
-//       fwd);
-// }
-
-// frc2::CommandPtr RobotContainer::WheelRadiusSysIdCommands(
-//     std::function<bool()> fwd) {
-//   return frc2::cmd::Either(
-//       driveSub.WheelRadius(frc2::sysid::Direction::kForward),
-//       driveSub.WheelRadius(frc2::sysid::Direction::kReverse), fwd);
-// }
-
-// Drive& RobotContainer::GetDrive() {
-//   return driveSub;
-// }
-
-
-
-// str::vision::VisionSystem& RobotContainer::GetVision() {
-//   return vision;
-// }
-
-
+str::vision::VisionSystem& RobotContainer::GetVision() {
+  return vision;
+}
