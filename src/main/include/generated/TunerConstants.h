@@ -211,8 +211,8 @@ public:
      */
     template <std::same_as<SwerveModuleConstants>... ModuleConstants>
     TunerSwerveDrivetrain(swerve::SwerveDrivetrainConstants const &driveTrainConstants, ModuleConstants const &... modules) :
-        SwerveDrivetrain{driveTrainConstants, modules...}
-    {}
+        SwerveDrivetrain{driveTrainConstants, modules...} {}
+    
 
     /**
      * \brief Constructs a CTRE SwerveDrivetrain using the specified constants.

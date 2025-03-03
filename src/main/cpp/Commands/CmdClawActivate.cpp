@@ -15,13 +15,12 @@ void CmdClawActivate::Initialize() {
   std::cout << "Initialize CmdClawActivate" << std::endl;
 
   // Force the command to always run in Intake mode
+  //Putting State machine in Init so it will run once and not spam Execute allowing Pivot to change - Trent
   m_operationMode = OperationMode::Intake;
   currentState = ClawState::RunClawFull;
   std::cout << "CmdClawActivate: Mode set to Intake" << std::endl;
-}
 
-void CmdClawActivate::Execute() {
-  switch (currentState) {
+    switch (currentState) {
     case ClawState::RunClawFull:
       robotcontainer.m_claw.SetClawPower(m_power);
       std::cout << "claw Run Full" << std::endl;
@@ -61,7 +60,10 @@ void CmdClawActivate::Execute() {
     default:
       break;
   }
+
 }
+
+void CmdClawActivate::Execute() {}
 
 void CmdClawActivate::End(bool interrupted) {
   std::cout << "End CmdClawActivate" << std::endl;

@@ -14,12 +14,10 @@ void CmdAlgaeIntake::Initialize() {
   m_timer.Reset();
   m_timer.Start();
 
+  //Taken out of execute to prevent overwriting the scheduler
   // Force always into Intake Mode
   m_mode = Mode::Intake;
   std::cout << "CmdAlgaeIntake: Mode set to Intake" << std::endl;
-}
-
-void CmdAlgaeIntake::Execute() {
   if (robotcontainer.m_claw.GetAlgaePhotoEye()) {
     robotcontainer.m_claw.SetAlgaePower(-0.2);  // Creep intake
     std::cout << "CmdAlgaeIntake: Algae detected, creeping intake" << std::endl;
@@ -28,6 +26,8 @@ void CmdAlgaeIntake::Execute() {
     std::cout << "CmdAlgaeIntake: Full power intake" << std::endl;
   }
 }
+
+void CmdAlgaeIntake::Execute() {}
 
 void CmdAlgaeIntake::End(bool interrupted) {
   std::cout << "CmdAlgaeIntake::End" << std::endl;
@@ -38,7 +38,7 @@ void CmdAlgaeIntake::End(bool interrupted) {
     std::cout << "CmdAlgaeIntake: Un-jamming reverse" << std::endl;
     robotcontainer.m_claw.SetAlgaePower(0.2);  // Small reverse
     frc::Wait(0.2_s);  // Wait 200ms
-    robotcontainer.m_claw.SetAlgaePower(0.0);
+    robotcontainer.m_claw.SetAlgaePower(0.05); //Holding Power Adjust as needed
     robotcontainer.m_claw.SetBallLoaded(true);
   }
 }

@@ -17,14 +17,12 @@ void CmdClawOuttake::Initialize()
 
   m_timer.Reset(); //Resets the timer
   m_timer.Start(); //Starts the timer
+
+   robotcontainer.m_claw.SetClawPower(-1); //Moved from execute, Should allow Pivot to change now - Trent
 }
 
 void CmdClawOuttake::Execute() 
-{
-  robotcontainer.m_claw.SetClawPower(-1);
-
-  
-}
+{}
 
 void CmdClawOuttake::End(bool interrupted) 
 {
@@ -43,9 +41,7 @@ bool CmdClawOuttake::IsFinished()
   {
     return true;
   }
-  else 
-  {
     return false;
-  }
+  
 
 }
