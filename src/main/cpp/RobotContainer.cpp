@@ -90,8 +90,8 @@ void RobotContainer::ConfigureBindings()
 
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
-  m_topDriver.B() && m_topDriver.Back().OnTrue(new CmdRampDrop());
-  m_topDriver.Start() && m_topDriver.Y().OnTrue(new CmdClimberActivate(0.5));
+  //m_topDriver.B() && m_topDriver.Back().OnTrue(new CmdRampDrop());
+  //m_topDriver.Y() && m_topDriver.Start().OnTrue(new CmdClimberActivate(0.5));
 
 
   //Coral
@@ -104,45 +104,63 @@ void RobotContainer::ConfigureBindings()
   m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
   
 
-  // m_topDriver.Y().ToggleOnTrue(new CmdPivotAngle(0.0, 0.0)); //Change Later
-  // m_topDriver.Y().ToggleOnFalse(new CmdPivotAngle(0.0, 0.0)); //Change Later
+ m_topDriver.Y().OnTrue(new CmdAlgaeSetPosition(15));
 
 
-  // Create button objects (assuming your m_topDriver returns button objects)
-auto aButton = m_topDriver.A();
-auto povUpButton = m_topDriver.POVUp();
-auto povDownButton = m_topDriver.POVDown();
-auto povLeftButton = m_topDriver.POVLeft();
-auto povRightButton = m_topDriver.POVRight();
+// Assume these button objects are stored persistently (here as local constants)
+const auto aButton       = m_topDriver.A();
+const auto povUpButton   = m_topDriver.POVUp();
+const auto povDownButton = m_topDriver.POVDown();
+const auto povLeftButton = m_topDriver.POVLeft();
+const auto povRightButton= m_topDriver.POVRight();
 
-frc2::Trigger altPovUp([&]() {
+// Alternate bindings (only fire when A is pressed)
+frc2::Trigger altPovUp([=]() {
   return aButton.Get() && povUpButton.Get();
 });
 altPovUp.OnTrue(new CmdElevatorToPosition(ELEV_POS_L1));
 
-frc2::Trigger altPovDown([&]() {
+frc2::Trigger altPovDown([=]() {
   return aButton.Get() && povDownButton.Get();
 });
 altPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
-                                                 
-frc2::Trigger altPovLeft([&]() {
+
+frc2::Trigger altPovLeft([=]() {
   return aButton.Get() && povLeftButton.Get();
 });
-altPovLeft.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_ALG_LOW),
-                                                  CmdAlgaeSetPosition(0))); //Change Later
+altPovLeft.OnTrue(new frc2::ParallelCommandGroup(
+   CmdElevatorToPosition(ELEV_POS_ALG_LOW),
+   CmdAlgaeSetPosition(0)  // Change Later if needed
+));
 
-frc2::Trigger altPovRight([&]() {
+frc2::Trigger altPovRight([=]() {
   return aButton.Get() && povRightButton.Get();
 });
-altPovRight.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_ALG_HIGH),
-                                                  CmdAlgaeSetPosition(0))); //Change Later
+altPovRight.OnTrue(new frc2::ParallelCommandGroup(
+   CmdElevatorToPosition(ELEV_POS_ALG_HIGH),
+   CmdAlgaeSetPosition(0)  // Change Later if needed
+));
 
-// Normal D-pad bindings when A is not pressed
-povUpButton.OnTrue(new CmdElevatorToPosition(ELEV_POS_L4));
-povDownButton.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
-povLeftButton.OnTrue(new CmdElevatorToPosition(ELEV_POS_L3));
-povRightButton.OnTrue(new CmdElevatorToPosition(ELEV_POS_L2));
+// Normal D-pad bindings (fire only when A is NOT pressed)
+frc2::Trigger normalPovUp([=]() {
+  return !aButton.Get() && povUpButton.Get();
+});
+normalPovUp.OnTrue(new CmdElevatorToPosition(ELEV_POS_L4));
 
+frc2::Trigger normalPovDown([=]() {
+  return !aButton.Get() && povDownButton.Get();
+});
+normalPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
+
+frc2::Trigger normalPovLeft([=]() {
+  return !aButton.Get() && povLeftButton.Get();
+});
+normalPovLeft.OnTrue(new CmdElevatorToPosition(ELEV_POS_L3));
+
+frc2::Trigger normalPovRight([=]() {
+  return !aButton.Get() && povRightButton.Get();
+});
+normalPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_L2));
 
 }
 
