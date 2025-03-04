@@ -50,11 +50,11 @@ inline const frc::AprilTagFieldLayout TAG_LAYOUT =
 
 #define ELEV_POSITION_HOME -0.05_tr    //home
 #define ELEV_POSITION_L1 -0.75_tr    //L1
-#define ELEV_POSITION_L2 -1.5_tr     //L2
-#define ELEV_POSITION_L3 -4.5_tr       //L3
+#define ELEV_POSITION_L2 -1.4_tr     //L2
+#define ELEV_POSITION_L3 -3.05_tr       //L3
 #define ELEV_POSITION_L4 -5.6_tr     //L4
-#define ELEV_POSITION_ALG_L2 -2.35_tr       //ALgea Low
-#define ELEV_POSITION_ALG_L3 -4_tr       //Algea High
+#define ELEV_POSITION_ALG_L2 -2.85_tr       //ALgea Low
+#define ELEV_POSITION_ALG_L3 -4.5_tr       //Algea High
 
 #define ELEV_TOLERANCE 0.05_tr
 
