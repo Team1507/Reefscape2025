@@ -29,7 +29,6 @@
 #include <map>
 #include <string>
 
-
 class Elevator : public frc2::SubsystemBase {
  public:
   Elevator();
@@ -65,11 +64,12 @@ class Elevator : public frc2::SubsystemBase {
 
   units::meter_t ConvertRadiansToHeight(units::radian_t rots);
 
+  bool elevatorL1;
   bool elevatorL2;
   bool elevatorL3;
   bool elevatorL4;
 
-  bool elevatorLoad;
+  bool elevatorHome;
 
   bool elevatorLowAlgae;
   bool elevatorHighAlgae;

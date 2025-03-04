@@ -27,7 +27,7 @@ Claw::Claw()
         .VelocityConversionFactor(100);
     pivotconfig.closedLoop
         .SetFeedbackSensor(ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
-        .Pid(0.5, 0.0, 0.0) //Tuning 
+        .Pid(10.0, 0.0, 0.5) //Tuning 
         .OutputRange(-0.09, 0.1);     
     pivotconfig.closedLoop.maxMotion
         .MaxVelocity(100)
@@ -110,7 +110,7 @@ void Claw::SetAlgaePower(double power)
   }
   void Claw::SetPosition(double position)
   {
-    m_pivotPID.SetReference( position, rev::spark::SparkMax::ControlType::kMAXMotionPositionControl );  //MaxMotion
+    m_pivotEncoder.SetPosition(position);
   }
   void Claw::SetPower(double power)
   {

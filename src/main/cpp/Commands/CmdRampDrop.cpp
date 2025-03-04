@@ -17,12 +17,13 @@ void CmdRampDrop::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void CmdRampDrop::Execute() 
 {
-  const units::second_t timeout = units::second_t(1.0);
+  const units::second_t timeout = units::second_t(1.5);
   robotcontainer.m_climber.DropRamp();
   if(m_timer.Get() >= timeout)
   {
     robotcontainer.m_climber.ResetRamp();
   }
+  else{robotcontainer.m_climber.DropRamp();}
 }
 
 // Called once the command ends or is interrupted.
@@ -31,7 +32,7 @@ void CmdRampDrop::End(bool interrupted) {}
 // Returns true when the command should end.
 bool CmdRampDrop::IsFinished() 
 {
-  const units::second_t timeout = units::second_t(2.0);
+  const units::second_t timeout = units::second_t(3.0);
   if(m_timer.Get() >= timeout)
   {
     robotcontainer.m_climber.OffRamp();
@@ -39,6 +40,7 @@ bool CmdRampDrop::IsFinished()
   }
   else 
   {
+
     return false;
   }
 

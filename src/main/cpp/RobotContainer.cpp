@@ -7,6 +7,7 @@
 #include "commands/CmdClawOuttake.h"
 #include "commands/CmdAlgaeOuttake.h"
 #include "commands/CmdAlgaeIntake.h"
+#include "commands/CmdAlgaeToPos.h"
 #include "commands/CmdAlgaeSetPosition.h"
 #include "Commands/CmdElevatorPosition.h"
 #include "Commands/CmdElevatorHome.h"
@@ -15,6 +16,7 @@
 #include "Commands/CmdPivotZero.h"
 #include "Commands/CmdElevatorToPosition.h"
 #include "Commands/CmdRampDrop.h"
+#include  "Commands/CmdAlgaeSetPosition.h"
 
 #include "Subsystems/Elevator.h"
 #include "Subsystems/Claw.h"
@@ -36,6 +38,7 @@
 #include "frc2/command/sysid/SysIdRoutine.h"
 
 #include "str/DriverstationUtils.h"
+#include <frc2/command/ParallelCommandGroup.h>
 
 
 RobotContainer::RobotContainer() 
@@ -77,7 +80,8 @@ void RobotContainer::ConfigureBindings()
 
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
-  m_topDriver.B().OnTrue(new CmdRampDrop());
+  (m_topDriver.B() && m_topDriver.Back()).OnTrue(new CmdRampDrop());
+  (m_topDriver.Y() && m_topDriver.Start()).OnTrue(new CmdClimberActivate(0.5));
 
 
   //Coral
@@ -88,26 +92,59 @@ void RobotContainer::ConfigureBindings()
   //m_topDriver.LeftBumper().WhileTrue(new CmdAlgaeOuttake(frc::SmartDashboard::PutNumber("AlgaeOut Power", 1)));
   driverJoystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
   m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
+  
 
-  // m_topDriver.Y().ToggleOnTrue(new CmdPivotAngle(0.0, 0.0)); //Change Later
-  // m_topDriver.Y().ToggleOnFalse(new CmdPivotAngle(0.0, 0.0)); //Change Later
+ m_topDriver.Y().OnTrue(new CmdAlgaeToPos(15));
 
 
-  if(!m_topDriver.Y().Get())
-  {
-    m_topDriver.POVDown().OnTrue(new CmdElevatorToPosition(1));
-    m_topDriver.POVRight().OnTrue(new CmdElevatorToPosition(2));
-    m_topDriver.POVLeft().OnTrue(new CmdElevatorToPosition(3));
-    m_topDriver.POVUp().OnTrue(new CmdElevatorToPosition(4));
-  }
-  else
-  {
-    m_topDriver.POVUp().OnTrue(new CmdElevatorToPosition(5));
-    m_topDriver.POVDown().OnTrue(new CmdElevatorToPosition(6));
-    m_topDriver.POVLeft().OnTrue(new CmdElevatorHome());
-  }
-  //m_topDriver.Back().WhileFalse(new CmdAlgaeManualPower(0));
+// Assume these button objects are stored persistently (here as local constants)
+const auto aButton       = m_topDriver.A();
+const auto povUpButton   = m_topDriver.POVUp();
+const auto povDownButton = m_topDriver.POVDown();
+const auto povLeftButton = m_topDriver.POVLeft();
+const auto povRightButton= m_topDriver.POVRight();
 
+// Alternate bindings (only fire when A is pressed)
+frc2::Trigger altPovUp([=]() {
+  return aButton.Get() && povUpButton.Get();
+});
+altPovUp.OnTrue(new CmdElevatorToPosition(ELEV_POS_L1));
+
+frc2::Trigger altPovDown([=]() {
+  return aButton.Get() && povDownButton.Get();
+});
+altPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
+
+frc2::Trigger altPovLeft([=]() {
+  return aButton.Get() && povLeftButton.Get();
+});
+altPovLeft.OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG_LOW));
+
+frc2::Trigger altPovRight([=]() {
+  return aButton.Get() && povRightButton.Get();
+});
+altPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG_HIGH));
+
+// Normal D-pad bindings (fire only when A is NOT pressed)
+frc2::Trigger normalPovUp([=]() {
+  return !aButton.Get() && povUpButton.Get();
+});
+normalPovUp.OnTrue(new CmdElevatorToPosition(ELEV_POS_L4));
+
+frc2::Trigger normalPovDown([=]() {
+  return !aButton.Get() && povDownButton.Get();
+});
+normalPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
+
+frc2::Trigger normalPovLeft([=]() {
+  return !aButton.Get() && povLeftButton.Get();
+});
+normalPovLeft.OnTrue(new CmdElevatorToPosition(ELEV_POS_L3));
+
+frc2::Trigger normalPovRight([=]() {
+  return !aButton.Get() && povRightButton.Get();
+});
+normalPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_L2));
 
 }
 

@@ -5,8 +5,6 @@
 
 CmdAlgaeIntake::CmdAlgaeIntake(double power)
   : m_power(power) {
-  // Declare subsystem dependencies
-  AddRequirements(&robotcontainer.m_claw);
 }
 
 void CmdAlgaeIntake::Initialize() {
@@ -36,9 +34,9 @@ void CmdAlgaeIntake::End(bool interrupted) {
 
   if (robotcontainer.m_claw.GetAlgaePhotoEye()) {
     std::cout << "CmdAlgaeIntake: Un-jamming reverse" << std::endl;
-    robotcontainer.m_claw.SetAlgaePower(0.2);  // Small reverse
+    robotcontainer.m_claw.SetAlgaePower(-0.2);  // Small reverse
     frc::Wait(0.2_s);  // Wait 200ms
-    robotcontainer.m_claw.SetAlgaePower(0.05); //Holding Power Adjust as needed
+    robotcontainer.m_claw.SetAlgaePower(-0.05); //Holding Power Adjust as needed
     robotcontainer.m_claw.SetBallLoaded(true);
   }
 }

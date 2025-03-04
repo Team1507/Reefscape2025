@@ -48,37 +48,27 @@ inline constexpr frc::Transform2d CLAW_TRANS_R{0_m, CLAW_OFFSET_R,
 
 #define ELEV_PULLY_DIAM 1.25_in
 
-#define ELEV_POSITION_1 -0.05_tr
-#define ELEV_POSITION_2 -1.5_tr
-#define ELEV_POSITION_3 -3_tr
-#define ELEV_POSITION_4 -5.6_tr
-#define ELEV_POSITION_5 -5_tr
-#define ELEV_POSITION_6 -6_tr
+#define ELEV_POSITION_HOME -0.05_tr    //home
+#define ELEV_POSITION_L1 -0.75_tr    //L1
+#define ELEV_POSITION_L2 -1.5_tr     //L2
+#define ELEV_POSITION_L3 -4.5_tr       //L3
+#define ELEV_POSITION_L4 -5.6_tr     //L4
+#define ELEV_POSITION_ALG_L2 -2.35_tr       //ALgea Low
+#define ELEV_POSITION_ALG_L3 -4_tr       //Algea High
 
 #define ELEV_TOLERANCE 0.05_tr
 
-#define ELEV_MOTOR_PORT 1
-#define ELEV_ENCODER_A_CHANNEL 0
-#define ELEV_ENCODER_B_CHANNEL 1
-
-#define ELEV_KP 5.0
-#define ELEV_GEARING 10.0
-#define ELEV_DRUM_RADIUS 0.0508
-#define ELEV_CARRING_MASS 4
-
-#define ELEV_MIN_ELEVATOR_HEIGHT 0.0508
-#define ELEV_MAX_ELEVATOR_HEIGHT 1.27
-
-#define ELEV_MAX_VELOCITY 1.75
-#define ELEV_MAX_ACCEL 0.75
-
-#define ELEV_P 1.3
-#define ELEV_I 0.0
-#define ELEV_D 0.7
-#define ELEV_KDT 0.2
 
 #define ELEV_HOMING_HIGH_SPEED 0.01
 #define ELEV_HOMING_CREEP_SPEED 0.005
 
 #define ELEV_MANUAL_SLOW_POWER 0.4
 #define ELEV_MANUAL_SLOW_DOWN_POWER -0.1
+
+#define ELEV_POS_HOME 1
+#define ELEV_POS_L1 7
+#define ELEV_POS_L2 4
+#define ELEV_POS_L3 2
+#define ELEV_POS_L4 3
+#define ELEV_POS_ALG_LOW 5
+#define ELEV_POS_ALG_HIGH 6
