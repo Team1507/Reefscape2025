@@ -12,5 +12,6 @@ void CmdAlgaeSetPosition::Initialize()
 {
   std::cout << "CmdElevatorSetPosition " << m_position << std::endl;
   robotcontainer.m_claw.SetPosition( m_position );
+  robotcontainer.m_claw.SetPower(0.3); 
 }
 

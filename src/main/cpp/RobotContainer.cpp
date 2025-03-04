@@ -7,6 +7,7 @@
 #include "commands/CmdClawOuttake.h"
 #include "commands/CmdAlgaeOuttake.h"
 #include "commands/CmdAlgaeIntake.h"
+#include "commands/CmdAlgaeToPos.h"
 #include "commands/CmdAlgaeSetPosition.h"
 #include "Commands/CmdElevatorPosition.h"
 #include "Commands/CmdElevatorHome.h"
@@ -104,7 +105,7 @@ void RobotContainer::ConfigureBindings()
   m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
   
 
- m_topDriver.Y().OnTrue(new CmdAlgaeSetPosition(15));
+ m_topDriver.Y().OnTrue(new CmdAlgaeToPos(15));
 
 
 // Assume these button objects are stored persistently (here as local constants)
@@ -128,18 +129,12 @@ altPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
 frc2::Trigger altPovLeft([=]() {
   return aButton.Get() && povLeftButton.Get();
 });
-altPovLeft.OnTrue(new frc2::ParallelCommandGroup(
-   CmdElevatorToPosition(ELEV_POS_ALG_LOW),
-   CmdAlgaeSetPosition(0)  // Change Later if needed
-));
+altPovLeft.OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG_LOW));
 
 frc2::Trigger altPovRight([=]() {
   return aButton.Get() && povRightButton.Get();
 });
-altPovRight.OnTrue(new frc2::ParallelCommandGroup(
-   CmdElevatorToPosition(ELEV_POS_ALG_HIGH),
-   CmdAlgaeSetPosition(0)  // Change Later if needed
-));
+altPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG_HIGH));
 
 // Normal D-pad bindings (fire only when A is NOT pressed)
 frc2::Trigger normalPovUp([=]() {
