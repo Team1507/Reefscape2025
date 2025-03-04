@@ -1,7 +1,3 @@
-// Copyright (c) FRC 2053.
-// Open Source Software; you can modify and/or share it under the terms of
-// the MIT License file in the root of this project
-
 #include "Robot.h"
 
 #include <frc/DataLogManager.h>
@@ -13,10 +9,12 @@
 
 #include <ctre/phoenix6/SignalLogger.hpp>
 
-#include "constants/SwerveConstants.h"
 #include "frc/geometry/Pose2d.h"
 #include "frc/smartdashboard/SmartDashboard.h"
-#include "str/vision/StrPoseEstimator.h"
+#include "photon/PhotonPoseEstimator.h"
+#include <cameraserver/CameraServer.h>
+
+RobotContainer robotcontainer; // <--- global variable
 
 Robot::Robot() {
   // DANGEROUS MAKE SURE CODE DOESN'T BLOCK!!!
@@ -25,11 +23,12 @@ Robot::Robot() {
   ctre::phoenix6::SignalLogger::Start();
   frc::DataLogManager::Start();
   frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
-  AddPeriodic([this] { robotcontainer.GetDrive().UpdateOdom(); },
-              1 / consts::swerve::ODOM_UPDATE_RATE, 2_ms);
+  // AddPeriodic([this] { m_container.GetDrive().UpdateOdom(); },
+  //             1 / consts::swerve::ODOM_UPDATE_RATE, 2_ms);
   wpi::WebServer::GetInstance().Start(5800,
                                       frc::filesystem::GetDeployDirectory());
   pdp.ClearStickyFaults();
+  frc::CameraServer::StartAutomaticCapture();
 }
 
 void Robot::RobotPeriodic() {
@@ -38,11 +37,12 @@ void Robot::RobotPeriodic() {
   loopTimePub.Set((1 / loopTime).value());
 
   frc2::CommandScheduler::GetInstance().Run();
-  UpdateVision();
+  //UpdateVision();
 
   lastTotalLoopTime = now;
   matchTimePub.Set(frc::DriverStation::GetMatchTime().value());
   battVoltagePub.Set(frc::RobotController::GetBatteryVoltage().value());
+
 }
 
 void Robot::SimulationPeriodic() {
@@ -58,19 +58,23 @@ void Robot::UpdateVision() {
   robotcontainer.GetVision().UpdateCameraPositionVis(robotPose);
 }
 
-void Robot::DisabledInit() {}
+void Robot::DisabledInit() {
+  // m_container.GetPivot().SetToStartingPosition();
+  // m_container.GetElevator().SetToZeroHeight();
+}
 
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() {
+  // m_container.GetPivot().SetToStartingPosition();
+}
 
 void Robot::DisabledExit() {}
 
 void Robot::AutonomousInit() {
-  // m_autonomousCommand = m_container.GetAutonomousCommand();
+  m_autonomousCommand = robotcontainer.GetAutonomousCommand();
 
-  // if (m_autonomousCommand != nullptr) {
-  //   m_autonomousCommand->Schedule();
-  // }
-
+  if (m_autonomousCommand != nullptr) {
+    m_autonomousCommand->Schedule();
+  }
 }
 
 void Robot::AutonomousPeriodic() {}

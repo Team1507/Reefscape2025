@@ -1,3 +1,7 @@
+// Copyright (c) FRC 2053.
+// Open Source Software; you can modify and/or share it under the terms of
+// the MIT License file in the root of this project
+
 #include "subsystems/Drive.h"
 
 #include <frc/DataLogManager.h>
@@ -154,7 +158,7 @@ frc2::CommandPtr Drive::DriveToPose(std::function<frc::Pose2d()> goalPose,
                            currentPose.Rotation().Radians())};
 
                    swerveDrive.DriveFieldRelative(xSpeed, ySpeed, thetaSpeed,
-                                                  true);
+                                                  false);
                  },
                  {this})
                  .Until([this] {
@@ -187,7 +191,7 @@ frc2::CommandPtr Drive::AlignToAlgae() {
           return clawPos;
         }
       },
-      false);
+      true);
 }
 
 frc2::CommandPtr Drive::AlignToProcessor() {
@@ -232,7 +236,7 @@ frc2::CommandPtr Drive::AlignToReef(std::function<bool()> leftSide) {
           return clawOnPole;
         }
       },
-      false);
+      true);
 }
 
 frc2::CommandPtr Drive::AlignToReefSegment(std::function<bool()> leftSide,
@@ -264,7 +268,7 @@ frc2::CommandPtr Drive::AlignToReefSegment(std::function<bool()> leftSide,
           return clawOnPole;
         }
       },
-      false);
+      true);
 }
 
 std::string Drive::WhatPoleToGoTo(int zone, bool leftOrRight) {
@@ -366,6 +370,7 @@ void Drive::SetupPathplanner() {
   pathplanner::PathPlannerLogging::setLogActivePathCallback(
       [this](std::vector<frc::Pose2d> poses) {
         swerveDrive.SetActivePath(poses);
+        fmt::print("Active path changed!:\n");
       });
 }
 

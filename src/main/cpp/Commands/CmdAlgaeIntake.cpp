@@ -4,7 +4,9 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 CmdAlgaeIntake::CmdAlgaeIntake(double power)
-  : m_power(power) {
+{
+  m_power = power;
+  AddRequirements(&robotcontainer.m_claw);
 }
 
 void CmdAlgaeIntake::Initialize() {

@@ -7,7 +7,6 @@
 
 CmdAlgaeManualPower::CmdAlgaeManualPower(float power) 
 {
-  AddRequirements(&robotcontainer.m_claw);
   m_power = power;
   m_manualAlgaeEnabled = false;
 }

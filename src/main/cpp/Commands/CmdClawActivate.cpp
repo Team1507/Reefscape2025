@@ -7,8 +7,9 @@
 #include <frc/Timer.h>  
 
 CmdClawActivate::CmdClawActivate(double power)
-    : m_power(power) {
+{
   AddRequirements(&robotcontainer.m_claw);
+  m_power = power;
 }
 
 void CmdClawActivate::Initialize() {

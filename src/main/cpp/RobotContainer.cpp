@@ -10,7 +10,6 @@
 #include "commands/CmdAlgaeToPos.h"
 #include "commands/CmdAlgaeSetPosition.h"
 #include "Commands/CmdElevatorPosition.h"
-#include "Commands/CmdElevatorHome.h"
 #include "Commands/CmdElevatorManualPower.h"
 #include "Commands/CmdAlgaeManualPower.h"
 #include "Commands/CmdPivotZero.h"

@@ -19,9 +19,9 @@ namespace consts::swerve {
 inline constexpr units::hertz_t ODOM_UPDATE_RATE = 250_Hz;
 
 namespace can_ids {
-inline constexpr int FL_DRIVE = 2;
-inline constexpr int FL_STEER = 3;
-inline constexpr int FL_ENC = 4;
+inline constexpr int FL_DRIVE = 4;
+inline constexpr int FL_STEER = 2;
+inline constexpr int FL_ENC = 3;
 
 inline constexpr int FR_DRIVE = 5;
 inline constexpr int FR_STEER = 6;
@@ -102,9 +102,9 @@ inline constexpr bool BL_STEER_INVERT = true;
 inline constexpr bool BR_STEER_INVERT = true;
 
 inline constexpr bool FL_DRIVE_INVERT = false;
-inline constexpr bool FR_DRIVE_INVERT = true;
+inline constexpr bool FR_DRIVE_INVERT = false;
 inline constexpr bool BL_DRIVE_INVERT = false;
-inline constexpr bool BR_DRIVE_INVERT = true;
+inline constexpr bool BR_DRIVE_INVERT = false;
 
 inline const str::swerve::ModuleConstants FL{"FL",
                                              consts::swerve::can_ids::FL_DRIVE,
@@ -160,21 +160,22 @@ namespace gains {
 inline const str::gains::radial::VoltRadialGainsHolder STEER{
     consts::swerve::physical::STEER_MOTOR.freeSpeed /
         consts::swerve::physical::STEER_GEARING,
-    str::gains::radial::turn_volt_ka_unit_t{0.095481},
-    str::gains::radial::turn_volt_kv_unit_t{2.606},
-    str::gains::radial::turn_volt_ka_unit_t{0.095481},
+    str::gains::radial::turn_volt_ka_unit_t{0},
+
+    str::gains::radial::turn_volt_kv_unit_t{2.66},
+    str::gains::radial::turn_volt_ka_unit_t{0},
     str::gains::radial::turn_volt_kv_unit_t{2.606},
     0.24038_V,
-    str::gains::radial::turn_volt_kp_unit_t{176},
+    str::gains::radial::turn_volt_kp_unit_t{100},
     str::gains::radial::turn_volt_ki_unit_t{0},
-    str::gains::radial::turn_volt_kd_unit_t{.2},
+    str::gains::radial::turn_volt_kd_unit_t{0.5},
 };
 
 inline const str::swerve::DriveGains DRIVE{
-    str::gains::radial::turn_volt_ka_unit_t{0.0031508},
-    str::gains::radial::turn_volt_kv_unit_t{.11982},
+    str::gains::radial::turn_volt_ka_unit_t{0},
+    str::gains::radial::turn_volt_kv_unit_t{0.124},
     .29943_V,
-    str::gains::radial::turn_volt_kp_unit_t{7},
+    str::gains::radial::turn_volt_kp_unit_t{0.1},
     str::gains::radial::turn_volt_ki_unit_t{0},
     str::gains::radial::turn_volt_kd_unit_t{0},
 };
@@ -198,10 +199,10 @@ inline constexpr units::meter_t DYNAMIC_REPLAN_THRESHOLD_SPIKE = 1_ft;
 
 inline pathplanner::RobotConfig config;
 
-inline constexpr units::meter_t translationalPIDTolerance = 1_in;
+inline constexpr units::meter_t translationalPIDTolerance = .5_in;
 inline constexpr units::meters_per_second_t translationalVelPIDTolerance =
     .25_fps;
-inline constexpr units::radian_t rotationalPIDTolerance = 3_deg;
+inline constexpr units::radian_t rotationalPIDTolerance = 1_deg;
 inline constexpr units::radians_per_second_t rotationalVelPIDTolerance =
     1_deg_per_s;
 inline constexpr units::meters_per_second_t translationalVelPIDDeadband =
