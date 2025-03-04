@@ -7,6 +7,7 @@ Climber::Climber()
 {
     
     m_isClimberActivated = false;
+     m_climber.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 }
 
 void Climber::Periodic()
@@ -38,12 +39,12 @@ bool Climber::GetClimberBeamBreak()
 
 void Climber::DropRamp()
 {
-    m_ramp.Set(frc::Relay::kForward);
+    m_ramp.Set(frc::Relay::kReverse);
 }
 
 void Climber::ResetRamp()
 {
-    m_ramp.Set(frc::Relay::kReverse);
+    m_ramp.Set(frc::Relay::kForward);
 }
 
 void Climber::OffRamp()

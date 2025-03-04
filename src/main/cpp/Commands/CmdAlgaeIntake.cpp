@@ -5,8 +5,6 @@
 
 CmdAlgaeIntake::CmdAlgaeIntake(double power)
   : m_power(power) {
-  // Declare subsystem dependencies
-  AddRequirements(&robotcontainer.m_claw);
 }
 
 void CmdAlgaeIntake::Initialize() {

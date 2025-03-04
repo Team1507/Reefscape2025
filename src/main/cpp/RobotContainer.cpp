@@ -88,7 +88,8 @@ void RobotContainer::ConfigureBindings()
 
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
-  m_topDriver.B().OnTrue(new CmdRampDrop());
+  m_topDriver.B() && m_topDriver.Back().OnTrue(new CmdRampDrop());
+  m_topDriver.Start() && m_topDriver.Y().OnTrue(new CmdClimberActivate(0.5));
 
 
   //Coral
@@ -99,23 +100,26 @@ void RobotContainer::ConfigureBindings()
   //m_topDriver.LeftBumper().WhileTrue(new CmdAlgaeOuttake(frc::SmartDashboard::PutNumber("AlgaeOut Power", 1)));
   joystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
   m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
+  
 
   // m_topDriver.Y().ToggleOnTrue(new CmdPivotAngle(0.0, 0.0)); //Change Later
   // m_topDriver.Y().ToggleOnFalse(new CmdPivotAngle(0.0, 0.0)); //Change Later
 
 
-  if(!m_topDriver.Y().Get())
+  if(m_topDriver.A().Get() == true)
+  {
+    std::cout << "A button pushed!" << std::endl;
+    m_topDriver.A() && m_topDriver.POVUp().OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG1));
+    m_topDriver.POVDown().OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
+    m_topDriver.POVLeft().OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG1));
+    m_topDriver.POVRight().OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG2));
+  }
+  else 
   {
     m_topDriver.POVDown().OnTrue(new CmdElevatorToPosition(1));
-    m_topDriver.POVRight().OnTrue(new CmdElevatorToPosition(2));
-    m_topDriver.POVLeft().OnTrue(new CmdElevatorToPosition(3));
-    m_topDriver.POVUp().OnTrue(new CmdElevatorToPosition(4));
-  }
-  else
-  {
+    m_topDriver.POVRight().OnTrue(new CmdElevatorToPosition(3));
+    m_topDriver.POVLeft().OnTrue(new CmdElevatorToPosition(4));
     m_topDriver.POVUp().OnTrue(new CmdElevatorToPosition(5));
-    m_topDriver.POVDown().OnTrue(new CmdElevatorToPosition(6));
-    m_topDriver.POVLeft().OnTrue(new CmdElevatorHome());
   }
   //m_topDriver.Back().WhileFalse(new CmdAlgaeManualPower(0));
 

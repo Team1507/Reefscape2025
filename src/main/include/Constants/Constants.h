@@ -48,12 +48,13 @@ inline const frc::AprilTagFieldLayout TAG_LAYOUT =
 
 #define ELEV_PULLY_DIAM 1.25_in
 
-#define ELEV_POSITION_1 -0.05_tr
-#define ELEV_POSITION_2 -1.5_tr
-#define ELEV_POSITION_3 -3_tr
-#define ELEV_POSITION_4 -5.6_tr
-#define ELEV_POSITION_5 -5_tr
-#define ELEV_POSITION_6 -6_tr
+#define ELEV_POSITION_1 -0.05_tr    //home
+#define ELEV_POSITION_2 -0.75_tr    //L1
+#define ELEV_POSITION_3 -1.5_tr     //L2
+#define ELEV_POSITION_4 -5_tr       //L3
+#define ELEV_POSITION_5 -5.6_tr     //L4
+#define ELEV_POSITION_6 -2_tr       //ALgea Low
+#define ELEV_POSITION_7 -4_tr       //Algea High
 
 #define ELEV_TOLERANCE 0.05_tr
 
@@ -82,3 +83,11 @@ inline const frc::AprilTagFieldLayout TAG_LAYOUT =
 
 #define ELEV_MANUAL_SLOW_POWER 0.4
 #define ELEV_MANUAL_SLOW_DOWN_POWER -0.1
+
+#define ELEV_POS_HOME 1
+#define ELEV_POS_L1 7
+#define ELEV_POS_L2 4
+#define ELEV_POS_L3 2
+#define ELEV_POS_L4 3
+#define ELEV_POS_ALG1 5
+#define ELEV_POS_ALG2 6

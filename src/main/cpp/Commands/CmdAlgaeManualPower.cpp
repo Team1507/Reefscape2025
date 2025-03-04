@@ -19,7 +19,7 @@ void CmdAlgaeManualPower::Initialize()
 
 void CmdAlgaeManualPower::Execute() 
 {
-    if((robotcontainer.m_topDriver.GetRightY() > ALGAE_DEADBAND_CONSTANT && !m_manualAlgaeEnabled))
+    if((robotcontainer.m_topDriver.GetRightY() > ALGAE_DEADBAND_CONSTANT))
   {
     robotcontainer.m_claw.SetPower(-PIVOT_MANUAL_POWER);
     m_manualAlgaeEnabled = true;

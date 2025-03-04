@@ -17,18 +17,18 @@ Elevator::Elevator()
 
   /* Configure Motion Magic */
   ctre::phoenix6::configs::MotionMagicConfigs &mm = cfg.MotionMagic;
-  mm.MotionMagicCruiseVelocity = 5_tps; // 5 (mechanism) rotations per second cruise
-  mm.MotionMagicAcceleration = 10_tr_per_s_sq; // Take approximately 0.5 seconds to reach max vel
+  mm.MotionMagicCruiseVelocity = 10_tps; // 5 (mechanism) rotations per second cruise
+  mm.MotionMagicAcceleration = 15_tr_per_s_sq; // Take approximately 0.5 seconds to reach max vel
   // Take approximately 0.1 seconds to reach max accel 
   mm.MotionMagicJerk = 100_tr_per_s_cu;
 
   ctre::phoenix6::configs::Slot0Configs &slot0 = cfg.Slot0;
   slot0.kS = 0.4; // Add 0.25 V output to overcome static friction
-  slot0.kV = 4.0; // A velocity target of 1 rps results in 0.12 V output
+  slot0.kV = 5.0; // A velocity target of 1 rps results in 0.12 V output
   slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-  slot0.kP = 25.0; // A position error of 0.2 rotations results in 12 V output
+  slot0.kP = 60.0; // A position error of 0.2 rotations results in 12 V output
   slot0.kI = 0.0; // No output for integrated error
-  slot0.kD = 1.0; // A velocity error of 1 rps results in 0.5 V output
+  slot0.kD = 0.5; // A velocity error of 1 rps results in 0.5 V output
 
   ctre::phoenix::StatusCode status = ctre::phoenix::StatusCode::StatusCodeNotInitialized;
   for (int i = 0; i < 5; ++i) {
@@ -60,7 +60,7 @@ void Elevator::Periodic()
   frc::SmartDashboard::PutBoolean("Elevator L2", elevatorL2);
   frc::SmartDashboard::PutBoolean("Elevator L3", elevatorL3);
   frc::SmartDashboard::PutBoolean("Elevator L4", elevatorL4);
-  frc::SmartDashboard::PutBoolean("Elevator Load", elevatorLoad);
+  frc::SmartDashboard::PutBoolean("Elevator Load", elevatorHome);
   frc::SmartDashboard::PutBoolean("Elevator Low Algae", elevatorLowAlgae);
   frc::SmartDashboard::PutBoolean("Elevator High Algae", elevatorHighAlgae);
 
@@ -132,66 +132,46 @@ units::meter_t Elevator::ConvertRadiansToHeight(units::radian_t rots)
 
 void Elevator::SetTargetPosition (int position)
 {
-  if (position == 1)
+
+    elevatorL1 = elevatorL2 = elevatorL3 = elevatorL4 = elevatorHome = elevatorLowAlgae = elevatorHighAlgae = false;
+
+  if (position == ELEV_POS_HOME)
   {
+    //move elevator home
     targetPosition = ELEV_POSITION_1;
-    elevatorL2 = true;
-    elevatorL3 = false;
-    elevatorL4 = false;
-    elevatorLoad = false;
-    elevatorLowAlgae = false;
-    elevatorHighAlgae = false;
+    elevatorHome = true;
   }
-  else if (position == 2)
+  else if (position == ELEV_POS_L1)
   {
     targetPosition = ELEV_POSITION_2;
-    elevatorL2 = false;
-    elevatorL3 = true;
-    elevatorL4 = false;
-    elevatorLoad = false;
-    elevatorLowAlgae = false;
-    elevatorHighAlgae = false;
+    elevatorL1 = true;
   }
-  else if (position == 3)
+  else if (position == ELEV_POS_L2)
   {
     targetPosition = ELEV_POSITION_3;
-    elevatorL2 = false;
-    elevatorL3 = false;
-    elevatorL4 = true;
-    elevatorLoad = false;
-    elevatorLowAlgae = false;
-    elevatorHighAlgae = false;
+    elevatorL2 = true;
   }
-  else if (position == 4)
+  else if (position == ELEV_POS_L3)
   {
     targetPosition = ELEV_POSITION_4;
-    elevatorL2 = false;
-    elevatorL3 = false;
-    elevatorL4 = false;
-    elevatorLoad = true;
-    elevatorLowAlgae = false;
-    elevatorHighAlgae = false;
+    elevatorL3 = true;
   }
-  else if (position == 5)
+  else if (position == ELEV_POS_L4)
   {
     targetPosition = ELEV_POSITION_5;
-    elevatorL2 = false;
-    elevatorL3 = false;
-    elevatorL4 = false;
-    elevatorLoad = false;
-    elevatorLowAlgae = true;
-    elevatorHighAlgae = false;
+    elevatorL4 = true;
   }
-  else if (position == 6)
+  else if (position == ELEV_POS_ALG1)
   {
     targetPosition = ELEV_POSITION_6;
-    elevatorL2 = false;
-    elevatorL3 = false;
-    elevatorL4 = false;
-    elevatorLoad = false;
-    elevatorLowAlgae = false;
+    elevatorLowAlgae = true;
+  }
+  else if(position == ELEV_POS_ALG2)
+  {
+    targetPosition = ELEV_POSITION_7;
     elevatorHighAlgae = true;
   }
+
   
   m_elevatorMotor.SetControl(m_mmElevator.WithPosition(targetPosition));
 

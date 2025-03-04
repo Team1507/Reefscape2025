@@ -8,7 +8,6 @@
 CmdClawOuttake::CmdClawOuttake(double power) 
 {
   m_power = power;
-  AddRequirements(&robotcontainer.m_claw);
 }
 
 void CmdClawOuttake::Initialize() 
