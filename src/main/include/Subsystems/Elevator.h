@@ -29,8 +29,6 @@
 #include <map>
 #include <string>
 
-enum dPadPosition {DPAD_UP, DPAD_DOWN, DPAD_LEFT, DPAD_RIGHT};
-
 class Elevator : public frc2::SubsystemBase {
  public:
   Elevator();

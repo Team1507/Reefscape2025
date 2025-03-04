@@ -15,6 +15,7 @@
 #include "Commands/CmdPivotZero.h"
 #include "Commands/CmdElevatorToPosition.h"
 #include "Commands/CmdRampDrop.h"
+#include  "Commands/CmdAlgaeSetPosition.h"
 
 #include "Subsystems/Elevator.h"
 #include "Subsystems/Claw.h"
@@ -36,6 +37,7 @@
 #include "frc2/command/sysid/SysIdRoutine.h"
 
 #include "str/DriverstationUtils.h"
+#include <frc2/command/ParallelCommandGroup.h>
 
 
 RobotContainer::RobotContainer() 
@@ -106,22 +108,40 @@ void RobotContainer::ConfigureBindings()
   // m_topDriver.Y().ToggleOnFalse(new CmdPivotAngle(0.0, 0.0)); //Change Later
 
 
-  if(m_topDriver.A().Get() == true)
-  {
-    std::cout << "A button pushed!" << std::endl;
-    m_topDriver.A() && m_topDriver.POVUp().OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG1));
-    m_topDriver.POVDown().OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
-    m_topDriver.POVLeft().OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG1));
-    m_topDriver.POVRight().OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG2));
-  }
-  else 
-  {
-    m_topDriver.POVDown().OnTrue(new CmdElevatorToPosition(1));
-    m_topDriver.POVRight().OnTrue(new CmdElevatorToPosition(3));
-    m_topDriver.POVLeft().OnTrue(new CmdElevatorToPosition(4));
-    m_topDriver.POVUp().OnTrue(new CmdElevatorToPosition(5));
-  }
-  //m_topDriver.Back().WhileFalse(new CmdAlgaeManualPower(0));
+  // Create button objects (assuming your m_topDriver returns button objects)
+auto aButton = m_topDriver.A();
+auto povUpButton = m_topDriver.POVUp();
+auto povDownButton = m_topDriver.POVDown();
+auto povLeftButton = m_topDriver.POVLeft();
+auto povRightButton = m_topDriver.POVRight();
+
+frc2::Trigger altPovUp([&]() {
+  return aButton.Get() && povUpButton.Get();
+});
+altPovUp.OnTrue(new CmdElevatorToPosition(ELEV_POS_L1));
+
+frc2::Trigger altPovDown([&]() {
+  return aButton.Get() && povDownButton.Get();
+});
+altPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
+                                                 
+frc2::Trigger altPovLeft([&]() {
+  return aButton.Get() && povLeftButton.Get();
+});
+altPovLeft.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_ALG_LOW),
+                                                  CmdAlgaeSetPosition(0))); //Change Later
+
+frc2::Trigger altPovRight([&]() {
+  return aButton.Get() && povRightButton.Get();
+});
+altPovRight.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_ALG_HIGH),
+                                                  CmdAlgaeSetPosition(0))); //Change Later
+
+// Normal D-pad bindings when A is not pressed
+povUpButton.OnTrue(new CmdElevatorToPosition(ELEV_POS_L4));
+povDownButton.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
+povLeftButton.OnTrue(new CmdElevatorToPosition(ELEV_POS_L3));
+povRightButton.OnTrue(new CmdElevatorToPosition(ELEV_POS_L2));
 
 
 }

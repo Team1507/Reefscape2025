@@ -138,37 +138,37 @@ void Elevator::SetTargetPosition (int position)
   if (position == ELEV_POS_HOME)
   {
     //move elevator home
-    targetPosition = ELEV_POSITION_1;
+    targetPosition = ELEV_POSITION_HOME;
     elevatorHome = true;
   }
   else if (position == ELEV_POS_L1)
   {
-    targetPosition = ELEV_POSITION_2;
+    targetPosition = ELEV_POSITION_L1;
     elevatorL1 = true;
   }
   else if (position == ELEV_POS_L2)
   {
-    targetPosition = ELEV_POSITION_3;
+    targetPosition = ELEV_POSITION_L2;
     elevatorL2 = true;
   }
   else if (position == ELEV_POS_L3)
   {
-    targetPosition = ELEV_POSITION_4;
+    targetPosition = ELEV_POSITION_L3;
     elevatorL3 = true;
   }
   else if (position == ELEV_POS_L4)
   {
-    targetPosition = ELEV_POSITION_5;
+    targetPosition = ELEV_POSITION_L4;
     elevatorL4 = true;
   }
-  else if (position == ELEV_POS_ALG1)
+  else if (position == ELEV_POS_ALG_LOW)
   {
-    targetPosition = ELEV_POSITION_6;
+    targetPosition = ELEV_POSITION_ALG_L2;
     elevatorLowAlgae = true;
   }
-  else if(position == ELEV_POS_ALG2)
+  else if(position == ELEV_POS_ALG_HIGH)
   {
-    targetPosition = ELEV_POSITION_7;
+    targetPosition = ELEV_POSITION_ALG_L3;
     elevatorHighAlgae = true;
   }
 
