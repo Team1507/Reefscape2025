@@ -72,20 +72,26 @@ void RobotContainer::ConfigureBindings()
                360_deg_per_s;
       }));
 
+  driverJoystick.X().WhileTrue(frc2::cmd::Either(
+      driveSub.AlignToAlgae(), driveSub.AlignToReef([] { return true; }),
+      [this] { return !m_claw.GetClawPhotoEyeFirst(); }));
+    driverJoystick.B().WhileTrue(frc2::cmd::Either(
+      driveSub.AlignToProcessor(), driveSub.AlignToReef([] { return false; }),
+      [this] { return !m_claw.GetClawPhotoEyeFirst(); }));
 
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
-  // (m_topDriver.B() && m_topDriver.Back()).OnTrue(new CmdRampDrop());
-  // (m_topDriver.Y() && m_topDriver.Start()).OnTrue(new CmdClimberActivate(0.7));
+  (m_topDriver.B() && m_topDriver.Back()).OnTrue(new CmdRampDrop());
+  (m_topDriver.Y() && m_topDriver.Start()).OnTrue(new CmdClimberActivate(0.7));
 
 
   //Coral
-  //joystick.RightBumper().WhileTrue(new CmdClawOuttake(-1.0));
+   driverJoystick.RightBumper().WhileTrue(new CmdClawOuttake(-1.0));
   m_topDriver.RightTrigger(0.5).OnTrue(new CmdClawActivate(-1.0));
   
   //Algae
   //m_topDriver.LeftBumper().WhileTrue(new CmdAlgaeOuttake(frc::SmartDashboard::PutNumber("AlgaeOut Power", 1)));
-  //joystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
+  driverJoystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
   m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
   
 
@@ -239,5 +245,16 @@ str::vision::VisionSystem& RobotContainer::GetVision() {
   return vision;
 }
 
+Claw& RobotContainer::GetClaw() {
+  return m_claw;
+}
+
+Climber& RobotContainer::GetClimber() {
+  return m_climber;
+}
+
+Elevator& RobotContainer::GetElevator() {
+  return m_elevator;
+} 
 
 

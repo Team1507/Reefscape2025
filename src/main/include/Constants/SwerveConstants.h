@@ -163,16 +163,16 @@ inline const str::gains::radial::VoltRadialGainsHolder STEER{
     str::gains::radial::turn_volt_ka_unit_t{0.095481},
     str::gains::radial::turn_volt_kv_unit_t{2.606},
     0.24038_V,
-    str::gains::radial::turn_volt_kp_unit_t{100},
+    str::gains::radial::turn_volt_kp_unit_t{176},
     str::gains::radial::turn_volt_ki_unit_t{0},
-    str::gains::radial::turn_volt_kd_unit_t{0.5},
+    str::gains::radial::turn_volt_kd_unit_t{.2},
 };
 
 inline const str::swerve::DriveGains DRIVE{
-    str::gains::radial::turn_volt_ka_unit_t{0},
-    str::gains::radial::turn_volt_kv_unit_t{0},
+    str::gains::radial::turn_volt_ka_unit_t{0.0031508},
+    str::gains::radial::turn_volt_kv_unit_t{.11982},
     .29943_V,
-    str::gains::radial::turn_volt_kp_unit_t{0.1},
+    str::gains::radial::turn_volt_kp_unit_t{7},
     str::gains::radial::turn_volt_ki_unit_t{0},
     str::gains::radial::turn_volt_kd_unit_t{0},
 };

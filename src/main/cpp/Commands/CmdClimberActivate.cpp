@@ -40,7 +40,7 @@ void CmdClimberActivate::Execute()
   // {
   //   if(robotcontainer.m_topDriver.X().Get())
   //   {
-  //     robotcontainer..ReleaseRamp();
+  //     robotcontainer.m_climber.ReleaseRamp();
   //   }
   //   if(robotcontainer.m_topDriver.B().Get())
   //   {
@@ -48,7 +48,7 @@ void CmdClimberActivate::Execute()
   //   }
   // }
 
-  //robotcontainer..SetClimbPower(0);
+  //robotcontainer.m_climber.SetClimbPower(0);
 
   switch(currentState)
   {
@@ -60,18 +60,18 @@ void CmdClimberActivate::Execute()
     
     case stateClimber::Sensor1:
       std::cout << "Sensor1" << std::endl;
-      // if(robotcontainer..GetClimberBeamBreak() == false)
-      // {
-      //   if(incriment == CLIMBER_INCRIMENT)
-      //   {
-      //     currentState = stateClimber::StopMotor;
-      //     std::cout << "Sensor Off" << std::endl;
-      //   }
-      //   else
-      //   {
-      //     incriment ++;
-      //     std::cout << "Climber Incroment" << std::endl;
-      //   }
+      if(robotcontainer.m_climber.GetClimberBeamBreak() == false)
+      {
+        if(incriment == CLIMBER_INCRIMENT)
+        {
+          currentState = stateClimber::StopMotor;
+          std::cout << "Sensor Off" << std::endl;
+        }
+        else
+        {
+          incriment ++;
+          std::cout << "Climber Incroment" << std::endl;
+        }
       }
       break;
 
@@ -96,7 +96,7 @@ void CmdClimberActivate::End(bool interrupted)
 {
   std::cout << "End CmdMotorSpin" << std::endl; //Lets Us know the command is ending
   
-  //robotcontainer.m_climber.SetClimbPower(0);
+  robotcontainer.m_climber.SetClimbPower(0);
 
   // m_timer.Stop();
   // m_timer.Reset();

@@ -39,7 +39,7 @@ class Climber : public frc2::SubsystemBase
 
     private:
 
-    //ctre::phoenix6::hardware::TalonFX m_climber{CLIMBER_CAN_ID}; //Constant 
+    ctre::phoenix6::hardware::TalonFX m_climber{CLIMBER_CAN_ID}; //Constant 
 
     frc::DigitalInput                 m_climberBeamBreak{CLIMBER_BEAM_BREAK_ID};
 
@@ -47,4 +47,3 @@ class Climber : public frc2::SubsystemBase
 
     frc::Relay                        m_ramp{0};
 };
-
