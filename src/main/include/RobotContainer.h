@@ -20,11 +20,8 @@
 #include "subsystems/Claw.h"
 #include "subsystems/Climber.h"
 #include "Subsystems/Elevator.h"
+#include "subsystems/Drive.h"
 #include "str/vision/VisionSystem.h"
-#include "subsystems/CommandSwerveDrivetrain.h"
-#include "Telemetry.h"
-
-#include "Autos.h"
 
 class RobotContainer {
  public:
@@ -32,69 +29,68 @@ class RobotContainer {
 
   frc2::Command* GetAutonomousCommand();
 
-  Climber m_climber;
+   Climber m_climber;
+   Climber& GetClimber();
+
   Claw    m_claw;
+  Claw& GetClaw();
+  
   Elevator m_elevator;
+  Elevator& GetElevator();
 
+  Drive driveSub{};
+  Drive& GetDrive();
 
+str::vision::VisionSystem& GetVision();
 
-  subsystems::CommandSwerveDrivetrain& GetDrive();
-
-  str::vision::VisionSystem& GetVision();
-
+    str::vision::VisionSystem vision{
+      [this](const frc::Pose2d& pose, units::second_t time,
+             const Eigen::Vector3d& stdDevs) {
+        driveSub.AddVisionMeasurement(pose, time, stdDevs);
+      },
+      [this](const frc::Pose2d& pose, units::second_t time,
+             const Eigen::Vector3d& stdDevs) {
+        driveSub.AddSingleTagVisionMeasurement(pose, time, stdDevs);
+      }};
 
   frc2::CommandXboxController m_topDriver{1};
-
-   subsystems::CommandSwerveDrivetrain drivetrain{TunerConstants::CreateDrivetrain()};
+  frc2::CommandXboxController driverJoystick{0};
 
  private:
   void ConfigureBindings();
+  void ConfigureSysIdBinds();
 
-   units::meters_per_second_t MaxSpeed = TunerConstants::kSpeedAt12Volts; // kSpeedAt12Volts desired top speed
-    units::radians_per_second_t MaxAngularRate = 0.75_tps; // 3/4 of a rotation per second max angular velocity
+    frc2::CommandPtr SteerVoltsSysIdCommands(std::function<bool()> fwd,
+                                           std::function<bool()> quasistatic);
+  frc2::CommandPtr SteerTorqueCurrentSysIdCommands(
+      std::function<bool()> fwd, std::function<bool()> quasistatic);
+  frc2::CommandPtr DriveSysIdCommands(std::function<bool()> fwd,
+                                      std::function<bool()> quasistatic);
+  frc2::CommandPtr WheelRadiusSysIdCommands(std::function<bool()> fwd);
 
-    units::meters_per_second_t CreepSpeed = 2_mps; // kSpeedAt12Volts desired top speed
-    units::radians_per_second_t CreepAngularRate = 0.25_tps; // 3/4 of a rotation per second max angular velocity
+  std::shared_ptr<nt::NetworkTable> tuningTable{
+      nt::NetworkTableInstance::GetDefault().GetTable("Tuning")};
+  frc2::NetworkButton steerTuneBtn{tuningTable, "SteerPidTuning"};
+  frc2::NetworkButton driveTuneBtn{tuningTable, "DrivePidTuning"};
+  frc2::NetworkButton steerSysIdVoltsBtn{tuningTable, "SteerSysIdVolts"};
+  frc2::NetworkButton steerSysIdTorqueCurrentBtn{tuningTable,
+                                                 "SteerSysIdTorqueCurrent"};
+  frc2::NetworkButton driveSysIdBtn{tuningTable, "DriveSysId"};
+  frc2::NetworkButton wheelRadiusBtn{tuningTable, "WheelRadius"};
+  frc2::NetworkButton elevatorTuneBtn{tuningTable, "ElevatorPidTuning"};
+  frc2::NetworkButton elevatorSysIdVoltsBtn{tuningTable, "ElevatorSysIdVolts"};
+  frc2::NetworkButton pivotTuneBtn{tuningTable, "PivotPidTuning"};
+  frc2::NetworkButton pivotSysIdVoltsBtn{tuningTable, "PivotSysIdVolts"};
+  frc2::NetworkButton algaePivotTuneBtn{tuningTable, "AlgaePivotPidTuning"};
+  frc2::NetworkButton algaePivotSysIdVoltsBtn{tuningTable,
+                                              "AlgaePivotSysIdVolts"};
+  frc2::NetworkButton coastElevatorBtn{tuningTable, "CoastElevator"};
+  frc2::NetworkButton coastPivotBtn{tuningTable, "CoastPivot"};
 
 
+   bool SmartDashHoming;
+};
 
-    /* Setting up bindings for necessary control of the swerve drive platform */
-    swerve::requests::FieldCentric drive = swerve::requests::FieldCentric{}
-        .WithDeadband(MaxSpeed * 0.1).WithRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-        .WithDriveRequestType(swerve::DriveRequestType::OpenLoopVoltage); // Use open-loop control for drive motors
-    swerve::requests::SwerveDriveBrake brake{};
-    swerve::requests::PointWheelsAt point{};
-
-    /* Note: This must be constructed before the drivetrain, otherwise we need to
-     *       define a destructor to un-register the telemetry from the drivetrain */
-    Telemetry logger{MaxSpeed};
-
-    frc2::CommandXboxController joystick{0};
   
-  bool SmartDashHoming;
-
  
 
-    // str::vision::VisionSystem vision{
-    //   [this](const frc::Pose2d& pose, units::second_t time,
-    //          const Eigen::Vector3d& stdDevs) {
-    //     driveSub.AddVisionMeasurement(pose, time, stdDevs);
-    //   },
-    //   [this](const frc::Pose2d& pose, units::second_t time,
-    //          const Eigen::Vector3d& stdDevs) {
-    //     driveSub.AddSingleTagVisionMeasurement(pose, time, stdDevs);
-    //   }};
-
-  // std::shared_ptr<nt::NetworkTable> tuningTable{
-  //     nt::NetworkTableInstance::GetDefault().GetTable("Tuning")};
-  // frc2::NetworkButton steerTuneBtn{tuningTable, "SteerPidTuning"};
-  // frc2::NetworkButton driveTuneBtn{tuningTable, "DrivePidTuning"};
-  // frc2::NetworkButton steerSysIdVoltsBtn{tuningTable, "SteerSysIdVolts"};
-  // frc2::NetworkButton steerSysIdTorqueCurrentBtn{tuningTable,
-  //                                                "SteerSysIdTorqueCurrent"};
-  // frc2::NetworkButton driveSysIdBtn{tuningTable, "DriveSysId"};
-  // frc2::NetworkButton wheelRadiusBtn{tuningTable, "WheelRadius"};
-
-
-
-};

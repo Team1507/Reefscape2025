@@ -12,23 +12,21 @@
 #include "frc/geometry/Pose2d.h"
 #include "frc/smartdashboard/SmartDashboard.h"
 #include "photon/PhotonPoseEstimator.h"
-#include <cameraserver/CameraServer.h>
 
 RobotContainer robotcontainer; // <--- global variable
 
 Robot::Robot() {
   // // DANGEROUS MAKE SURE CODE DOESN'T BLOCK!!!
-  // frc::SetCurrentThreadPriority(true, 15);
-  // ctre::phoenix6::SignalLogger::EnableAutoLogging(true);
-  // ctre::phoenix6::SignalLogger::Start();
-  // frc::DataLogManager::Start();
-  // frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
-  // // AddPeriodic([this] { m_container.GetDrive().UpdateOdom(); },
-  // //             1 / consts::swerve::ODOM_UPDATE_RATE, 2_ms);
-  // wpi::WebServer::GetInstance().Start(5800,
-  //                                     frc::filesystem::GetDeployDirectory());
+  frc::SetCurrentThreadPriority(true, 15);
+  ctre::phoenix6::SignalLogger::EnableAutoLogging(true);
+  ctre::phoenix6::SignalLogger::Start();
+  frc::DataLogManager::Start();
+  frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
+  AddPeriodic([this] { robotcontainer.GetDrive().UpdateOdom(); },
+              1 / consts::swerve::ODOM_UPDATE_RATE, 2_ms);
+  wpi::WebServer::GetInstance().Start(5800,
+                                      frc::filesystem::GetDeployDirectory());
   pdp.ClearStickyFaults();
-  frc::CameraServer::StartAutomaticCapture();
 }
 
 void Robot::RobotPeriodic() {
@@ -45,18 +43,18 @@ void Robot::RobotPeriodic() {
 
 }
 
-// void Robot::SimulationPeriodic() {
-//   m_container.GetVision().SimulationPeriodic(
-//       m_container.GetDrive().GetOdomPose());
-// }
+void Robot::SimulationPeriodic() {
+  robotcontainer.GetVision().SimulationPeriodic(
+      robotcontainer.GetDrive().GetOdomPose());
+}
 
-// void Robot::UpdateVision() {
-//   auto robotPose = frc::Pose3d{m_container.GetDrive().GetRobotPose()};
-//   m_container.GetVision().UpdateYaws(m_container.GetDrive().GetGyroYaw(),
-//                                      frc::Timer::GetFPGATimestamp());
-//   m_container.GetVision().UpdatePoseEstimators(robotPose);
-//   m_container.GetVision().UpdateCameraPositionVis(robotPose);
-// }
+void Robot::UpdateVision() {
+  auto robotPose = frc::Pose3d{robotcontainer.GetDrive().GetRobotPose()};
+  robotcontainer.GetVision().UpdateYaws(robotcontainer.GetDrive().GetGyroYaw(),
+                                     frc::Timer::GetFPGATimestamp());
+  robotcontainer.GetVision().UpdatePoseEstimators(robotPose);
+  robotcontainer.GetVision().UpdateCameraPositionVis(robotPose);
+}
 
 void Robot::DisabledInit() {
   // m_container.GetPivot().SetToStartingPosition();

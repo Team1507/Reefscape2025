@@ -7,7 +7,7 @@ Climber::Climber()
 {
     
     m_isClimberActivated = false;
-     m_climber.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+     //m_climber.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 }
 
 void Climber::Periodic()
@@ -20,18 +20,18 @@ void Climber::Periodic()
 
 void Climber::SetClimbPower(double power)
 {
-    m_climber.Set(power);
+    //m_climber.Set(power);
 }
 
 units::ampere_t Climber::GetClimberCurrent()
 {
-    auto current = m_climber.GetTorqueCurrent().GetValue();
-    return current;
+    //auto current = m_climber.GetTorqueCurrent().GetValue();
+    //return current;
 }
 
 double Climber::GetClimbPower(void)
 {
-    return m_climber.Get();
+    //return m_climber.Get();
 }
 
 bool Climber::IsClimberActivated(void)
@@ -41,7 +41,7 @@ bool Climber::IsClimberActivated(void)
 
 bool Climber::GetClimberBeamBreak()
 {
-    return m_climberBeamBreak.Get();
+  //  return m_climberBeamBreak.Get();
 }
 
 void Climber::DropRamp()
