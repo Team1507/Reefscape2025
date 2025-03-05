@@ -35,6 +35,8 @@ class Climber : public frc2::SubsystemBase
 
     void OffRamp();
 
+    units::ampere_t GetClimberCurrent();
+
     private:
 
     ctre::phoenix6::hardware::TalonFX m_climber{CLIMBER_CAN_ID}; //Constant 

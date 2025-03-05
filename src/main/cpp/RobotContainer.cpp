@@ -92,7 +92,7 @@ void RobotContainer::ConfigureBindings()
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
   (m_topDriver.B() && m_topDriver.Back()).OnTrue(new CmdRampDrop());
-  (m_topDriver.Y() && m_topDriver.Start()).OnTrue(new CmdClimberActivate(0.5));
+  (m_topDriver.Y() && m_topDriver.Start()).OnTrue(new CmdClimberActivate(0.7));
 
 
   //Coral
@@ -129,12 +129,12 @@ altPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
 frc2::Trigger altPovLeft([=]() {
   return aButton.Get() && povLeftButton.Get();
 });
-altPovLeft.OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG_LOW));
+altPovLeft.OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG_HIGH));
 
 frc2::Trigger altPovRight([=]() {
   return aButton.Get() && povRightButton.Get();
 });
-altPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG_HIGH));
+altPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG_LOW));
 
 // Normal D-pad bindings (fire only when A is NOT pressed)
 frc2::Trigger normalPovUp([=]() {
@@ -161,7 +161,7 @@ normalPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_L2));
 
 frc2::Command* RobotContainer::GetAutonomousCommand() 
 {
-  return nullptr;
+  return autos.GetSelectedCommand()
 }
 
 // void RobotContainer::ConfigureSysIdBinds() {
@@ -241,9 +241,9 @@ frc2::Command* RobotContainer::GetAutonomousCommand()
 //       driveSub.WheelRadius(frc2::sysid::Direction::kReverse), fwd);
 // }
 
-// Drive& RobotContainer::GetDrive() {
-//   return driveSub;
-// }
+subsystems::CommandSwerveDrivetrain& RobotContainer::GetDrive() {
+  return drivetrain;
+}
 
 
 

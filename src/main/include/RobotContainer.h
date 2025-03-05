@@ -24,6 +24,8 @@
 #include "subsystems/CommandSwerveDrivetrain.h"
 #include "Telemetry.h"
 
+#include "Autos.h"
+
 class RobotContainer {
  public:
   RobotContainer();
@@ -33,6 +35,10 @@ class RobotContainer {
   Climber m_climber;
   Claw    m_claw;
   Elevator m_elevator;
+
+
+
+  subsystems::CommandSwerveDrivetrain& GetDrive();
 
   str::vision::VisionSystem& GetVision();
 
@@ -66,6 +72,8 @@ class RobotContainer {
     frc2::CommandXboxController joystick{0};
   
   bool SmartDashHoming;
+
+ 
 
     // str::vision::VisionSystem vision{
     //   [this](const frc::Pose2d& pose, units::second_t time,

@@ -15,11 +15,18 @@ void Climber::Periodic()
     frc::SmartDashboard::PutBoolean("Climber Activated Status", IsClimberActivated());
     frc::SmartDashboard::PutBoolean("Climber Done", GetClimberBeamBreak());
     frc::SmartDashboard::PutBoolean("Climber Beam Break", GetClimberBeamBreak());
+    frc::SmartDashboard::PutNumber("Climber Current", GetClimberCurrent().value());
 }
 
 void Climber::SetClimbPower(double power)
 {
     m_climber.Set(power);
+}
+
+units::ampere_t Climber::GetClimberCurrent()
+{
+    auto current = m_climber.GetTorqueCurrent().GetValue();
+    return current;
 }
 
 double Climber::GetClimbPower(void)

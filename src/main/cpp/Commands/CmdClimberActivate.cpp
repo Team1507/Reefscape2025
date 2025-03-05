@@ -10,6 +10,9 @@
 
 #include <iostream> 
 
+#define CLIMBER_INCRIMENT 10
+int incriment = 0;
+
 CmdClimberActivate::CmdClimberActivate(double power) 
 {
   m_power = power;
@@ -59,8 +62,16 @@ void CmdClimberActivate::Execute()
       std::cout << "Sensor1" << std::endl;
       if(robotcontainer.m_climber.GetClimberBeamBreak() == false)
       {
-        currentState = stateClimber::StopMotor;
-        std::cout << "Sensor Off" << std::endl;
+        if(incriment == CLIMBER_INCRIMENT)
+        {
+          currentState = stateClimber::StopMotor;
+          std::cout << "Sensor Off" << std::endl;
+        }
+        else
+        {
+          incriment ++;
+          std::cout << "Climber Incroment" << std::endl;
+        }
       }
       break;
 
