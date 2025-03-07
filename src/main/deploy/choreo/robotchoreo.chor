@@ -1,0 +1,479 @@
+{
+ "name":"robotchoreo",
+ "version":1,
+ "type":"Swerve",
+ "variables":{
+  "expressions":{
+   "PoleOffset":{
+    "dimension":"Length",
+    "var":{
+     "exp":"6.469 in",
+     "val":0.1643126
+    }
+   },
+   "RWidth":{
+    "dimension":"Length",
+    "var":{
+     "exp":"0.446913 m",
+     "val":0.446913
+    }
+   },
+   "Width":{
+    "dimension":"Length",
+    "var":{
+     "exp":"8.052 m",
+     "val":8.052
+    }
+   }
+  },
+  "poses":{
+   "A":{
+    "x":{
+     "exp":"Tag18.x - RWidth",
+     "val":3.2105870000000003
+    },
+    "y":{
+     "exp":"Tag18.y + PoleOffset",
+     "val":4.1902126
+    },
+    "heading":{
+     "exp":"Tag18.heading",
+     "val":0.0
+    }
+   },
+   "ABAlgae":{
+    "x":{
+     "exp":"Tag18.x - (RWidth * cos(Tag18.heading))",
+     "val":3.2105870000000003
+    },
+    "y":{
+     "exp":"Tag18.y - (RWidth * sin(Tag18.heading))",
+     "val":4.0259
+    },
+    "heading":{
+     "exp":"Tag18.heading",
+     "val":0.0
+    }
+   },
+   "ApproachKL":{
+    "x":{
+     "exp":"3.5708212852478027 m",
+     "val":3.5708212852478027
+    },
+    "y":{
+     "exp":"5.586282730102539 m",
+     "val":5.586282730102539
+    },
+    "heading":{
+     "exp":"-1.0390721810527082 rad",
+     "val":-1.0390721810527082
+    }
+   },
+   "B":{
+    "x":{
+     "exp":"Tag18.x - RWidth",
+     "val":3.2105870000000003
+    },
+    "y":{
+     "exp":"Tag18.y - PoleOffset",
+     "val":3.8615874
+    },
+    "heading":{
+     "exp":"Tag18.heading",
+     "val":0.0
+    }
+   },
+   "C":{
+    "x":{
+     "exp":"Tag17.x - (PoleOffset * sin(Tag17.heading)) - (RWidth * cos(Tag17.heading))",
+     "val":3.708150614138129
+    },
+    "y":{
+     "exp":"Tag17.y + (PoleOffset * cos(Tag17.heading)) - (RWidth * sin(Tag17.heading))",
+     "val":3.001436288618485
+    },
+    "heading":{
+     "exp":"Tag17.heading",
+     "val":1.0471975511965976
+    }
+   },
+   "CDAlgae":{
+    "x":{
+     "exp":"Tag17.x - (RWidth * cos(Tag17.heading))",
+     "val":3.8504494999
+    },
+    "y":{
+     "exp":"Tag17.y - (RWidth * sin(Tag17.heading))",
+     "val":2.9192799886184853
+    },
+    "heading":{
+     "exp":"Tag17.heading",
+     "val":1.0471975511965976
+    }
+   },
+   "D":{
+    "x":{
+     "exp":"Tag17.x + (PoleOffset * sin(Tag17.heading)) - (RWidth * cos(Tag17.heading))",
+     "val":3.992748385661871
+    },
+    "y":{
+     "exp":"Tag17.y - (PoleOffset * cos(Tag17.heading)) - (RWidth * sin(Tag17.heading))",
+     "val":2.8371236886184854
+    },
+    "heading":{
+     "exp":"Tag17.heading",
+     "val":1.0471975511965976
+    }
+   },
+   "E":{
+    "x":{
+     "exp":"Tag22.x - (PoleOffset * sin(Tag22.heading)) - (RWidth * cos(Tag22.heading))",
+     "val":4.985897613238129
+    },
+    "y":{
+     "exp":"Tag22.y + (PoleOffset * cos(Tag22.heading)) - (RWidth * sin(Tag22.heading))",
+     "val":2.8371236886184854
+    },
+    "heading":{
+     "exp":"Tag22.heading",
+     "val":2.0943951023931953
+    }
+   },
+   "EFAlgae":{
+    "x":{
+     "exp":"Tag22.x - (RWidth * cos(Tag22.heading))",
+     "val":5.128196499
+    },
+    "y":{
+     "exp":"Tag22.y - (RWidth * sin(Tag22.heading))",
+     "val":2.9192799886184853
+    },
+    "heading":{
+     "exp":"Tag22.heading",
+     "val":2.0943951023931953
+    }
+   },
+   "F":{
+    "x":{
+     "exp":"Tag22.x + (PoleOffset * sin(Tag22.heading)) - (RWidth * cos(Tag22.heading))",
+     "val":5.270495384761872
+    },
+    "y":{
+     "exp":"Tag22.y - (PoleOffset * cos(Tag22.heading)) - (RWidth * sin(Tag22.heading))",
+     "val":3.001436288618485
+    },
+    "heading":{
+     "exp":"Tag22.heading",
+     "val":2.0943951023931953
+    }
+   },
+   "G":{
+    "x":{
+     "exp":"Tag21.x - (PoleOffset * sin(Tag21.heading)) - (RWidth * cos(Tag21.heading))",
+     "val":5.767959
+    },
+    "y":{
+     "exp":"Tag21.y + (PoleOffset * cos(Tag21.heading)) - (RWidth * sin(Tag21.heading))",
+     "val":3.8615874
+    },
+    "heading":{
+     "exp":"Tag21.heading",
+     "val":3.141592653589793
+    }
+   },
+   "GHAlgae":{
+    "x":{
+     "exp":"Tag21.x - (RWidth * cos(Tag21.heading))",
+     "val":5.767959
+    },
+    "y":{
+     "exp":"Tag21.y - (RWidth * sin(Tag21.heading))",
+     "val":4.0259
+    },
+    "heading":{
+     "exp":"Tag21.heading",
+     "val":3.141592653589793
+    }
+   },
+   "H":{
+    "x":{
+     "exp":"Tag21.x + (PoleOffset * sin(Tag21.heading)) - (RWidth * cos(Tag21.heading))",
+     "val":5.767959
+    },
+    "y":{
+     "exp":"Tag21.y - (PoleOffset * cos(Tag21.heading)) - (RWidth * sin(Tag21.heading))",
+     "val":4.1902126
+    },
+    "heading":{
+     "exp":"Tag21.heading",
+     "val":3.141592653589793
+    }
+   },
+   "I":{
+    "x":{
+     "exp":"Tag20.x - (PoleOffset * sin(Tag20.heading)) - (RWidth * cos(Tag20.heading))",
+     "val":5.270495384761872
+    },
+    "y":{
+     "exp":"Tag20.y + (PoleOffset * cos(Tag20.heading)) - (RWidth * sin(Tag20.heading))",
+     "val":5.0503637112815145
+    },
+    "heading":{
+     "exp":"Tag20.heading",
+     "val":-2.0943951023931953
+    }
+   },
+   "IJAlgae":{
+    "x":{
+     "exp":"Tag20.x - (RWidth * cos(Tag20.heading))",
+     "val":5.128196499
+    },
+    "y":{
+     "exp":"Tag20.y - (RWidth * sin(Tag20.heading))",
+     "val":5.132520011281515
+    },
+    "heading":{
+     "exp":"Tag20.heading",
+     "val":-2.0943951023931953
+    }
+   },
+   "J":{
+    "x":{
+     "exp":"Tag20.x + (PoleOffset * sin(Tag20.heading)) - (RWidth * cos(Tag20.heading))",
+     "val":4.985897613238129
+    },
+    "y":{
+     "exp":"Tag20.y - (PoleOffset * cos(Tag20.heading)) - (RWidth * sin(Tag20.heading))",
+     "val":5.214676311281515
+    },
+    "heading":{
+     "exp":"Tag20.heading",
+     "val":-2.0943951023931953
+    }
+   },
+   "K":{
+    "x":{
+     "exp":"Tag19.x - (PoleOffset * sin(Tag19.heading)) - (RWidth * cos(Tag19.heading))",
+     "val":3.992748385661871
+    },
+    "y":{
+     "exp":"Tag19.y + (PoleOffset * cos(Tag19.heading)) - (RWidth * sin(Tag19.heading))",
+     "val":5.214676311281515
+    },
+    "heading":{
+     "exp":"Tag19.heading",
+     "val":-1.0471975511965976
+    }
+   },
+   "KLAlgae":{
+    "x":{
+     "exp":"Tag19.x - (RWidth * cos(Tag19.heading))",
+     "val":3.8504494999
+    },
+    "y":{
+     "exp":"Tag19.y - (RWidth * sin(Tag19.heading))",
+     "val":5.132520011281515
+    },
+    "heading":{
+     "exp":"Tag19.heading",
+     "val":-1.0471975511965976
+    }
+   },
+   "L":{
+    "x":{
+     "exp":"Tag19.x + (PoleOffset * sin(Tag19.heading)) - (RWidth * cos(Tag19.heading))",
+     "val":3.708150614138129
+    },
+    "y":{
+     "exp":"Tag19.y - (PoleOffset * cos(Tag19.heading)) - (RWidth * sin(Tag19.heading))",
+     "val":5.0503637112815145
+    },
+    "heading":{
+     "exp":"Tag19.heading",
+     "val":-1.0471975511965976
+    }
+   },
+   "LSB":{
+    "x":{
+     "exp":"1.6246 m",
+     "val":1.6246
+    },
+    "y":{
+     "exp":"7.41714 m",
+     "val":7.41714
+    },
+    "heading":{
+     "exp":"-0.9256228732090668 rad",
+     "val":-0.9256228732090668
+    }
+   },
+   "Process":{
+    "x":{
+     "exp":"6.050968647003174 m",
+     "val":6.050968647003174
+    },
+    "y":{
+     "exp":"0.470966637134552 m",
+     "val":0.470966637134552
+    },
+    "heading":{
+     "exp":"4.712388980384692 rad",
+     "val":4.712388980384692
+    }
+   },
+   "Tag17":{
+    "x":{
+     "exp":"4.0739059999 m",
+     "val":4.0739059999
+    },
+    "y":{
+     "exp":"3.3063179999 m",
+     "val":3.3063179999
+    },
+    "heading":{
+     "exp":"60 deg",
+     "val":1.0471975511965976
+    }
+   },
+   "Tag18":{
+    "x":{
+     "exp":"3.6575 m",
+     "val":3.6575
+    },
+    "y":{
+     "exp":"4.0259 m",
+     "val":4.0259
+    },
+    "heading":{
+     "exp":"0 rad",
+     "val":0.0
+    }
+   },
+   "Tag19":{
+    "x":{
+     "exp":"4.0739059999 m",
+     "val":4.0739059999
+    },
+    "y":{
+     "exp":"4.745482 m",
+     "val":4.745482
+    },
+    "heading":{
+     "exp":"-60 deg",
+     "val":-1.0471975511965976
+    }
+   },
+   "Tag20":{
+    "x":{
+     "exp":"4.904739999 m",
+     "val":4.904739999
+    },
+    "y":{
+     "exp":"4.745482 m",
+     "val":4.745482
+    },
+    "heading":{
+     "exp":"-120 deg",
+     "val":-2.0943951023931953
+    }
+   },
+   "Tag21":{
+    "x":{
+     "exp":"5.321046 m",
+     "val":5.321046
+    },
+    "y":{
+     "exp":"4.0259 m",
+     "val":4.0259
+    },
+    "heading":{
+     "exp":"180 deg",
+     "val":3.141592653589793
+    }
+   },
+   "Tag22":{
+    "x":{
+     "exp":"4.904739999 m",
+     "val":4.904739999
+    },
+    "y":{
+     "exp":"3.3063179999 m",
+     "val":3.3063179999
+    },
+    "heading":{
+     "exp":"120 deg",
+     "val":2.0943951023931953
+    }
+   }
+  }
+ },
+ "config":{
+  "frontLeft":{
+   "x":{
+    "exp":"0.289 m",
+    "val":0.289
+   },
+   "y":{
+    "exp":"0.289 m",
+    "val":0.289
+   }
+  },
+  "backLeft":{
+   "x":{
+    "exp":"-0.289 m",
+    "val":-0.289
+   },
+   "y":{
+    "exp":"-0.289 m",
+    "val":-0.289
+   }
+  },
+  "mass":{
+   "exp":"135 lb",
+   "val":61.23496995
+  },
+  "inertia":{
+   "exp":"6 kg m ^ 2",
+   "val":6.0
+  },
+  "gearing":{
+   "exp":"6.75",
+   "val":6.75
+  },
+  "radius":{
+   "exp":"0.049 m",
+   "val":0.049
+  },
+  "vmax":{
+   "exp":"5800 rpm",
+   "val":607.3745796940267
+  },
+  "tmax":{
+   "exp":"0.9 N * m",
+   "val":0.9
+  },
+  "cof":{
+   "exp":"1.2",
+   "val":1.2
+  },
+  "bumper":{
+   "front":{
+    "exp":"0.4485005 m",
+    "val":0.4485005
+   },
+   "side":{
+    "exp":"0.4485005 m",
+    "val":0.4485005
+   },
+   "back":{
+    "exp":"0.4485005 m",
+    "val":0.4485005
+   }
+  },
+  "differentialTrackWidth":{
+   "exp":"22 in",
+   "val":0.5588
+  }
+ },
+ "generationFeatures":[]
+}

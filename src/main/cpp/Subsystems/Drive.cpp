@@ -583,3 +583,15 @@ frc2::CommandPtr Drive::WheelRadius(frc2::sysid::Direction dir) {
                  {this}))
       .WithName("Wheel Radius Calculation");
 }
+
+frc::Pose2d Drive::GetRobotPose() const {
+    return swerveDrive.GetPose();
+}
+
+units::degree_t Drive::GetYaw() const {
+    return swerveDrive.GetYawFromImu();
+}
+
+void Drive::Drive2(frc::ChassisSpeeds speeds) {
+    swerveDrive.Drive(speeds, false); // Assuming openLoop is false for closed-loop
+}

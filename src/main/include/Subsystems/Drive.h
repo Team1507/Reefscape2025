@@ -77,6 +77,11 @@ class Drive : public frc2::SubsystemBase {
   frc2::CommandPtr TuneDrivePID(std::function<bool()> isDone);
   frc2::CommandPtr WheelRadius(frc2::sysid::Direction dir);
 
+    frc::Pose2d GetRobotPose() const;
+    units::degree_t GetYaw() const;
+    void Drive2(frc::ChassisSpeeds speeds);
+
+
  private:
   str::swerve::SwerveDrive swerveDrive{};
   std::shared_ptr<pathplanner::PPHolonomicDriveController> ppControllers;
