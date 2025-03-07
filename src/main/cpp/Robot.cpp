@@ -35,7 +35,7 @@ void Robot::RobotPeriodic() {
   loopTimePub.Set((1 / loopTime).value());
 
   frc2::CommandScheduler::GetInstance().Run();
-  //UpdateVision();
+  UpdateVision();
 
   lastTotalLoopTime = now;
   matchTimePub.Set(frc::DriverStation::GetMatchTime().value());

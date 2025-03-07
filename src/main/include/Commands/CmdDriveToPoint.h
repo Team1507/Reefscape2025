@@ -6,6 +6,7 @@
 #include <units/velocity.h>
 #include <units/angle.h>
 #include <units/time.h>
+#include <frc/Timer.h>
 
 class CmdDriveToPoint
     : public frc2::CommandHelper<frc2::Command, CmdDriveToPoint> {
