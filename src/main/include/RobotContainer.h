@@ -10,6 +10,9 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/NetworkButton.h>
 
+#include <frc/smartdashboard/SendableChooser.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include <functional>
 #include <memory>
 #include <string>
@@ -87,6 +90,8 @@ str::vision::VisionSystem& GetVision();
   frc2::NetworkButton coastElevatorBtn{tuningTable, "CoastElevator"};
   frc2::NetworkButton coastPivotBtn{tuningTable, "CoastPivot"};
 
+
+  frc::SendableChooser<frc2::Command*> m_chooser;
 
    bool SmartDashHoming;
 };

@@ -15,6 +15,9 @@
 
 RobotContainer robotcontainer; // <--- global variable
 
+void WriteToSmartDashboard(void);
+
+
 Robot::Robot() {
   // // DANGEROUS MAKE SURE CODE DOESN'T BLOCK!!!
   frc::SetCurrentThreadPriority(true, 15);
@@ -33,6 +36,8 @@ void Robot::RobotPeriodic() {
   units::second_t now = frc::Timer::GetFPGATimestamp();
   units::second_t loopTime = now - lastTotalLoopTime;
   loopTimePub.Set((1 / loopTime).value());
+
+  WriteToSmartDashboard();
 
   frc2::CommandScheduler::GetInstance().Run();
   UpdateVision();
@@ -102,3 +107,10 @@ int main() {
   return frc::StartRobot<Robot>();
 }
 #endif
+
+void WriteToSmartDashboard()
+{
+    frc::SmartDashboard::PutNumber("Odo X" , robotcontainer.driveSub.GetRobotPose().X().value());
+    frc::SmartDashboard::PutNumber("Odo Y" , robotcontainer.driveSub.GetRobotPose().Y().value());
+     frc::SmartDashboard::PutNumber("Odo Angle" , robotcontainer.driveSub.GetRobotPose().Rotation().Degrees().value());
+}

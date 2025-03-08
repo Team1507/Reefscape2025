@@ -42,6 +42,8 @@
 #include "str/DriverstationUtils.h"
 #include <frc2/command/ParallelCommandGroup.h>
 
+#include "commands/AutoDoNothing.h"
+
 
 
 RobotContainer::RobotContainer() 
@@ -52,6 +54,14 @@ RobotContainer::RobotContainer()
   m_claw.SetDefaultCommand(CmdAlgaeManualPower(0));
   
   frc::SmartDashboard::PutData("zero pivot", new CmdPivotZero());
+
+   m_chooser.AddOption("Auto Do Nothing",           new AutoDoNothing() );
+
+    m_chooser.SetDefaultOption("Auto Do Nothing",    new AutoDoNothing() );
+
+  frc::SmartDashboard::PutData("Auto Mode", &m_chooser);
+
+
 }
 
 void RobotContainer::ConfigureBindings()
@@ -59,16 +69,16 @@ void RobotContainer::ConfigureBindings()
    driveSub.SetDefaultCommand(driveSub.DriveTeleop(
       [this] {
         return str::NegateIfRed(
-            frc::ApplyDeadband<double>(-driverJoystick.GetLeftY(), .1) *
+            frc::ApplyDeadband<double>(-driverJoystick.GetLeftY(), .05) *
             consts::swerve::physical::PHY_CHAR.MaxLinearSpeed());
       },
       [this] {
         return str::NegateIfRed(
-            frc::ApplyDeadband<double>(-driverJoystick.GetLeftX(), .1) *
+            frc::ApplyDeadband<double>(-driverJoystick.GetLeftX(), .05) *
             consts::swerve::physical::PHY_CHAR.MaxLinearSpeed());
       },
       [this] {
-        return frc::ApplyDeadband<double>(-driverJoystick.GetRightX(), .1) *
+        return frc::ApplyDeadband<double>(-driverJoystick.GetRightX(), .05) *
                360_deg_per_s;
       }));
 
@@ -233,10 +243,10 @@ frc2::CommandPtr RobotContainer::WheelRadiusSysIdCommands(
       driveSub.WheelRadius(frc2::sysid::Direction::kReverse), fwd);
 }
 
-frc2::Command* RobotContainer::GetAutonomousCommand() {
-  return nullptr;
+frc2::Command* RobotContainer::GetAutonomousCommand() 
+{
+  return m_chooser.GetSelected();
 }
-
 Drive& RobotContainer::GetDrive() {
   return driveSub;
 }
