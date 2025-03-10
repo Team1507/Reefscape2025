@@ -13,9 +13,10 @@
 #define CLIMBER_INCRIMENT 10
 int incriment = 0;
 
-CmdClimberActivate::CmdClimberActivate(double power) 
+CmdClimberActivate::CmdClimberActivate(double power, double sparkPower) 
 {
   m_power = power;
+  m_sparkPower = sparkPower;
   AddRequirements(&robotcontainer.m_climber); //Calls Climber through container
 }
 
@@ -53,7 +54,7 @@ void CmdClimberActivate::Execute()
   switch(currentState)
   {
     case stateClimber::RunClimberFull:
-      robotcontainer.m_climber.SetClimbPower(m_power);
+      robotcontainer.m_climber.SetClimbPower(m_power, m_sparkPower);
       currentState = stateClimber::Sensor1;
       std::cout << "RunClimberFull" << std::endl;
       break;
@@ -76,7 +77,7 @@ void CmdClimberActivate::Execute()
       break;
 
     case stateClimber::StopMotor:
-      robotcontainer.m_climber.SetClimbPower(0);
+      robotcontainer.m_climber.SetClimbPower(0,0);
       currentState = stateClimber::EndState;
       std::cout << "StopMotor" << std::endl;
       break;
@@ -96,7 +97,7 @@ void CmdClimberActivate::End(bool interrupted)
 {
   std::cout << "End CmdMotorSpin" << std::endl; //Lets Us know the command is ending
   
-  robotcontainer.m_climber.SetClimbPower(0);
+  robotcontainer.m_climber.SetClimbPower(0,0);
 
   // m_timer.Stop();
   // m_timer.Reset();

@@ -25,6 +25,7 @@ inline constexpr frc::Transform2d CLAW_TRANS_R{0_m, CLAW_OFFSET_R,
 //**********CLIMB CONSTANTS **********//
 #define CLIMBER_CAN_ID         17       
 #define CLIMBER_BEAM_BREAK_ID  1
+#define CLIMBER_SPARK_CAN_ID   18
 
 //********** ClAW CONSTANTS **********//
 

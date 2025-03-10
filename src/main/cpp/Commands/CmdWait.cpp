@@ -2,9 +2,9 @@
 #include "Robot.h"
 #include <iostream>
 
-CmdWait::CmdWait() 
+CmdWait::CmdWait(double wait) 
 {
-
+  m_wait = wait;
 }
 
 
@@ -28,6 +28,6 @@ void CmdWait::End(bool interrupted)
 
 bool CmdWait::IsFinished()
 {
- const units::second_t timeout = units::second_t(0.65); 
+ const units::second_t timeout = units::second_t(m_wait); 
  return m_timer.Get() >= timeout;
 }

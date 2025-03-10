@@ -57,6 +57,11 @@ frc::Pose2d Drive::GetOdomPose() const {
   return swerveDrive.GetOdomPose();
 }
 
+void Drive::ResetAllSensors() 
+{
+  swerveDrive.ResetPose(frc::Pose2d{});
+}
+
 void Drive::AddVisionMeasurement(const frc::Pose2d& measurement,
                                  units::second_t timestamp,
                                  const Eigen::Vector3d& stdDevs) {

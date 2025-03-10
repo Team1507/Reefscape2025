@@ -15,7 +15,7 @@ class CmdClimberActivate
     : public frc2::CommandHelper<frc2::Command, CmdClimberActivate> {
  public:
 
-  CmdClimberActivate(double power);
+  CmdClimberActivate(double power,double sparkPower);
 
   void Initialize() override;
 
@@ -38,6 +38,8 @@ class CmdClimberActivate
   private:
 
   double m_power;
+
+  double m_sparkPower;
 
   frc::Timer m_timer;
 };

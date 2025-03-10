@@ -5,16 +5,14 @@
 #pragma once
 
 #include <frc2/command/CommandHelper.h>
-#include <frc2/command/InstantCommand.h>
+#include <frc2/command/SequentialCommandGroup.h>
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.
 // For more information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-class CmdDriveClearAll
-    : public frc2::CommandHelper<frc2::InstantCommand,
-                                 CmdDriveClearAll> {
+class Auto2PieceRight
+    : public frc2::CommandHelper<frc2::SequentialCommandGroup,
+                                 Auto2PieceRight> {
  public:
-  CmdDriveClearAll();
-
-  void Initialize() override;
+  Auto2PieceRight();
 };

@@ -21,8 +21,8 @@ void WriteToSmartDashboard(void);
 Robot::Robot() {
   // // DANGEROUS MAKE SURE CODE DOESN'T BLOCK!!!
   frc::SetCurrentThreadPriority(true, 15);
-  ctre::phoenix6::SignalLogger::EnableAutoLogging(true);
-  ctre::phoenix6::SignalLogger::Start();
+  // ctre::phoenix6::SignalLogger::EnableAutoLogging(true);
+  // ctre::phoenix6::SignalLogger::Start();
   frc::DataLogManager::Start();
   frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
   AddPeriodic([this] { robotcontainer.GetDrive().UpdateOdom(); },

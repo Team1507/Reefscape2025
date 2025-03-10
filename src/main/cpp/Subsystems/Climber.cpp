@@ -2,12 +2,26 @@
 #include "constants/Constants.h"
 #include "Robot.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <rev/SparkMax.h>
+#include <rev/config/SparkMaxConfig.h>
 
+using namespace rev::spark;
 Climber::Climber()
 {
     
     m_isClimberActivated = false;
-     m_climber.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+     m_climber.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
+
+    SparkMaxConfig climberconfig{};
+
+    climberconfig
+        .Inverted(false)
+        .SetIdleMode(SparkMaxConfig::IdleMode::kCoast);
+        
+    m_climberSpark.Configure(climberconfig,
+     SparkMax::ResetMode::kResetSafeParameters,
+     SparkMax::PersistMode::kPersistParameters);
+
 }
 
 void Climber::Periodic()
@@ -18,9 +32,10 @@ void Climber::Periodic()
     frc::SmartDashboard::PutNumber("Climber Current", GetClimberCurrent().value());
 }
 
-void Climber::SetClimbPower(double power)
+void Climber::SetClimbPower(double power, double sparkPower)
 {
     m_climber.Set(power);
+    m_climberSpark.Set(sparkPower);
 }
 
 units::ampere_t Climber::GetClimberCurrent()
@@ -58,3 +73,5 @@ void Climber::OffRamp()
 {
     m_ramp.Set(frc::Relay::kOff);
 }
+
+

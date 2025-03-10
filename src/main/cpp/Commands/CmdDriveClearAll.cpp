@@ -1,3 +1,14 @@
 #include "Commands/CmdDriveClearAll.h"
+#include "Robot.h"
 
-CmdDriveClearAll::CmdDriveClearAll() = default;
+
+CmdDriveClearAll::CmdDriveClearAll() 
+{
+  AddRequirements({&robotcontainer.driveSub});
+}
+
+
+void CmdDriveClearAll::Initialize() 
+{
+  robotcontainer.driveSub.ResetAllSensors();
+}

@@ -21,7 +21,7 @@ class CmdWait
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  CmdWait();
+  CmdWait(double wait);
 
   void Initialize() override;
 
@@ -32,6 +32,8 @@ class CmdWait
   bool IsFinished() override;
 
   private:
+
+  double m_wait;
 
   frc::Timer m_timer;
 };

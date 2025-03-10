@@ -17,6 +17,7 @@
 #include "Commands/CmdElevatorToPosition.h"
 #include "Commands/CmdRampDrop.h"
 #include  "Commands/CmdAlgaeSetPosition.h"
+#include "Commands/CmdDriveClearAll.h"
 
 #include "Subsystems/Elevator.h"
 #include "Subsystems/Claw.h"
@@ -43,7 +44,7 @@
 #include <frc2/command/ParallelCommandGroup.h>
 
 #include "commands/AutoDoNothing.h"
-
+#include "commands/Auto2PieceRight.h"
 
 
 RobotContainer::RobotContainer() 
@@ -58,6 +59,8 @@ RobotContainer::RobotContainer()
    m_chooser.AddOption("Auto Do Nothing",           new AutoDoNothing() );
 
     m_chooser.SetDefaultOption("Auto Do Nothing",    new AutoDoNothing() );
+
+    m_chooser.AddOption("Auto 2 Piece Right", new Auto2PieceRight());
 
   frc::SmartDashboard::PutData("Auto Mode", &m_chooser);
 
@@ -92,7 +95,7 @@ void RobotContainer::ConfigureBindings()
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
   (m_topDriver.B() && m_topDriver.Back()).OnTrue(new CmdRampDrop());
-  (m_topDriver.Y() && m_topDriver.Start()).OnTrue(new CmdClimberActivate(0.7));
+  (m_topDriver.Y() && m_topDriver.Start()).OnTrue(new CmdClimberActivate(1, 0.8));
 
 
   //Coral
@@ -106,6 +109,8 @@ void RobotContainer::ConfigureBindings()
   
 
  m_topDriver.Y().OnTrue(new CmdAlgaeToPos(15));
+
+ driverJoystick.A().OnTrue(new CmdDriveClearAll());
 
 
 // Assume these button objects are stored persistently (here as local constants)
