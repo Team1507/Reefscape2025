@@ -48,12 +48,12 @@ inline constexpr frc::Transform2d CLAW_TRANS_R{0_m, CLAW_OFFSET_R,
 #define ELEV_PULLY_DIAM 1.25_in
 
 #define ELEV_POSITION_HOME -0.03_tr    //home
-#define ELEV_POSITION_L1 -0.75_tr    //L1
-#define ELEV_POSITION_L2 -1.4_tr     //L2
-#define ELEV_POSITION_L3 -3.05_tr       //L3
-#define ELEV_POSITION_L4 -5.6_tr     //L4
-#define ELEV_POSITION_ALG_L2 -2.85_tr       //ALgea Low
-#define ELEV_POSITION_ALG_L3 -4.5_tr       //Algea High
+#define ELEV_POSITION_L1 -0.85_tr    //L1
+#define ELEV_POSITION_L2 -1.5_tr     //L2
+#define ELEV_POSITION_L3 -3.15_tr       //L3
+#define ELEV_POSITION_L4 -5.7_tr     //L4
+#define ELEV_POSITION_ALG_L2 -2.95_tr       //ALgea Low
+#define ELEV_POSITION_ALG_L3 -4.6_tr       //Algea High
 
 #define ELEV_TOLERANCE 0.05_tr
 

@@ -6,6 +6,9 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/Timer.h>  
 
+#define CLAW_INCRIMENT 10
+int claw_Incriment = 0;
+
 CmdClawActivate::CmdClawActivate(double power)
     : m_power(power) {
   AddRequirements(&robotcontainer.m_claw);
@@ -29,8 +32,20 @@ void CmdClawActivate::Execute() {
       break;
     case ClawState::Sensor1:
       if (robotcontainer.m_claw.GetClawPhotoEyeFirst()) {
-        std::cout << "claw See coral" << std::endl;
-        currentState = ClawState::RunClawCreep;
+         if(robotcontainer.m_climber.GetClimberBeamBreak() == false)
+      {
+        if(claw_Incriment == CLAW_INCRIMENT)
+        {
+          std::cout << "claw See coral" << std::endl;
+          currentState = ClawState::RunClawCreep;
+        }
+        else
+        {
+          claw_Incriment ++;
+          std::cout << "Claw Incroment" << std::endl;
+        }
+      }
+        
       }
       break;
     case ClawState::RunClawCreep:

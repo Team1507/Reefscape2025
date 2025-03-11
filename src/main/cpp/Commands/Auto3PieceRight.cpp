@@ -32,7 +32,7 @@ Auto3PieceRight::Auto3PieceRight()
     //Get coral at coral station
     CmdDriveToPoint(3.7_m, -1.4_m, -60_deg, 4.5_mps, false, 5_s),
     CmdDriveToPoint(6_m, -0.8_m, -125_deg, 3.5_mps, false, 5_s),
-    frc2::ParallelCommandGroup(   
+    frc2::ParallelCommandGroup(
     CmdDriveToPoint(6.6_m, -0.35_m, -127_deg, 1.25_mps, true, 2_s),
     CmdClawActivate(-1.0)
     ),

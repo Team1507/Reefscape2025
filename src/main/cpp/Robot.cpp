@@ -30,6 +30,7 @@ Robot::Robot() {
   wpi::WebServer::GetInstance().Start(5800,
                                       frc::filesystem::GetDeployDirectory());
   pdp.ClearStickyFaults();
+  frc::CameraServer::StartAutomaticCapture();
 }
 
 void Robot::RobotPeriodic() {
