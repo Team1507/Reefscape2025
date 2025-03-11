@@ -10,7 +10,7 @@
 
 #include <iostream> 
 
-#define CLIMBER_INCRIMENT 10
+#define CLIMBER_INCRIMENT 1
 int incriment = 0;
 
 CmdClimberActivate::CmdClimberActivate(double power, double sparkPower) 

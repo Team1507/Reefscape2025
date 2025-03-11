@@ -45,6 +45,8 @@
 
 #include "commands/AutoDoNothing.h"
 #include "commands/Auto2PieceRight.h"
+#include "commands/Auto2PieceLeft.h"
+
 
 
 RobotContainer::RobotContainer() 
@@ -56,11 +58,13 @@ RobotContainer::RobotContainer()
   
   frc::SmartDashboard::PutData("zero pivot", new CmdPivotZero());
 
-   m_chooser.AddOption("Auto Do Nothing",           new AutoDoNothing() );
+    m_chooser.AddOption("Auto Do Nothing",           new AutoDoNothing() );
 
     m_chooser.SetDefaultOption("Auto Do Nothing",    new AutoDoNothing() );
 
     m_chooser.AddOption("Auto 2 Piece Right", new Auto2PieceRight());
+
+    m_chooser.AddOption("Auto 2 Piece Left", new Auto2PieceLeft());
 
   frc::SmartDashboard::PutData("Auto Mode", &m_chooser);
 
@@ -95,7 +99,7 @@ void RobotContainer::ConfigureBindings()
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
   (m_topDriver.B() && m_topDriver.Back()).OnTrue(new CmdRampDrop());
-  (m_topDriver.Y() && m_topDriver.Start()).OnTrue(new CmdClimberActivate(1, 0.8));
+  (m_topDriver.Y() && m_topDriver.Start()).OnTrue(new CmdClimberActivate(0.7, 0.7));
 
 
   //Coral
