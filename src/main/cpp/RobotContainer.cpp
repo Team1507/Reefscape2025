@@ -19,6 +19,7 @@
 #include  "Commands/CmdAlgaeSetPosition.h"
 #include "Commands/CmdDriveClearAll.h"
 #include "commands/CmdClawStop.h"
+#include "Commands/CmdAlgaeHome.h"
 
 #include "Subsystems/Elevator.h"
 #include "Subsystems/Claw.h"
@@ -150,7 +151,9 @@ altPovUp.OnTrue(new CmdElevatorToPosition(ELEV_POS_L1));
 frc2::Trigger altPovDown([=]() {
   return aButton.Get() && povDownButton.Get();
 });
+altPovDown.OnTrue(new CmdAlgaeHome());
 altPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
+
 
 frc2::Trigger altPovLeft([=]() {
   return aButton.Get() && povLeftButton.Get();
