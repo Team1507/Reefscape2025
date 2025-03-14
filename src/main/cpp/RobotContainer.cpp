@@ -18,6 +18,7 @@
 #include "Commands/CmdRampDrop.h"
 #include  "Commands/CmdAlgaeSetPosition.h"
 #include "Commands/CmdDriveClearAll.h"
+#include "commands/CmdClawStop.h"
 
 #include "Subsystems/Elevator.h"
 #include "Subsystems/Claw.h"
@@ -119,6 +120,7 @@ void RobotContainer::ConfigureBindings()
 
   //Coral
    driverJoystick.RightBumper().WhileTrue(new CmdClawOuttake(-1.0));
+   driverJoystick.RightTrigger(0.5).WhileTrue(new CmdClawStop());
   m_topDriver.RightTrigger(0.5).OnTrue(new CmdClawActivate(-1.0));
   
   //Algae

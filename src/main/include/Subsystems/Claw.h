@@ -49,6 +49,7 @@ class Claw : public frc2::SubsystemBase {
   void SetBallLoaded(bool loaded);
   
   bool m_ballLoaded = false;
+  bool m_clawStop = false;
   
   bool isCoralReady;
   
@@ -62,6 +63,8 @@ class Claw : public frc2::SubsystemBase {
 
   frc::DigitalInput         m_armPhotoeyeFirst  {CLAW_PHOTO_EYE_FIRST};
   frc::DigitalInput         m_algaePhotoEye     {ALGAE_PHOTO_EYE};
+
+  
 
   
 };

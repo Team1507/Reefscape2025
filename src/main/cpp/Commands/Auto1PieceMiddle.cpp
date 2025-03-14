@@ -19,7 +19,13 @@ Auto1PieceMiddle::Auto1PieceMiddle() {
     CmdPrintText("Auto 1 Middle"),
     CmdDriveClearAll(),
 
-    CmdDriveToPoint(1.6_m, 0_m, 0_deg, 1.5_mps, true, 3_s),
+    CmdDriveToPoint(1.8_m, 0_m, 0_deg, 1.5_mps, false, 3_s),
+    CmdElevatorToPosition(3),
+    CmdDriveToPoint(1.85_m, 0_m, 0_deg, 1_mps, true, 2_s),
+    CmdWait(0.65),
+    CmdClawOuttake(-1.0),
+    CmdElevatorToPosition(1),
+    CmdWait(0.65),
 
     CmdPrintText("Auto 1 Middle End")
   );
