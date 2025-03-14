@@ -58,6 +58,10 @@ Auto2PieceRight::Auto2PieceRight()
     CmdElevatorToPosition(1),
     CmdWait(0.65),
 
+    //Get Coral
+    CmdDriveToPoint(4.5_m, -2_m, -125_deg, 1.5_mps, false, 5_s),
+    CmdDriveToPoint(6_m, -0.8_m, -127_deg, 3_mps, true, 5_s),
+
     CmdPrintText("Auto 2 Right Done")
   );
 }
