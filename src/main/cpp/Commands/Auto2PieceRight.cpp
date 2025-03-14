@@ -23,7 +23,7 @@ Auto2PieceRight::Auto2PieceRight()
 
     //Score coral
     CmdElevatorToPosition(3),
-    CmdDriveToPoint(2.43_m, -2.5_m, -60_deg, 1_mps, true, 3_s), //was 2.48, -2.47 //then 2.28, -2.57 //then 2.38, -2.52
+    CmdDriveToPoint(2.46_m, -2.48_m, -60_deg, 1_mps, true, 3_s), //was 2.48, -2.47 //then 2.28, -2.57 //then 2.38, -2.52 //then 2.43, -2.5
     CmdWait(0.65),
     CmdClawOuttake(-1.0),
     CmdElevatorToPosition(1),
