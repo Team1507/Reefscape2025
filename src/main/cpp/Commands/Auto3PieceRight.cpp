@@ -27,7 +27,7 @@ Auto3PieceRight::Auto3PieceRight()
     CmdWait(0.35),
     CmdClawOuttake(-1.0),
     CmdElevatorToPosition(1),
-    CmdWait(0.35),
+    CmdWait(0.2),
 
     //Get coral at coral station
     CmdDriveToPoint(3.7_m, -1.4_m, -60_deg, 4.5_mps, false, 5_s),
@@ -50,7 +50,7 @@ Auto3PieceRight::Auto3PieceRight()
     CmdWait(0.65),
     CmdClawOuttake(-1.0),
     CmdElevatorToPosition(1),
-    CmdWait(0.35),
+    CmdWait(0.2),
 
     CmdPrintText("Auto 3 Right Done")
   );

@@ -18,7 +18,7 @@ Auto2PieceRight::Auto2PieceRight()
     //Go to reef
     CmdDriveToPoint(0.5_m, -0.5_m, 0_deg, 1.5_mps, false, 5_s),
     CmdDriveToPoint(1.5_m, -1.5_m, 0_deg, 3.5_mps, false, 5_s),
-    CmdElevatorToPosition(4),
+    CmdElevatorToPosition(2),
     CmdDriveToPoint(2.2_m, -2.4_m, -60_deg, 1.5_mps, false, 5_s), //was 2.4, -2.3
 
     //Score coral
