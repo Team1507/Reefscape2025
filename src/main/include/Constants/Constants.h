@@ -12,7 +12,7 @@
 namespace consts::yearspecific {
 inline const frc::AprilTagFieldLayout TAG_LAYOUT =
     frc::AprilTagFieldLayout::LoadField(
-        frc::AprilTagField::kDefaultField);
+        frc::AprilTagField::k2025ReefscapeAndyMark);
 inline constexpr units::inch_t CLAW_OFFSET_L = 6.5_in;
 inline constexpr units::inch_t CLAW_OFFSET_R = 6_in;
 inline constexpr frc::Transform2d CLAW_TRANS_L{0_m, CLAW_OFFSET_L,

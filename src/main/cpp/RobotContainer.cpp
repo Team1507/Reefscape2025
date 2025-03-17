@@ -16,9 +16,10 @@
 #include "Commands/CmdPivotZero.h"
 #include "Commands/CmdElevatorToPosition.h"
 #include "Commands/CmdRampDrop.h"
-#include  "Commands/CmdAlgaeSetPosition.h"
+#include "Commands/CmdAlgaeSetPosition.h"
 #include "Commands/CmdDriveClearAll.h"
 #include "commands/CmdClawStop.h"
+#include "Commands/CmdAlgaeHome.h"
 
 #include "Subsystems/Elevator.h"
 #include "Subsystems/Claw.h"
@@ -29,6 +30,9 @@
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/button/POVButton.h>
 #include <frc2/command/Commands.h>
+#include <frc2/command/ParallelCommandGroup.h>
+#include <frc2/command/CommandPtr.h>
+#include "Commands/CmdSmartAlignToReef.h"
 #include <frc/smartdashboard/SmartDashboard.h>  
 #include "Robot.h"
 
@@ -42,7 +46,6 @@
 #include "frc/filter/Debouncer.h"
 #include "frc2/command/sysid/SysIdRoutine.h"
 #include "str/DriverstationUtils.h"
-#include <frc2/command/ParallelCommandGroup.h>
 
 #include "commands/AutoDoNothing.h"
 #include "commands/Auto2PieceRight.h"
@@ -105,12 +108,12 @@ void RobotContainer::ConfigureBindings()
                360_deg_per_s;
       }));
 
-  driverJoystick.X().WhileTrue(frc2::cmd::Either(
-      driveSub.AlignToAlgae(), driveSub.AlignToReef([] { return true; }),
-      [this] { return !m_claw.GetClawPhotoEyeFirst(); }));
-    driverJoystick.B().WhileTrue(frc2::cmd::Either(
-      driveSub.AlignToProcessor(), driveSub.AlignToReef([] { return false; }),
-      [this] { return !m_claw.GetClawPhotoEyeFirst(); }));
+  // driverJoystick.X().WhileTrue(frc2::cmd::Either(
+  //     driveSub.AlignToAlgae(), driveSub.AlignToReef([] { return true; }),
+  //     [this] { return !m_claw.GetClawPhotoEyeFirst(); }));
+  //   driverJoystick.B().WhileTrue(frc2::cmd::Either(
+  //     driveSub.AlignToProcessor(), driveSub.AlignToReef([] { return false; }),
+  //     [this] { return !m_claw.GetClawPhotoEyeFirst(); }));
 
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
@@ -127,12 +130,15 @@ void RobotContainer::ConfigureBindings()
   //m_topDriver.LeftBumper().WhileTrue(new CmdAlgaeOuttake(frc::SmartDashboard::PutNumber("AlgaeOut Power", 1)));
   driverJoystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
   m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
+  m_topDriver.RightBumper().OnTrue(new CmdAlgaeHome());
   
 
  m_topDriver.Y().OnTrue(new CmdAlgaeToPos(15));
 
  driverJoystick.A().OnTrue(new CmdDriveClearAll());
 
+driverJoystick.X().WhileTrue(new CmdSmartAlignToReef(true, 1.0_mps, 5_s));
+driverJoystick.B().WhileTrue(new CmdSmartAlignToReef(false, 1.0_mps, 5_s));
 
 // Assume these button objects are stored persistently (here as local constants)
 const auto aButton       = m_topDriver.A();
@@ -147,10 +153,18 @@ frc2::Trigger altPovUp([=]() {
 });
 altPovUp.OnTrue(new CmdElevatorToPosition(ELEV_POS_L1));
 
+
 frc2::Trigger altPovDown([=]() {
   return aButton.Get() && povDownButton.Get();
 });
+
+// altPovDown.OnTrue(new frc2::ParallelCommandGroup(
+//   CmdElevatorToPosition(ELEV_POS_HOME),
+//   CmdAlgaeHome()
+// ));
 altPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
+
+
 
 
 frc2::Trigger altPovLeft([=]() {

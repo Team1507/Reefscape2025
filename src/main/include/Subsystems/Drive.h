@@ -1,7 +1,3 @@
-// Copyright (c) FRC 2053.
-// Open Source Software; you can modify and/or share it under the terms of
-// the MIT License file in the root of this project
-
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
@@ -42,6 +38,8 @@ class Drive : public frc2::SubsystemBase {
   }
 
     void ResetAllSensors();
+
+ 
 
   void SetupPathplanner();
   void AddVisionMeasurement(const frc::Pose2d& measurement,
@@ -84,6 +82,8 @@ class Drive : public frc2::SubsystemBase {
     units::degree_t GetYaw() const;
     void Drive2(frc::ChassisSpeeds speeds);
 
+    std::unordered_map<std::string, frc::Pose2d> importantPoses{};
+
 
  private:
   str::swerve::SwerveDrive swerveDrive{};
@@ -125,7 +125,7 @@ class Drive : public frc2::SubsystemBase {
 
   str::swerve::WheelRadiusCharData wheelRadiusData{};
 
-  std::unordered_map<std::string, frc::Pose2d> importantPoses{};
+
   int WhatReefZoneAmIIn();
   std::string WhatPoleToGoTo(int zone, bool leftOrRight);
   std::string WhatAlgaeToGoTo(int zone);

@@ -1,108 +1,110 @@
-// #include "commands/CmdSmartAlignToReef.h"
-// #include "subsystems/Drive.h"
-// #include "Constants/SwerveConstants.h"
-// #include <frc/geometry/Pose2d.h>
-// #include <frc/smartdashboard/SmartDashboard.h>
-// #include <units/math.h>
-// #include <iostream>
-// #include "Robot.h"
+// CmdSmartAlignToReef.cpp
+#include "commands/CmdSmartAlignToReef.h"
+#include <frc/geometry/Pose2d.h>
+#include <frc/geometry/Translation2d.h>
+#include <iostream>
+#include "str/DriverstationUtils.h"
 
-// CmdSmartAlignToReef::CmdSmartAlignToReef(bool alignLeft, units::meter_t customOffset)
-//     : m_alignLeft(alignLeft), m_customOffset(customOffset) {
-//     AddRequirements(&robotcontainer.driveSub);
-// }
+CmdSmartAlignToReef::CmdSmartAlignToReef(bool alignLeft,
+                                       units::meters_per_second_t velocity,
+                                       units::second_t timeout)
+    : m_alignLeft(alignLeft), m_velocity(velocity), m_timeout(timeout) {
+  AddRequirements(&robotcontainer.driveSub);
+}
 
-// void CmdSmartAlignToReef::Initialize() {
-//     m_timer.Reset();
-//     m_timer.Start();
-//     m_targetPose = CalculateTargetPose();
-//     m_lastDistance = units::math::hypot(
-//         m_targetPose.X() - robotcontainer.driveSub.GetRobotPose().X(),
-//         m_targetPose.Y() - robotcontainer.driveSub.GetRobotPose().Y()
-//     );
-// }
+void CmdSmartAlignToReef::Initialize() {
+  std::cout << "CmdSmartAlignToReef Init - Align Left: " 
+            << m_alignLeft << std::endl;
+  m_timer.Reset();
+  m_timer.Start();
+  
+  // Get tunable offsets from SmartDashboard
+  lOffset = units::inch_t{frc::SmartDashboard::GetNumber("L OFFSET", 0)};
+  rOffset = units::inch_t{frc::SmartDashboard::GetNumber("R OFFSET", 0)};
 
-// frc::Pose2d CmdSmartAlignToReef::CalculateTargetPose() const {
-//     auto basePose = robotcontainer.driveSub.importantPoses.at(
-//         robotcontainer.driveSub.WhatPoleToGoTo(
-//             robotcontainer.driveSub.WhatReefZoneAmIIn(),
-//             m_alignLeft
-//         )
-//     );
+  // Get target pose from predefined positions
+  std::string targetKey = m_alignLeft ? "ReefLeft" : "ReefRight";
+  m_targetPose = robotcontainer.driveSub.importantPoses.at(targetKey);
 
-//     frc::Transform2d offset{0_m, m_customOffset, 0_deg};
-//     if (robotcontainer.driveSub.IsOnRed()) {
-//         basePose = pathplanner::GeometryUtil::flipFieldPose(basePose);
-//         offset = frc::Transform2d{0_m, -m_customOffset, 0_deg};
-//     }
-    
-//     return basePose.TransformBy(offset);
-// }
+  // Apply alliance flip if needed
+  if (str::IsOnRed()) {
+    m_targetPose = pathplanner::FlippingUtil::flipFieldPose(m_targetPose);
+  }
 
-// frc::Translation2d CmdSmartAlignToReef::GetOptimalApproachVector() const {
-//     const auto currentPose = robotcontainer.driveSub.GetRobotPose();
-//     const auto targetVec = m_targetPose.Translation() - currentPose.Translation();
-//     const units::meter_t distance = targetVec.Norm();
+  // Apply side-specific offset
+  if(m_alignLeft) {
+    m_targetPose = m_targetPose.TransformBy(
+        frc::Transform2d{0_m, lOffset, frc::Rotation2d{}});
+  } else {
+    m_targetPose = m_targetPose.TransformBy(
+        frc::Transform2d{0_m, rOffset, frc::Rotation2d{}});
+  }
+}
 
-//     const double curvature = SmartAlignConstants::CURVATURE_FACTOR * 
-//         (1.0 - units::math::min(distance / SmartAlignConstants::APPROACH_DISTANCE, 1.0));
+void CmdSmartAlignToReef::Execute() {
+  constexpr auto ROT_kP = 5 / 1_s;
+  constexpr auto DECEL_DIST = 1.0_m;
+  constexpr auto MIN_VEL = 0.3_mps;
 
-//     return targetVec.RotateBy(
-//         m_alignLeft ? frc::Rotation2d(-curvature * 90_deg) 
-//                    : frc::Rotation2d(curvature * 90_deg)
-//         .Normalize();
-// }
+  auto currentPose = robotcontainer.driveSub.GetRobotPose();
+  
+  // Calculate remaining distance
+  units::meter_t deltaX = m_targetPose.X() - currentPose.X();
+  units::meter_t deltaY = m_targetPose.Y() - currentPose.Y();
+  units::meter_t distance = units::math::hypot(deltaX, deltaY);
 
-// void CmdSmartAlignToReef::Execute() {
-//     const auto currentPose = robotcontainer.driveSub.GetRobotPose();
-//     const auto approachVector = GetOptimalApproachVector();
-//     const units::meter_t distance = currentPose.Translation().Distance(m_targetPose.Translation());
+  // Adaptive velocity with linear deceleration
+  units::meters_per_second_t adaptiveVel = m_velocity;
+  if(distance < DECEL_DIST) {
+    adaptiveVel = m_velocity * (distance / DECEL_DIST);
+    adaptiveVel = units::math::max(adaptiveVel, MIN_VEL);
+  }
 
-//     const units::meters_per_second_t speed = units::math::min(
-//         SmartAlignConstants::MAX_SPEED * (distance / SmartAlignConstants::APPROACH_DISTANCE), 
-//         SmartAlignConstants::MAX_SPEED
-//     );
+  // Calculate heading error
+  units::degree_t targetHeading = m_targetPose.Rotation().Degrees();
+  units::degree_t currentHeading = robotcontainer.driveSub.GetYaw();
+  units::degree_t headingError = targetHeading - currentHeading;
+  headingError = units::math::fmod(headingError + 180_deg, 360_deg) - 180_deg;
 
-//     const units::radian_t headingError = units::math::fmod(
-//         (m_targetPose.Rotation().Radians() - currentPose.Rotation().Radians()) + 
-//         units::radian_t(std::numbers::pi), 
-//         units::radian_t(2 * std::numbers::pi)
-//     ) - units::radian_t(std::numbers::pi);
+  // Calculate direction vector
+  double ux = 0.0;
+  double uy = 0.0;
+  if(distance > 0.05_m) {
+    ux = deltaX.value() / distance.value();
+    uy = deltaY.value() / distance.value();
+  }
 
-//     const units::radians_per_second_t omega = units::radians_per_second_t(std::clamp(
-//         headingError.value() * 3.0,
-//         -SmartAlignConstants::MAX_ANGULAR_VEL.value(),
-//         SmartAlignConstants::MAX_ANGULAR_VEL.value()
-//     ));
+  // Create chassis speeds
+  frc::ChassisSpeeds speeds;
+  speeds.vx = adaptiveVel * ux;
+  speeds.vy = adaptiveVel * uy;
+  speeds.omega = headingError * ROT_kP;
 
-//     robotcontainer.driveSub.Drive2(
-//         frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-//             approachVector.X() * speed,
-//             approachVector.Y() * speed,
-//             omega,
-//             currentPose.Rotation()
-//         )
-//     );
+  // Drive field-relative
+  robotcontainer.driveSub.Drive2(
+      frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+          speeds.vx, 
+          speeds.vy, 
+          speeds.omega,
+          currentPose.Rotation()
+      )
+  );
 
-//     frc::SmartDashboard::PutNumber("Align/Speed", speed.value());
-//     frc::SmartDashboard::PutNumber("Align/Omega", omega.value());
-//     frc::SmartDashboard::PutNumber("Align/Distance", distance.value());
-// }
+  std::cout << "Aligning to " << (m_alignLeft ? "LEFT" : "RIGHT")
+            << " | Distance: " << distance.value() 
+            << "m | Vel: " << adaptiveVel.value() << "m/s" << std::endl;
+}
 
-// void CmdSmartAlignToReef::End(bool interrupted) {
-//     robotcontainer.driveSub.Drive2(frc::ChassisSpeeds{});
-// }
+void CmdSmartAlignToReef::End(bool interrupted) {
+  robotcontainer.driveSub.Drive2(frc::ChassisSpeeds{});
+  std::cout << "CmdSmartAlignToReef Ended" << std::endl;
+}
 
-// bool CmdSmartAlignToReef::IsFinished() {
-//     const auto currentPose = robotcontainer.driveSub.GetRobotPose();
-//     const units::meter_t distance = currentPose.Translation().Distance(m_targetPose.Translation());
-//     const units::radian_t headingError = units::math::abs(
-//         currentPose.Rotation().Radians() - m_targetPose.Rotation().Radians()
-//     );
-
-//     const bool isStationary = (units::math::abs(m_lastDistance - distance) < 0.01_m);
-//     const bool inPosition = distance < 0.1_m && headingError < 5_deg;
-    
-//     m_lastDistance = distance;
-//     return inPosition || (isStationary && m_timer.HasElapsed(2_s)) || m_timer.HasElapsed(5_s);
-// }
+bool CmdSmartAlignToReef::IsFinished() {
+  auto currentPose = robotcontainer.driveSub.GetRobotPose();
+  units::meter_t distance = units::math::hypot(
+      m_targetPose.X() - currentPose.X(),
+      m_targetPose.Y() - currentPose.Y()
+  );
+  return (distance < 0.05_m) || m_timer.HasElapsed(m_timeout);
+}
