@@ -1,7 +1,3 @@
-// Copyright (c) FRC 2053.
-// Open Source Software; you can modify and/or share it under the terms of
-// the MIT License file in the root of this project
-
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
@@ -18,6 +14,7 @@
 #include "constants/SwerveConstants.h"
 #include "ctre/phoenix6/SignalLogger.hpp"
 #include "frc/geometry/Pose2d.h"
+#include "frc/geometry/Translation2d.h"
 #include "frc2/command/CommandPtr.h"
 #include "networktables/BooleanTopic.h"
 #include "str/swerve/SwerveDrive.h"
@@ -41,7 +38,10 @@ class Drive : public frc2::SubsystemBase {
     return swerveDrive.GetOdomPose().Rotation().Radians();
   }
 
-    void ResetAllSensors();
+   void ResetAllSensors();
+     units::degree_t GetYaw() const;
+    void Drive2(frc::ChassisSpeeds speeds);
+
 
   void SetupPathplanner();
   void AddVisionMeasurement(const frc::Pose2d& measurement,
@@ -79,11 +79,7 @@ class Drive : public frc2::SubsystemBase {
   frc2::CommandPtr TuneSteerPID(std::function<bool()> isDone);
   frc2::CommandPtr TuneDrivePID(std::function<bool()> isDone);
   frc2::CommandPtr WheelRadius(frc2::sysid::Direction dir);
-
-    
-    units::degree_t GetYaw() const;
-    void Drive2(frc::ChassisSpeeds speeds);
-
+  void SetPosePids();
 
  private:
   str::swerve::SwerveDrive swerveDrive{};
@@ -96,23 +92,21 @@ class Drive : public frc2::SubsystemBase {
 
   frc::TrapezoidProfile<units::radians>::Constraints rotationConstraints{
       consts::swerve::physical::MAX_ROT_SPEED,
-      consts::swerve::physical::MAX_ROT_ACCEL,
+      consts::swerve::physical::MAX_ROT_ACCEL * .5,
   };
 
-  frc::ProfiledPIDController<units::meters> xPoseController{
-      consts::swerve::pathplanning::POSE_P,
-      consts::swerve::pathplanning::POSE_I,
-      consts::swerve::pathplanning::POSE_D, translationConstraints};
+  units::meters_per_second_t CalculateSpeedAtGoal(
+      frc::Translation2d currentTrans, frc::Translation2d goalTrans);
 
-  frc::ProfiledPIDController<units::meters> yPoseController{
-      consts::swerve::pathplanning::POSE_P,
-      consts::swerve::pathplanning::POSE_I,
-      consts::swerve::pathplanning::POSE_D, translationConstraints};
+  frc::ProfiledPIDController<units::meters> translationController{
+      consts::swerve::pathplanning::RAW_POSE_P,
+      consts::swerve::pathplanning::RAW_POSE_I,
+      consts::swerve::pathplanning::RAW_POSE_D, translationConstraints};
 
   frc::ProfiledPIDController<units::radians> thetaController{
-      consts::swerve::pathplanning::ROTATION_P,
-      consts::swerve::pathplanning::ROTATION_I,
-      consts::swerve::pathplanning::ROTATION_D, rotationConstraints};
+      consts::swerve::pathplanning::RAW_ROTATION_P,
+      consts::swerve::pathplanning::RAW_ROTATION_I,
+      consts::swerve::pathplanning::RAW_ROTATION_D, rotationConstraints};
 
   std::shared_ptr<nt::NetworkTable> nt{
       nt::NetworkTableInstance::GetDefault().GetTable("Swerve")};
@@ -184,3 +178,4 @@ class Drive : public frc2::SubsystemBase {
   units::meter_t lOffset{consts::yearspecific::CLAW_OFFSET_L};
   units::meter_t rOffset{consts::yearspecific::CLAW_OFFSET_R};
 };
+  
