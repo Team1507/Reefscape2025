@@ -104,12 +104,8 @@ void RobotContainer::ConfigureBindings()
                360_deg_per_s;
       }));
 
-  driverJoystick.X().WhileTrue(frc2::cmd::Either(
-      driveSub.AlignToAlgae(), driveSub.AlignToReef([] { return true; }),
-      [this] { return !m_claw.GetClawPhotoEyeFirst(); }));
-    driverJoystick.B().WhileTrue(frc2::cmd::Either(
-      driveSub.AlignToProcessor(), driveSub.AlignToReef([] { return false; }),
-      [this] { return !m_claw.GetClawPhotoEyeFirst(); }));
+  driverJoystick.X().WhileTrue(driveSub.AlignToReef([] { return true; }));
+    driverJoystick.B().WhileTrue( driveSub.AlignToReef([] { return false; }));
 
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
