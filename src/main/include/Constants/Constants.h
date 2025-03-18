@@ -10,16 +10,19 @@
 #include "frc/geometry/Translation3d.h"
 
 namespace consts::yearspecific {
-inline const frc::AprilTagFieldLayout TAG_LAYOUT =
-    frc::AprilTagFieldLayout::LoadField(
-        frc::AprilTagField::k2025ReefscapeAndyMark);
-inline constexpr units::inch_t CLAW_OFFSET_L = 6.5_in;
-inline constexpr units::inch_t CLAW_OFFSET_R = 6_in;
+// inline const frc::AprilTagFieldLayout TAG_LAYOUT =
+//     frc::AprilTagFieldLayout::LoadField(
+//         frc::AprilTagField::k2025ReefscapeWelded);
+
+inline constexpr units::inch_t CLAW_OFFSET_L = 0_in;
+inline constexpr units::inch_t CLAW_OFFSET_R = 0_in;
 inline constexpr frc::Transform2d CLAW_TRANS_L{0_m, CLAW_OFFSET_L,
                                                frc::Rotation2d{}};
 inline constexpr frc::Transform2d CLAW_TRANS_R{0_m, CLAW_OFFSET_R,
                                                frc::Rotation2d{}};
-}
+inline const frc::AprilTagFieldLayout TAG_LAYOUT = frc::AprilTagFieldLayout(
+    frc::filesystem::GetDeployDirectory() + "/reefonlytags.json");
+}  // namespace consts::yearspecific
 
 
 //**********CLIMB CONSTANTS **********//
