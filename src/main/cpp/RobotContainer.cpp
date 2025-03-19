@@ -52,6 +52,7 @@
 #include "Commands/AutoMoveForward.h"
 #include "Commands/Auto1PieceLeft.h"
 #include "Commands/Auto1PieceMiddle.h"
+#include "Commands/CmdClawStop.h"
 
 
 
@@ -117,6 +118,7 @@ void RobotContainer::ConfigureBindings()
   //Coral
    driverJoystick.RightBumper().WhileTrue(new CmdClawOuttake(-1.0));
   m_topDriver.RightTrigger(0.5).OnTrue(new CmdClawActivate(-1.0));
+  driverJoystick.RightTrigger(0.5).WhileTrue(new CmdClawStop());
   
   //Algae
   //m_topDriver.LeftBumper().WhileTrue(new CmdAlgaeOuttake(frc::SmartDashboard::PutNumber("AlgaeOut Power", 1)));

@@ -64,17 +64,16 @@ frc::Pose2d VisionSystem::GetTargetPose() const {
   return m_lastDetectedPose.value();
 }
 
-double VisionSystem::GetDetectedX() const {
-
+  double VisionSystem::GetDetectedX() const {
   if (!m_lastDetectedPose.has_value()) {
-    throw std::runtime_error("No target detected!");
+    return 0.0;  // or std::numeric_limits<double>::quiet_NaN();
   }
   return m_lastDetectedPose.value().X().value();
 }
 
-double VisionSystem::GetDetectedY() const {
+ double VisionSystem::GetDetectedY() const {
   if (!m_lastDetectedPose.has_value()) {
-    throw std::runtime_error("No target detected!");
+    return 0.0;  // or std::numeric_limits<double>::quiet_NaN();
   }
   return m_lastDetectedPose.value().Y().value();
 }
