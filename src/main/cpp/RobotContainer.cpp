@@ -18,6 +18,7 @@
 #include "Commands/CmdRampDrop.h"
 #include  "Commands/CmdAlgaeSetPosition.h"
 #include "Commands/CmdDriveClearAll.h"
+#include "Commands/CmdAlignToAprilTag.h"
 
 #include "Subsystems/Elevator.h"
 #include "Subsystems/Claw.h"
@@ -104,8 +105,8 @@ void RobotContainer::ConfigureBindings()
                360_deg_per_s;
       }));
 
-  driverJoystick.X().WhileTrue(driveSub.AlignToReef([] { return true; }));
-    driverJoystick.B().WhileTrue( driveSub.AlignToReef([] { return false; }));
+  driverJoystick.X().WhileTrue(new CmdAlignToAprilTag(true));
+  driverJoystick.B().WhileTrue(new CmdAlignToAprilTag(false));
 
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
