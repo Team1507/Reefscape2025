@@ -18,12 +18,12 @@ Auto2PieceRight::Auto2PieceRight()
     //Go to reef
     CmdDriveToPoint(0.5_m, -0.5_m, 0_deg, 1.5_mps, false, 5_s),
     CmdDriveToPoint(1.5_m, -1.5_m, 0_deg, 3.5_mps, false, 5_s),
-    CmdElevatorToPosition(4),
-    CmdDriveToPoint(2.4_m, -2.3_m, -60_deg, 2_mps, false, 5_s),
+    CmdElevatorToPosition(2),
+    CmdDriveToPoint(2.2_m, -2.2_m, -60_deg, 1.5_mps, false, 5_s), //was 2.4, -2.3
 
     //Score coral
     CmdElevatorToPosition(3),
-    CmdDriveToPoint(2.48_m, -2.47_m, -60_deg, 1_mps, true, 3_s),
+    CmdDriveToPoint(2.45_m, -2.48_m, -60_deg, 1_mps, true, 3_s), //was 2.48, -2.47 //then 2.28, -2.57 //then 2.38, -2.52 //then 2.43, -2.5 //then 2.46, -2.48
     CmdWait(0.65),
     CmdClawOuttake(-1.0),
     CmdElevatorToPosition(1),
@@ -39,14 +39,20 @@ Auto2PieceRight::Auto2PieceRight()
  
 
     //Go to reef
-    CmdDriveToPoint(6_m, -0.6_m, -120_deg, 1.5_mps, false, 3_s),
+    frc2::ParallelCommandGroup(
+    CmdClawActivate(-1.0),
+    CmdDriveToPoint(6_m, -0.6_m, -120_deg, 1.5_mps, false, 3_s)
+    ),
     CmdDriveToPoint(4.8_m, -1.8_m, -120_deg, 3_mps, false, 3_s),
-    CmdElevatorToPosition(4),
-    CmdDriveToPoint(4.1_m, -2.25_m, -120_deg, 2_mps, false, 3_s),
+    frc2::ParallelCommandGroup(
+    CmdClawActivate(-1.0),
+    CmdElevatorToPosition(4)
+    ),
+    CmdDriveToPoint(4.1_m, -2.25_m, -120_deg, 1.5_mps, false, 3_s),
 
     //Score coral
     CmdElevatorToPosition(3),
-    CmdDriveToPoint(3.9_m, -2.48_m, -120_deg, 1_mps, true, 2_s),
+    CmdDriveToPoint(3.9_m, -2.48_m, -120_deg, 1_mps, true, 2_s), //was 3.9, -2.48 //then 3.8 -2.48
     CmdWait(0.65),
     CmdClawOuttake(-1.0),
     CmdElevatorToPosition(1),

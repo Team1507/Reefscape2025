@@ -65,40 +65,30 @@ frc::Pose2d VisionSystem::GetTargetPose() const {
   return m_lastDetectedPose.value();
 }
 
-void VisionSystem::PublishTargetInfoToSmartDashboard() {
-  bool targetFound = false;
-
-  for (auto& cam : cameras) {
-    auto allTargets = cam.GetAllTargets();  // Assuming this returns a list of detected targets
-    if (!allTargets.empty()) {
-      for (const auto& target : allTargets) {
-        int targetID = target.GetFiducialId();
-        auto targetTransform = target.GetBestCameraToTarget();
-      frc::Pose2d targetPose{
-      units::meter_t{targetTransform.X()},
-      units::meter_t{targetTransform.Y()},
-      frc::Rotation2d{targetTransform.Rotation().Z()}
-};
-
-        // Publish to SmartDashboard
-        frc::SmartDashboard::PutNumber("Target ID", targetID);
-        frc::SmartDashboard::PutNumber("Target X", targetPose.X().value());
-        frc::SmartDashboard::PutNumber("Target Y", targetPose.Y().value());
-
-        std::cout << "Target ID: " << targetID
-                  << ", X: " << targetPose.X().value()
-                  << ", Y: " << targetPose.Y().value() << std::endl;
-
-        targetFound = true;
-        break;  // Only display the first valid target
-      }
-    }
+double VisionSystem::GetDetectedX() const {
+  // Throws if no target is detected; alternatively, you could return NaN.
+  if (!m_lastDetectedPose.has_value()) {
+    throw std::runtime_error("No target detected!");
   }
-
-  // If no targets were found, set default values
-  if (!targetFound) {
-    frc::SmartDashboard::PutNumber("Target ID", -1);
-    frc::SmartDashboard::PutNumber("Target X", 0.0);
-    frc::SmartDashboard::PutNumber("Target Y", 0.0);
-  }
+  return m_lastDetectedPose.value().X().value();
 }
+
+double VisionSystem::GetDetectedY() const {
+  if (!m_lastDetectedPose.has_value()) {
+    throw std::runtime_error("No target detected!");
+  }
+  return m_lastDetectedPose.value().Y().value();
+}
+
+// int VisionSystem::GetDetectedTagID() const {
+//   // This example assumes you have a method to retrieve the tag ID.
+//   // If not available, return -1. Replace this with your actual logic.
+//   if (!m_lastDetectedPose.has_value()) {
+//     return -1;
+//   }
+//   // Example: use the first camera's tag ID if available.
+//   // Replace GetLatestTagID() with your actual function.
+//   int tagID = cam[0].GetLatestTagID();  
+//   return tagID;
+// }
+

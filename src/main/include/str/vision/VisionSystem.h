@@ -25,7 +25,9 @@ class VisionSystem {
   bool IsTargetValid() const;
   frc::Pose2d GetTargetPose() const;
 
-  void PublishTargetInfoToSmartDashboard();
+  double GetDetectedX() const;
+  double GetDetectedY() const;
+  int GetDetectedTagID() const;
 
 
  private:

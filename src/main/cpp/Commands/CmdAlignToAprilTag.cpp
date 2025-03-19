@@ -36,6 +36,8 @@ void CmdAlignToAprilTag::Execute() {
       double dx = tagPose.X().value() - currentPose.X().value();
       double dy = tagPose.Y().value() - currentPose.Y().value();
       double angleToTag = std::atan2(dy, dx);  // Robot's heading to target (radians)
+      std::cout << "dx: " << dx << ", dy: " << dy 
+                << ", angleToTag: " << angleToTag << std::endl;
       
       // Configuration constants
       constexpr double kOffset = 0.3;  // Lateral offset from tag (meters)
@@ -53,10 +55,12 @@ void CmdAlignToAprilTag::Execute() {
         offsetX =  std::sin(angleToTag) * kOffset;
         offsetY = -std::cos(angleToTag) * kOffset;
       }
+      std::cout << "offsetX: " << offsetX << ", offsetY: " << offsetY << std::endl;
       
       // Calculate approach offset (move back from tag)
       double approachX = -std::cos(angleToTag) * kApproachDistance;
       double approachY = -std::sin(angleToTag) * kApproachDistance;
+      std::cout << "approachX: " << approachX << ", approachY: " << approachY << std::endl;
       
       // Combine offsets to create final target position
       frc::Translation2d targetTranslation(
@@ -79,6 +83,7 @@ void CmdAlignToAprilTag::Execute() {
       searchSpeeds.vy = meters_per_second_t(0.0);  // No lateral movement
       searchSpeeds.omega = radians_per_second_t(0.0);  // No rotation
       robotcontainer.driveSub.Drive2(searchSpeeds);
+      std::cout << "No target detected, executing search pattern." << std::endl;
       return;  // Skip rest of execution until target found
     }
   }
@@ -89,12 +94,16 @@ void CmdAlignToAprilTag::Execute() {
   auto deltaX = m_targetPose.X() - currentPose.X();
   auto deltaY = m_targetPose.Y() - currentPose.Y();
   double distance = std::hypot(deltaX.value(), deltaY.value());  // Straight-line distance
+  std::cout << "Distance to target: " << distance << std::endl;
   
   // Calculate heading error (wrapped to [-180, 180] degrees)
   double currentHeadingDeg = currentPose.Rotation().Degrees().value();
   double targetHeadingDeg = m_targetPose.Rotation().Degrees().value();
   double headingError = targetHeadingDeg - currentHeadingDeg;
   headingError = std::fmod(headingError + 180.0, 360.0) - 180.0;  // Wrap error
+  std::cout << "Current heading: " << currentHeadingDeg 
+            << ", Target heading: " << targetHeadingDeg 
+            << ", Heading error: " << headingError << std::endl;
   
   // Control constants (tune these for robot performance)
   constexpr double kTransP = 1.0;  // Translation proportional gain
@@ -104,10 +113,13 @@ void CmdAlignToAprilTag::Execute() {
   double speed = kTransP * distance;  // Speed proportional to distance
   speed = std::clamp(speed, -1.0, 1.0);  // Limit maximum speed
   double omega = kRotP * headingError;  // Angular velocity proportional to error
+  std::cout << "Calculated speed: " << speed 
+            << ", Angular velocity: " << omega << std::endl;
   
   // Calculate direction unit vector
   double ux = (distance > 0.001) ? deltaX.value() / distance : 0.0;
   double uy = (distance > 0.001) ? deltaY.value() / distance : 0.0;
+  std::cout << "Unit vector (ux, uy): " << ux << ", " << uy << std::endl;
   
   // Convert to chassis speeds
   frc::ChassisSpeeds speeds;
@@ -117,8 +129,6 @@ void CmdAlignToAprilTag::Execute() {
   
   // Send drive command
   robotcontainer.driveSub.Drive2(speeds);
-  
-  // Debug logging
   std::cout << "Driving: distance = " << distance
             << ", heading error = " << headingError << std::endl;
   
@@ -143,6 +153,7 @@ bool CmdAlignToAprilTag::IsFinished() {
     auto deltaX = m_targetPose.X() - currentPose.X();
     auto deltaY = m_targetPose.Y() - currentPose.Y();
     double distance = std::hypot(deltaX.value(), deltaY.value());
+    std::cout << "Checking if finished: current distance = " << distance << std::endl;
     return distance < 0.05;  // 5 cm position tolerance
   }
   return false;  // Continue until target reached or timeout
