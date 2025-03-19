@@ -57,7 +57,6 @@ bool VisionSystem::IsTargetValid() const {
   return m_lastDetectedPose.has_value();
 }
 
-// New method to get the latest detected pose
 frc::Pose2d VisionSystem::GetTargetPose() const {
   if (!m_lastDetectedPose.has_value()) {
     throw std::runtime_error("No target detected!");
@@ -66,7 +65,7 @@ frc::Pose2d VisionSystem::GetTargetPose() const {
 }
 
 double VisionSystem::GetDetectedX() const {
-  // Throws if no target is detected; alternatively, you could return NaN.
+
   if (!m_lastDetectedPose.has_value()) {
     throw std::runtime_error("No target detected!");
   }
