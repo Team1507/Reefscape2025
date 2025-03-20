@@ -9,7 +9,8 @@ using namespace units;
 using namespace units::velocity;
 using namespace units::angular_velocity;
 
-#define PI 3.1415
+
+
 
 // Constructor: Sets alignment side and subsystem requirements
 CmdAlignToAprilTag::CmdAlignToAprilTag(bool alignLeft)
@@ -39,7 +40,7 @@ void CmdAlignToAprilTag::Execute() {
       double distance = robotcontainer.m_limelight2.GetTargetDistance();  // Assumed to be properly implemented
       
       // Convert tx to radians and compute absolute angle to tag:
-      double txRad = tx * (PI / 180.0);
+      double txRad = tx * (M_PI / 180.0);
       double angleToTag = currentPose.Rotation().Radians().value() + txRad;
       std::cout << "tx (deg): " << tx 
                 << ", angleToTag (rad): " << angleToTag << std::endl;

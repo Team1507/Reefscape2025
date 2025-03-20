@@ -35,10 +35,13 @@ inline constexpr frc::Transform2d CLAW_TRANS_R{0_m, CLAW_OFFSET_R,
 
 //Pivot
 #define PIVOT_CAN_ID           25
+#define PIVOT_FALCON_CAN_ID    51
 
 #define PIVOT_HOME_POSITION    0
 #define PIVOT_TOLERANCE        0.05
 #define PIVOT_MANUAL_POWER     0.3
+
+
 
 //********** ELEVATOR CONSTANTS **********//
 
@@ -71,3 +74,11 @@ inline constexpr frc::Transform2d CLAW_TRANS_R{0_m, CLAW_OFFSET_R,
 #define ELEV_POS_L4 3
 #define ELEV_POS_ALG_LOW 5
 #define ELEV_POS_ALG_HIGH 6
+
+// ********* PIVOT CONSTANTS **********//
+
+#define PIVOT_POSITION_HOME 0.0_tr
+#define PIVOT_POSITION_OPEN 0.0_tr
+
+#define ALGAE_POS_HOME 1
+#define ALGAE_POS_OPEN 2

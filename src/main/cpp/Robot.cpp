@@ -114,4 +114,9 @@ void WriteToSmartDashboard()
     frc::SmartDashboard::PutNumber("Odo X" , robotcontainer.driveSub.GetRobotPose().X().value());
     frc::SmartDashboard::PutNumber("Odo Y" , robotcontainer.driveSub.GetRobotPose().Y().value());
     frc::SmartDashboard::PutNumber("Odo Angle" , robotcontainer.driveSub.GetRobotPose().Rotation().Degrees().value());
+
+    // frc::SmartDashboard::PutNumber(" h angle" , robotcontainer.m_limelight2.GetTargetHAngle());
+    // frc::SmartDashboard::PutNumber(" v angle" , robotcontainer.m_limelight2.GetTargetVAngle());
+    // frc::SmartDashboard::PutNumber(" target id" , robotcontainer.m_limelight2.GetTargetId());
+    // frc::SmartDashboard::PutBoolean(" target valid" , robotcontainer.m_limelight2.IsTargetValid());
 }

@@ -39,7 +39,6 @@ bool CmdAlgaeOuttake::IsFinished()
   {
     return true;
     robotcontainer.m_claw.SetAlgaePower(0.0);
-    robotcontainer.m_claw.SetPosition(0);
   }
   else 
   {

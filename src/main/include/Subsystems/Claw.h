@@ -35,15 +35,15 @@ class Claw : public frc2::SubsystemBase {
   bool GetAlgaePhotoEye();
 
  // --- ALGAE PIVOT ---
-  void SetPosition(double position);
+  //void SetPosition(double position);
   void   SetPower(double power);
 
-  double GetPosition();
+  // double GetPosition();
   
-  void ZeroEncoder(void);
+  // void ZeroEncoder(void);
 
-  float GetPivotCurrent();
-  float GetPivotTemp();
+  // float GetPivotCurrent();
+  // float GetPivotTemp();
 
   bool IsBallLoaded() const;
   void SetBallLoaded(bool loaded);

@@ -53,7 +53,7 @@ void Claw::Periodic()
     
     frc::SmartDashboard::PutBoolean("Coral", IsCoralReady()); 
 
-    frc::SmartDashboard::PutNumber("Pivot Encoder", GetPosition());
+    // frc::SmartDashboard::PutNumber("Pivot Encoder", GetPosition());
 }
 
 // --- CLAW ---
@@ -104,23 +104,23 @@ void Claw::SetAlgaePower(double power)
 
 // --- ALGAE PIVOT ---
 
-  double Claw::GetPosition(void)
-  {
-    return m_pivotEncoder.GetPosition();
-  }
-  void Claw::SetPosition(double position)
-  {
-    m_pivotEncoder.SetPosition(position);
-  }
+//   double Claw::GetPosition(void)
+//   {
+//     return m_pivotEncoder.GetPosition();
+//   }
+//   void Claw::SetPosition(double position)
+//   {
+//     m_pivotEncoder.SetPosition(position);
+//   }
   void Claw::SetPower(double power)
   {
     m_pivot.Set(power);
   }
 
- void Claw::ZeroEncoder(void)
- {
-    m_pivotEncoder.SetPosition(0.0);
- }
+//  void Claw::ZeroEncoder(void)
+//  {
+//     m_pivotEncoder.SetPosition(0.0);
+//  }
 
  bool Claw::IsBallLoaded() const 
 {
