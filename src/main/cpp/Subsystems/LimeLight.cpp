@@ -4,16 +4,12 @@
 #include "frc/smartdashboard/SmartDashboard.h"
 #include <iostream>
 
-#define PI 3.1415
+#define PI 3.14159265358979323846
 
 
 LimeLight::LimeLight(std::string llname) 
 {
     m_LLName = llname;
-
-//   frc::SmartDashboard::PutNumber("LL_h1",  0.0 );
-//   frc::SmartDashboard::PutNumber("LL_h2",  0.0 );
-//   frc::SmartDashboard::PutNumber("LL_a1",  0.0 );
 }
 
 // This method will be called once per scheduler run
@@ -21,9 +17,6 @@ void LimeLight::Periodic()
 {
     RunLimeLight();
 }
-
-
-
 
 int    LimeLight::GetTargetId(void)
 {
@@ -45,24 +38,40 @@ double LimeLight::GetTargetVAngle(void)
 }
 double LimeLight::GetTargetDistance(void)
 {
-/*
-  double h1 = frc::SmartDashboard::GetNumber("LL_h1",  0.0 );
-  double h2 = frc::SmartDashboard::GetNumber("LL_h2",  0.0 );
-  double a1 = frc::SmartDashboard::GetNumber("LL_a1",  0.0 );
+  // calibrate these values 
+  double h1 = frc::SmartDashboard::GetNumber("LL_h1", 35.5);   // Height of Limelight 
+  double h2 = frc::SmartDashboard::GetNumber("LL_h2", 103.50);  // Height of target
+  double a1 = frc::SmartDashboard::GetNumber("LL_a1", 32.0);    // Limelight's mounting angle (degrees)
 
-  // const double a1 = 32;//angle of limelight 32 off of vertical
-  // const double h1 = 35.5;//height of limelight from ground
-  // const double h2 = 103.50;//height of target
+  if (!IsTargetValid()) {
+    return 0.0;
+  }
 
-  if (!IsTargetValid()) return 0.0;
+  // Get the vertical offset from the target (degrees)
+  double a2 = nt::NetworkTableInstance::GetDefault().GetTable(m_LLName)->GetNumber("ty", 0.0);
 
+  // Total angle in degrees and conversion to radians
+  double totalAngleDeg = a1 + a2;
+  constexpr double DEG2RAD = PI / 180.0;
+  double totalAngleRad = totalAngleDeg * DEG2RAD;
 
-  double a2 = nt::NetworkTableInstance::GetDefault().GetTable(m_LLName)->GetNumber("ty", 0);
-  
-  return (h2-h1)/tan((a1+a2)*(PI/180));
-  */
- return 0;
+  // Ensure the denominator is not too small (to avoid division by zero)
+  double tanAngle = std::tan(totalAngleRad);
+  if (std::abs(tanAngle) < 1e-6) {
+    std::cout << "Warning: tan(totalAngle) is nearly zero. Returning 0.0 for distance." << std::endl;
+    return 0.0;
+  }
 
+  double distance = (h2 - h1) / tanAngle;
+
+  // Check for negative distance which indicates a potential calibration error
+  if (distance < 0) {
+    std::cout << "Warning: computed distance (" << distance 
+              << ") is negative. Check calibration values." << std::endl;
+    return 0.0;
+  }
+
+  return distance;
 }
 void   LimeLight::SetPipeline(int value)
 {
@@ -136,7 +145,7 @@ void    LimeLight::RunLimeLight(void)
     frc::SmartDashboard::PutNumber (m_LLName + " TID",          GetTargetId() );
     frc::SmartDashboard::PutNumber (m_LLName + " HAngle",       GetTargetHAngle()  );
     frc::SmartDashboard::PutNumber (m_LLName + " YAngle",       GetTargetVAngle()  );
-  //frc::SmartDashboard::PutNumber (m_LLName + " Range",        GetTargetDistance()  );
+    frc::SmartDashboard::PutNumber (m_LLName + " Range",        GetTargetDistance()  );
     frc::SmartDashboard::PutNumber (m_LLName + " Last ID",      m_lastSeenID  );
     frc::SmartDashboard::PutNumber (m_LLName + " Target Yaw",   GetTargetYaw()  );
   //frc::SmartDashboard::PutNumber (m_LLName + " Track PID Out",TrackBranch()  );

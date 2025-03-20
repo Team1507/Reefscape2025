@@ -6,9 +6,6 @@
 
 #include "constants/VisionConstants.h"
 
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <iostream>
-
 using namespace str::vision;
 
 VisionSystem::VisionSystem(
@@ -38,55 +35,11 @@ void VisionSystem::UpdateCameraPositionVis(frc::Pose3d robotPose) {
 void VisionSystem::UpdatePoseEstimators(frc::Pose3d robotPose) {
   for (auto& cam : cameras) {
     cam.UpdatePoseEstimator(robotPose);
-  
-  
-    auto maybePose = cam.GetLatestTagPose();
-    if (maybePose.has_value()) {
-      m_lastDetectedPose = maybePose.value().ToPose2d(); 
-    }
   }
-  }
+}
 
 void VisionSystem::SimulationPeriodic(frc::Pose2d simRobotPose) {
   for (auto& cam : cameras) {
     cam.SimPeriodic(simRobotPose);
   }
 }
-
-bool VisionSystem::IsTargetValid() const {
-  return m_lastDetectedPose.has_value();
-}
-
-frc::Pose2d VisionSystem::GetTargetPose() const {
-  if (!m_lastDetectedPose.has_value()) {
-    throw std::runtime_error("No target detected!");
-  }
-  return m_lastDetectedPose.value();
-}
-
-  double VisionSystem::GetDetectedX() const {
-  if (!m_lastDetectedPose.has_value()) {
-    return 0.0;  // or std::numeric_limits<double>::quiet_NaN();
-  }
-  return m_lastDetectedPose.value().X().value();
-}
-
- double VisionSystem::GetDetectedY() const {
-  if (!m_lastDetectedPose.has_value()) {
-    return 0.0;  // or std::numeric_limits<double>::quiet_NaN();
-  }
-  return m_lastDetectedPose.value().Y().value();
-}
-
-// int VisionSystem::GetDetectedTagID() const {
-//   // This example assumes you have a method to retrieve the tag ID.
-//   // If not available, return -1. Replace this with your actual logic.
-//   if (!m_lastDetectedPose.has_value()) {
-//     return -1;
-//   }
-//   // Example: use the first camera's tag ID if available.
-//   // Replace GetLatestTagID() with your actual function.
-//   int tagID = cam[0].GetLatestTagID();  
-//   return tagID;
-// }
-

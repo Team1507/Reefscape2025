@@ -9,6 +9,8 @@ using namespace units;
 using namespace units::velocity;
 using namespace units::angular_velocity;
 
+#define PI 3.1415
+
 // Constructor: Sets alignment side and subsystem requirements
 CmdAlignToAprilTag::CmdAlignToAprilTag(bool alignLeft)
     : m_alignLeft(alignLeft) {  // Store alignment direction (left/right)
@@ -27,21 +29,33 @@ void CmdAlignToAprilTag::Initialize() {
 void CmdAlignToAprilTag::Execute() {
   // TARGET ACQUISITION PHASE
   if (!m_targetAcquired) {
-    if (robotcontainer.vision.IsTargetValid()) {  // If AprilTag is detected
-      // Get target and current positions
-      frc::Pose2d tagPose = robotcontainer.vision.GetTargetPose();
+    // Use LimeLight instead of the old vision system.
+    if (robotcontainer.m_limelight2.IsTargetValid()) {  // If LimeLight reports a valid target
+      // Get the current robot pose
       frc::Pose2d currentPose = robotcontainer.driveSub.GetRobotPose();
       
-      // Calculate vector to target
-      double dx = tagPose.X().value() - currentPose.X().value();
-      double dy = tagPose.Y().value() - currentPose.Y().value();
-      double angleToTag = std::atan2(dy, dx);  // Robot's heading to target (radians)
-      std::cout << "dx: " << dx << ", dy: " << dy 
-                << ", angleToTag: " << angleToTag << std::endl;
+      // Retrieve LimeLight data
+      double tx = robotcontainer.m_limelight2.GetTargetHAngle();  // Horizontal offset (degrees)
+      double distance = robotcontainer.m_limelight2.GetTargetDistance();  // Assumed to be properly implemented
+      
+      // Convert tx to radians and compute absolute angle to tag:
+      double txRad = tx * (PI / 180.0);
+      double angleToTag = currentPose.Rotation().Radians().value() + txRad;
+      std::cout << "tx (deg): " << tx 
+                << ", angleToTag (rad): " << angleToTag << std::endl;
+      
+      // Compute the estimated AprilTag pose based on current robot pose, distance, and tx
+      double tagX = currentPose.X().value() + distance * std::cos(angleToTag);
+      double tagY = currentPose.Y().value() + distance * std::sin(angleToTag);
+      frc::Pose2d tagPose{
+          frc::Translation2d(units::meter_t(tagX), units::meter_t(tagY)),
+          frc::Rotation2d(units::radian_t(angleToTag))
+      };
+      std::cout << "Estimated Tag Pose: (" << tagX << ", " << tagY << ")" << std::endl;
       
       // Configuration constants
-      constexpr double kOffset = 0.3;  // Lateral offset from tag (meters)
-      constexpr double kApproachDistance = 0.5;  // Standoff distance from tag (meters)
+      constexpr double kOffset = 0.3;         // Lateral offset from tag (meters)
+      constexpr double kApproachDistance = 0.5; // Standoff distance from tag (meters)
       
       // Calculate lateral offset (left/right of tag)
       double offsetX = 0.0;
@@ -64,12 +78,12 @@ void CmdAlignToAprilTag::Execute() {
       
       // Combine offsets to create final target position
       frc::Translation2d targetTranslation(
-        units::meter_t(tagPose.X().value() + approachX + offsetX),
-        units::meter_t(tagPose.Y().value() + approachY + offsetY));
+          units::meter_t(tagPose.X().value() + approachX + offsetX),
+          units::meter_t(tagPose.Y().value() + approachY + offsetY));
       
-      // Target orientation (face directly towards AprilTag)
+      // Target orientation (face directly towards the tag)
       frc::Rotation2d targetRotation = frc::Rotation2d(units::radian_t(angleToTag));
-
+      
       // Store final target pose
       m_targetPose = frc::Pose2d(targetTranslation, targetRotation);
       m_targetAcquired = true;  // Lock target coordinates
@@ -80,8 +94,8 @@ void CmdAlignToAprilTag::Execute() {
       // SEARCH PATTERN: Drive backward slowly if no target
       frc::ChassisSpeeds searchSpeeds;
       searchSpeeds.vx = meters_per_second_t(-0.4);  // Reverse at 0.4 m/s
-      searchSpeeds.vy = meters_per_second_t(0.0);  // No lateral movement
-      searchSpeeds.omega = radians_per_second_t(0.0);  // No rotation
+      searchSpeeds.vy = meters_per_second_t(0.0);     // No lateral movement
+      searchSpeeds.omega = radians_per_second_t(0.0);// No rotation
       robotcontainer.driveSub.Drive2(searchSpeeds);
       std::cout << "No target detected, executing search pattern." << std::endl;
       return;  // Skip rest of execution until target found
@@ -124,8 +138,8 @@ void CmdAlignToAprilTag::Execute() {
   // Convert to chassis speeds
   frc::ChassisSpeeds speeds;
   speeds.vx = meters_per_second_t(speed * ux);  // X velocity component
-  speeds.vy = meters_per_second_t(speed * uy);  // Y velocity component
-  speeds.omega = radians_per_second_t(omega);   // Rotation speed
+  speeds.vy = meters_per_second_t(speed * uy);    // Y velocity component
+  speeds.omega = radians_per_second_t(omega);     // Rotation speed
   
   // Send drive command
   robotcontainer.driveSub.Drive2(speeds);

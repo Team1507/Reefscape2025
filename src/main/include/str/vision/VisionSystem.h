@@ -22,14 +22,6 @@ class VisionSystem {
   }
   void UpdatePoseEstimators(frc::Pose3d robotPose);
 
-  bool IsTargetValid() const;
-  frc::Pose2d GetTargetPose() const;
-
-  double GetDetectedX() const;
-  double GetDetectedY() const;
-  int GetDetectedTagID() const;
-
-
  private:
   std::array<frc::Pose3d, 2> cameraLocations;
   nt::StructArrayPublisher<frc::Pose3d> cameraLocationsPub{
@@ -39,7 +31,5 @@ class VisionSystem {
           .Publish()};
 
   std::array<Camera, 2> cameras;
-
-   std::optional<frc::Pose2d> m_lastDetectedPose;
 };
 }  // namespace str::vision

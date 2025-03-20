@@ -25,6 +25,7 @@
 #include "Subsystems/Elevator.h"
 #include "subsystems/Drive.h"
 #include "str/vision/VisionSystem.h"
+#include "Subsystems/LimeLight.h"
 
 class RobotContainer {
  public:
@@ -43,6 +44,10 @@ class RobotContainer {
 
   Drive driveSub{};
   Drive& GetDrive();
+
+  LimeLight      m_limelight2{"limelight-vtwo"};   
+   
+
 
 str::vision::VisionSystem& GetVision();
 

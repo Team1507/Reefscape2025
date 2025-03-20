@@ -50,10 +50,6 @@ class Camera {
     return singleTagPose;
   }
 
-  std::optional<frc::Pose3d> GetLatestTagPose() const;
-
-  std::vector<photon::PhotonTrackedTarget> GetAllTargets() const;
-
  private:
   std::array<int, 12> reefTags{6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
   Eigen::Matrix<double, 3, 1> GetEstimationStdDevs(frc::Pose2d estimatedPose);

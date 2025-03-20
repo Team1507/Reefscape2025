@@ -211,25 +211,3 @@ void Camera::SimPeriodic(frc::Pose2d robotSimPose) {
     visionSim->Update(robotSimPose);
   }
 }
-
-std::vector<photon::PhotonTrackedTarget> Camera::GetAllTargets() const {
-  // Fetch the latest result from the camera
-  auto result = camera->GetLatestResult();
-
-  // Extract targets from the result
-  if (result.HasTargets()) {
-    return std::vector<photon::PhotonTrackedTarget>(result.GetTargets().begin(), result.GetTargets().end());
-  } else {
-    return {};  // No targets found, return empty vector
-  }
-}
-
-std::optional<frc::Pose3d> Camera::GetLatestTagPose() const {
-    auto result = camera->GetLatestResult();
-    if (result.HasTargets()) {
-        auto transform = result.GetBestTarget().GetBestCameraToTarget();
-        frc::Pose3d targetPose(transform.Translation(), transform.Rotation());
-        return targetPose;
-    }
-    return std::nullopt;
-}
