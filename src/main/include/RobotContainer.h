@@ -26,6 +26,7 @@
 #include "subsystems/Drive.h"
 #include "str/vision/VisionSystem.h"
 #include "Subsystems/LimeLight.h"
+#include "Subsystems/Pivot.h"
 
 class RobotContainer {
  public:
@@ -44,6 +45,8 @@ class RobotContainer {
 
   Drive driveSub{};
   Drive& GetDrive();
+
+  Pivot m_pivot;
 
   LimeLight      m_limelight2{"limelight-vtwo"};   
    

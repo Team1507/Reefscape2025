@@ -28,6 +28,8 @@ class Pivot : public frc2::SubsystemBase {
 
   double GetPower(void);
 
+  double GetPosition(void);
+
   void SetTargetPosition(int position);
 
   bool pivotHome;
