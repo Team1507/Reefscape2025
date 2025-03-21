@@ -7,16 +7,12 @@
 #include "commands/CmdClawOuttake.h"
 #include "commands/CmdAlgaeOuttake.h"
 #include "commands/CmdAlgaeIntake.h"
-#include "commands/CmdAlgaeToPos.h"
-#include "commands/CmdAlgaeSetPosition.h"
 #include "Commands/CmdElevatorPosition.h"
 #include "Commands/CmdElevatorHome.h"
 #include "Commands/CmdElevatorManualPower.h"
 #include "Commands/CmdAlgaeManualPower.h"
-#include "Commands/CmdPivotZero.h"
 #include "Commands/CmdElevatorToPosition.h"
 #include "Commands/CmdRampDrop.h"
-#include  "Commands/CmdAlgaeSetPosition.h"
 #include "Commands/CmdDriveClearAll.h"
 #include "Commands/CmdAlignToAprilTag.h"
 
@@ -63,7 +59,6 @@ RobotContainer::RobotContainer()
   m_elevator.SetDefaultCommand(CmdElevatorManualPower(0));
   m_claw.SetDefaultCommand(CmdAlgaeManualPower(0));
   
-  frc::SmartDashboard::PutData("zero pivot", new CmdPivotZero());
 
     m_chooser.AddOption("Auto Do Nothing", new AutoDoNothing() );
 
@@ -125,9 +120,6 @@ void RobotContainer::ConfigureBindings()
   driverJoystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
   m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
   
-
- m_topDriver.Y().OnTrue(new CmdAlgaeToPos(15));
-
  driverJoystick.A().OnTrue(new CmdDriveClearAll());
 
 

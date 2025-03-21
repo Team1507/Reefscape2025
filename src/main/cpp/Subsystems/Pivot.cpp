@@ -30,7 +30,7 @@ void Pivot::SetPower(double power)
 
 void Pivot::SetTargetPosition(int position)
 {
-    pivotHome , pivotOpen = false;
+    pivotHome = pivotOpen = false;
 
     if (position == ALGAE_POS_HOME)
   {
