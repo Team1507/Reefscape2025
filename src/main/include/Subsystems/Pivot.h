@@ -8,6 +8,7 @@
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <ctre/phoenix6/controls/MotionMagicVoltage.hpp>
 #include "constants/Constants.h"
+#include <units/angle.h>
 
 class Pivot : public frc2::SubsystemBase {
  public:
@@ -18,7 +19,7 @@ class Pivot : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
-  double GetPosition(void);
+  double GetPivotPosition();
 
   void SetPosition(double position);
 
@@ -28,9 +29,16 @@ class Pivot : public frc2::SubsystemBase {
 
   double GetPower(void);
 
-  double GetPosition(void);
-
   void SetTargetPosition(int position);
+
+  void SetManualTarget(double targetPosition);
+
+  void SetPivotCoast();
+
+  void SetPivotBrake();
+
+  void ResetEncoderValue();
+
 
   bool pivotHome;
   bool pivotOpen;

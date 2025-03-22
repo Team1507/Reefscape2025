@@ -39,18 +39,20 @@ double LimeLight::GetTargetVAngle(void)
 
 double LimeLight::GetTargetDistance(void)
 {
-   const double a1 = 32;//angle of limelight 32 off of vertical
-   const double h1 = 35.5;//height of limelight from ground
-   const double h2 = 103.50;//height of target
+   const double a1 = 15;
+   const double h1 = 8;
+   const double h2 = 12; 
 
   if (!IsTargetValid()) return 0.0;
 
 
   double a2 = nt::NetworkTableInstance::GetDefault().GetTable(m_LLName)->GetNumber("ty", 0);
+
+  double a1_rad = a1 * (PI / 180.0);
+  double a2_rad = a2 * (PI / 180.0);
   
-  return (h2-h1)/tan((a1+a2)*(PI/180));
+  return (h2-h1)/tan((a1_rad+a2_rad));
   
- return 0;
 }
 
 void   LimeLight::SetPipeline(int value)
@@ -123,9 +125,9 @@ void    LimeLight::RunLimeLight(void)
         //Status Update
     frc::SmartDashboard::PutBoolean(m_LLName + " Valid",        IsTargetValid() );
     frc::SmartDashboard::PutNumber (m_LLName + " TID",          GetTargetId() );
-    frc::SmartDashboard::PutNumber (m_LLName + " HAngle",       GetTargetHAngle()  );
+    frc::SmartDashboard::PutNumber (m_LLName + " XAngle",       GetTargetHAngle()  );
     frc::SmartDashboard::PutNumber (m_LLName + " YAngle",       GetTargetVAngle()  );
-   // frc::SmartDashboard::PutNumber (m_LLName + " Range",        GetTargetDistance()  );
+    frc::SmartDashboard::PutNumber (m_LLName + " Range",        GetTargetDistance()  );
     frc::SmartDashboard::PutNumber (m_LLName + " Last ID",      m_lastSeenID  );
     frc::SmartDashboard::PutNumber (m_LLName + " Target Yaw",   GetTargetYaw()  );
   //frc::SmartDashboard::PutNumber (m_LLName + " Track PID Out",TrackBranch()  );

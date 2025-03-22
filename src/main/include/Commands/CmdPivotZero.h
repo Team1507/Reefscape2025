@@ -6,7 +6,6 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "constants/Constants.h"
 
 /**
  * An example command.
@@ -15,13 +14,13 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class CmdAlgaeManualPower
-    : public frc2::CommandHelper<frc2::Command, CmdAlgaeManualPower> {
+class CmdPivotZero
+    : public frc2::CommandHelper<frc2::Command, CmdPivotZero> {
  public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  CmdAlgaeManualPower(float power);
+  CmdPivotZero();
 
   void Initialize() override;
 
@@ -30,10 +29,4 @@ class CmdAlgaeManualPower
   void End(bool interrupted) override;
 
   bool IsFinished() override;
-
-  private:
-
-  float m_power;
-
-  bool m_manualAlgaeEnabled;
 };

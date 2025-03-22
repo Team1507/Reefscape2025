@@ -102,26 +102,6 @@ void Claw::SetAlgaePower(double power)
     m_claw.Set(power);
 }
 
-// --- ALGAE PIVOT ---
-
-//   double Claw::GetPosition(void)
-//   {
-//     return m_pivotEncoder.GetPosition();
-//   }
-//   void Claw::SetPosition(double position)
-//   {
-//     m_pivotEncoder.SetPosition(position);
-//   }
-  void Claw::SetPower(double power)
-  {
-    m_pivot.Set(power);
-  }
-
-//  void Claw::ZeroEncoder(void)
-//  {
-//     m_pivotEncoder.SetPosition(0.0);
-//  }
-
  bool Claw::IsBallLoaded() const 
 {
   return m_ballLoaded;

@@ -2,6 +2,8 @@
 #include "Constants/Constants.h"
 #include <iostream>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <units/angle.h>
+
 
 Pivot::Pivot() 
 {
@@ -42,7 +44,7 @@ Pivot::Pivot()
 void Pivot::Periodic() 
 {
 
-  frc::SmartDashboard::PutNumber("Pivot position", GetPosition());
+  frc::SmartDashboard::PutNumber("Pivot position", GetPivotPosition());
   frc::SmartDashboard::PutNumber("Pivot Temp", GetTemperature());
 
 }
@@ -63,9 +65,9 @@ void Pivot::SetPower(double power)
   m_pivotMotor.Set(power);
 }
 
-double Pivot::GetPosition()
+double Pivot::GetPivotPosition()
 {
-  return m_pivotMotor.GetPosition().GetValue().value();
+  return m_pivotMotor.GetPosition().GetValueAsDouble();
 }
 
 void Pivot::SetTargetPosition(int position)
@@ -86,4 +88,23 @@ void Pivot::SetTargetPosition(int position)
 
   m_pivotMotor.SetControl(m_mmPivot.WithPosition(targetPosition));
 
+}
+
+void Pivot::SetManualTarget(double targetPosition) {
+    m_pivotMotor.SetControl(m_mmPivot.WithPosition(units::turn_t{targetPosition}));
+}
+
+void Pivot::SetPivotCoast()
+{
+  m_pivotMotor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Coast);
+}
+
+void Pivot::SetPivotBrake()
+{
+  m_pivotMotor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+}
+
+void Pivot::ResetEncoderValue()
+{
+  m_pivotMotor.SetPosition(0_tr);
 }

@@ -43,3 +43,28 @@ void VisionSystem::SimulationPeriodic(frc::Pose2d simRobotPose) {
     cam.SimPeriodic(simRobotPose);
   }
 }
+
+bool VisionSystem::IsTargetValid() const {
+  return m_lastDetectedPose.has_value();
+}
+
+frc::Pose2d VisionSystem::GetTargetPose() const {
+  if (!m_lastDetectedPose.has_value()) {
+    throw std::runtime_error("No target detected!");
+  }
+  return m_lastDetectedPose.value();
+}
+
+  double VisionSystem::GetDetectedX() const {
+  if (!m_lastDetectedPose.has_value()) {
+    return 0.0;  // or std::numeric_limits<double>::quiet_NaN();
+  }
+  return m_lastDetectedPose.value().X().value();
+}
+
+ double VisionSystem::GetDetectedY() const {
+  if (!m_lastDetectedPose.has_value()) {
+    return 0.0;  // or std::numeric_limits<double>::quiet_NaN();
+  }
+  return m_lastDetectedPose.value().Y().value();
+}

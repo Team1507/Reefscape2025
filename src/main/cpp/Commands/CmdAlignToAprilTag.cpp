@@ -55,7 +55,7 @@ void CmdAlignToAprilTag::Execute() {
       std::cout << "Estimated Tag Pose: (" << tagX << ", " << tagY << ")" << std::endl;
       
       // Configuration constants
-      constexpr double kOffset = 0.3;         // Lateral offset from tag (meters)
+      constexpr double kOffset = 0.0;         // Lateral offset from tag (meters)
       constexpr double kApproachDistance = 0.5; // Standoff distance from tag (meters)
       
       // Calculate lateral offset (left/right of tag)

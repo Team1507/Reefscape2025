@@ -119,4 +119,11 @@ void WriteToSmartDashboard()
     // frc::SmartDashboard::PutNumber(" v angle" , robotcontainer.m_limelight2.GetTargetVAngle());
     // frc::SmartDashboard::PutNumber(" target id" , robotcontainer.m_limelight2.GetTargetId());
     // frc::SmartDashboard::PutBoolean(" target valid" , robotcontainer.m_limelight2.IsTargetValid());
+
+    frc::SmartDashboard::PutNumber("Detected X" , robotcontainer.GetVision().GetDetectedX());
+    frc::SmartDashboard::PutNumber("Detected Y" , robotcontainer.GetVision().GetDetectedY());
+   // frc::SmartDashboard::PutNumber("Detected Tag ID" , robotcontainer.GetVision().GetDetectedTagID());
+    frc::SmartDashboard::PutBoolean("Detected Valid" , robotcontainer.GetVision().IsTargetValid());
+
+
 }

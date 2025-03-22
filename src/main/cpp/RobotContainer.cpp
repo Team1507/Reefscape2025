@@ -10,11 +10,11 @@
 #include "Commands/CmdElevatorPosition.h"
 #include "Commands/CmdElevatorHome.h"
 #include "Commands/CmdElevatorManualPower.h"
-#include "Commands/CmdAlgaeManualPower.h"
 #include "Commands/CmdElevatorToPosition.h"
 #include "Commands/CmdRampDrop.h"
 #include "Commands/CmdDriveClearAll.h"
 #include "Commands/CmdAlignToAprilTag.h"
+#include "Commands/CmdPivotZero.h"
 
 #include "Subsystems/Elevator.h"
 #include "Subsystems/Claw.h"
@@ -49,7 +49,8 @@
 #include "Commands/Auto1PieceLeft.h"
 #include "Commands/Auto1PieceMiddle.h"
 #include "Commands/CmdClawStop.h"
-
+#include "Commands/CmdPivotManual.h"
+#include "Commands/CmdPivotToPos.h"
 
 
 RobotContainer::RobotContainer() 
@@ -57,7 +58,7 @@ RobotContainer::RobotContainer()
   ConfigureBindings();
 
   m_elevator.SetDefaultCommand(CmdElevatorManualPower(0));
-  m_claw.SetDefaultCommand(CmdAlgaeManualPower(0));
+  m_pivot.SetDefaultCommand(CmdPivotManual());
   
 
     m_chooser.AddOption("Auto Do Nothing", new AutoDoNothing() );
@@ -80,6 +81,8 @@ RobotContainer::RobotContainer()
 
   frc::SmartDashboard::PutData("Auto Mode", &m_chooser);
 
+
+  frc::SmartDashboard::PutData("Zero Pivot", new CmdPivotZero());
 
 }
 
@@ -119,6 +122,7 @@ void RobotContainer::ConfigureBindings()
   //m_topDriver.LeftBumper().WhileTrue(new CmdAlgaeOuttake(frc::SmartDashboard::PutNumber("AlgaeOut Power", 1)));
   driverJoystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
   m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
+  driverJoystick.POVDown().OnTrue(new CmdPivotZero());
   
  driverJoystick.A().OnTrue(new CmdDriveClearAll());
 
@@ -171,6 +175,9 @@ frc2::Trigger normalPovRight([=]() {
   return !aButton.Get() && povRightButton.Get();
 });
 normalPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_L2));
+
+m_topDriver.RightBumper().OnTrue(new CmdPivotToPos(2));
+m_topDriver.LeftBumper().OnTrue(new CmdPivotToPos(1));
 
 }
 
