@@ -17,7 +17,7 @@ Auto2PieceRight::Auto2PieceRight()
 
     //Go to reef
     CmdDriveToPoint(0.5_m, -0.5_m, 0_deg, 1.5_mps, false, 5_s),
-    CmdDriveToPoint(1.5_m, -1.5_m, 0_deg, 3.5_mps, false, 5_s),
+    CmdDriveToPoint(1.5_m, -1.5_m, 0_deg, 3_mps, false, 5_s),
     CmdElevatorToPosition(2),
     CmdDriveToPoint(2.2_m, -2.2_m, -60_deg, 1.5_mps, false, 5_s), //was 2.4, -2.3
 
@@ -45,7 +45,7 @@ Auto2PieceRight::Auto2PieceRight()
     ),
     CmdDriveToPoint(4.8_m, -1.8_m, -120_deg, 3_mps, false, 3_s),
     frc2::ParallelCommandGroup(
-    CmdClawActivate(-1.0),
+    //CmdClawActivate(-1.0),
     CmdElevatorToPosition(4)
     ),
     CmdDriveToPoint(4.1_m, -2.25_m, -120_deg, 1.5_mps, false, 3_s),
@@ -57,6 +57,10 @@ Auto2PieceRight::Auto2PieceRight()
     CmdClawOuttake(-1.0),
     CmdElevatorToPosition(1),
     CmdWait(0.65),
+
+    //Align to algae
+    CmdDriveToPoint(3.8_m, -2.15_m, -120_deg, 1_mps, true, 2_s),
+    CmdElevatorToPosition(5),
 
     CmdPrintText("Auto 2 Right Done")
   );

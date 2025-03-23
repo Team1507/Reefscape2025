@@ -39,19 +39,37 @@ double LimeLight::GetTargetVAngle(void)
 
 double LimeLight::GetTargetDistance(void)
 {
-   const double a1 = 15;
-   const double h1 = 8;
-   const double h2 = 12; 
+//    const double a1 = 15;
+//    const double h1 = 8;
+//    const double h2 = 12; 
 
-  if (!IsTargetValid()) return 0.0;
+//   if (!IsTargetValid()) return 0.0;
 
 
-  double a2 = nt::NetworkTableInstance::GetDefault().GetTable(m_LLName)->GetNumber("ty", 0);
+//   double a2 = nt::NetworkTableInstance::GetDefault().GetTable(m_LLName)->GetNumber("ty", 0);
 
-  double a1_rad = a1 * (PI / 180.0);
-  double a2_rad = a2 * (PI / 180.0);
+//   double a1_rad = a1 * (PI / 180.0);
+//   double a2_rad = a2 * (PI / 180.0);
   
-  return (h2-h1)/tan((a1_rad+a2_rad));
+//   return (h2-h1)/tan((a1_rad+a2_rad));
+
+    double targetOffsetAngle_Vertical = nt::NetworkTableInstance::GetDefault().GetTable(m_LLName)->GetNumber("ty", 0);
+
+    // how many degrees back is your limelight rotated from perfectly vertical?
+    double limelightMountAngleDegrees = 15.0; 
+
+    // distance from the center of the Limelight lens to the floor
+    double limelightLensHeightInches = 8; 
+
+    // distance from the target to the floor
+    double goalHeightInches = 12; 
+
+    double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+    double angleToGoalRadians = angleToGoalDegrees * (M_PI / 180.0);
+
+    //calculate distance
+    double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches)/tan(angleToGoalRadians);
+    return distanceFromLimelightToGoalInches;
   
 }
 

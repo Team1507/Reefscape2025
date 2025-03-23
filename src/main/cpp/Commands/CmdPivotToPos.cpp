@@ -10,5 +10,9 @@ CmdPivotToPos::CmdPivotToPos(float position)
 
 void CmdPivotToPos::Initialize() 
 {
-  robotcontainer.m_pivot.SetTargetPosition(m_position);
+  if (robotcontainer.m_elevator.isElevatorClearForPivot())
+  {
+    std::cout << "Pivot to position: " << m_position << std::endl;
+    robotcontainer.m_pivot.SetTargetPosition(m_position);
+  }
 }

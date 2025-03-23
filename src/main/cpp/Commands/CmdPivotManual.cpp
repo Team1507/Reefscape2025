@@ -35,11 +35,14 @@ void CmdPivotManual::Execute() {
   // // Command the pivot to move using Motion Magic.
   // robotcontainer.m_pivot.SetManualTarget(targetPosition);
 
-    if((robotcontainer.m_topDriver.GetRightY() < -PIVOT_DEADBAND))
+  if((robotcontainer.m_topDriver.GetRightY() < -PIVOT_DEADBAND))
   {
-    robotcontainer.m_pivot.SetPivotCoast();
-    robotcontainer.m_pivot.SetPower(-0.25);
-    m_manualPivotEnabled = true;
+    if (robotcontainer.m_elevator.isElevatorClearForPivot())
+    {
+      robotcontainer.m_pivot.SetPivotCoast();
+      robotcontainer.m_pivot.SetPower(-0.25);
+      m_manualPivotEnabled = true;
+    }
   }
   else if(robotcontainer.m_topDriver.GetRightY() > PIVOT_DEADBAND)
   {

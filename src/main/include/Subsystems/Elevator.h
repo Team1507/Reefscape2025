@@ -61,6 +61,8 @@ class Elevator : public frc2::SubsystemBase {
   void CheckAtGoal(void);
   void Stop(void);
   void Homing(void);
+  bool isElevatorClearForPivot(void);
+
 
   units::meter_t ConvertRadiansToHeight(units::radian_t rots);
 

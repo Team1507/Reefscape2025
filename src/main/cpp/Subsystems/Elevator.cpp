@@ -63,6 +63,7 @@ void Elevator::Periodic()
   frc::SmartDashboard::PutBoolean("Elevator Load", elevatorHome);
   frc::SmartDashboard::PutBoolean("Elevator Low Algae", elevatorLowAlgae);
   frc::SmartDashboard::PutBoolean("Elevator High Algae", elevatorHighAlgae);
+  frc::SmartDashboard::PutBoolean("Elevator All Clear", isElevatorClearForPivot());
 
 
 }
@@ -197,4 +198,16 @@ bool Elevator::AtSetpoint()
 void Elevator::ResetEncoderValue()
 {
   m_elevatorMotor.SetPosition(0_tr);
+}
+
+bool Elevator::isElevatorClearForPivot()
+{
+  if (m_elevatorMotor.GetPosition().GetValue() < -.7_tr)
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
