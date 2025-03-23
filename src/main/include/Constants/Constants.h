@@ -55,7 +55,7 @@ inline constexpr frc::Transform2d CLAW_TRANS_R{0_m, CLAW_OFFSET_R,
 #define ELEV_POSITION_L2 -1.5_tr     //L2
 #define ELEV_POSITION_L3 -3.15_tr       //L3
 #define ELEV_POSITION_L4 -5.7_tr     //L4
-#define ELEV_POSITION_ALG_L2 -2.23_tr       //ALgea Low
+#define ELEV_POSITION_ALG_L2 -2.45_tr       //ALgea Low -2.23 before now -2.4 , changed again now 2.45
 #define ELEV_POSITION_ALG_L3 -4.15_tr       //Algea High
 
 #define ELEV_TOLERANCE 0.05_tr
@@ -78,7 +78,7 @@ inline constexpr frc::Transform2d CLAW_TRANS_R{0_m, CLAW_OFFSET_R,
 // ********* PIVOT CONSTANTS **********//
 
 #define PIVOT_POSITION_HOME 0.29_tr
-#define PIVOT_POSITION_OPEN -1.4_tr
+#define PIVOT_POSITION_OPEN -1.35_tr
 
 #define ALGAE_POS_HOME 1
 #define ALGAE_POS_OPEN 2

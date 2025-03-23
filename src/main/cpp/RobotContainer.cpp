@@ -148,12 +148,12 @@ altPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
 frc2::Trigger altPovLeft([=]() {
   return aButton.Get() && povLeftButton.Get();
 });
-altPovLeft.OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG_HIGH));
+altPovLeft.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_ALG_HIGH), CmdPivotToPos(2)));
 
 frc2::Trigger altPovRight([=]() {
   return aButton.Get() && povRightButton.Get();
 });
-altPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_ALG_LOW));
+altPovRight.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_ALG_LOW), CmdPivotToPos(2)));
 
 // Normal D-pad bindings (fire only when A is NOT pressed)
 frc2::Trigger normalPovUp([=]() {
