@@ -104,8 +104,14 @@ void RobotContainer::ConfigureBindings()
                360_deg_per_s;
       }));
 
-  driverJoystick.X().WhileTrue(new CmdAlignToAprilTag(true));
-  driverJoystick.B().WhileTrue(new CmdAlignToAprilTag(false));
+ driverJoystick.RightBumper().WhileTrue(
+    driveSub.DriveReefAlign(
+        [this] { return driverJoystick.GetLeftX(); },
+        [this] { return -driverJoystick.GetLeftY(); },
+        [this] { return driverJoystick.GetRightX() * 0.5; },
+        [this] { return driverJoystick.GetHID().GetLeftBumper(); }
+    )
+);
 
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));

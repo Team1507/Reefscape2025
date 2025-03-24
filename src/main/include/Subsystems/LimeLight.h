@@ -14,6 +14,8 @@
 #include <units/length.h>
 #include <units/angle.h>
 
+#include "str/swerve/SwerveDrive.h"
+
 #define BranchTrackKp 0.05
 #define BranchTrackKi 0 
 #define BranchTrackKd 0
@@ -87,7 +89,10 @@ class LimeLight : public frc2::SubsystemBase
       setLimelightNTDoubleArray(limelightName, "robot_orientation_set", entries);
   }
 
+
  private:
+  str::swerve::SwerveDrive swerveDrive{}; 
+
   int    m_lastSeenID{0};
   int    m_targetId{0};  
   bool   m_targetValid{false};

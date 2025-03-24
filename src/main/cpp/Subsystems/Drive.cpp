@@ -29,6 +29,13 @@
 #include "units/velocity.h"
 #include "util/choreovariables.h"
 
+
+
+constexpr units::meter_t Drive::kReefCenterToWall;
+constexpr units::meter_t Drive::kPipeOffsetX;
+constexpr units::meter_t Drive::kPipeOffsetY;
+constexpr units::radian_t Drive::kAlignmentTolerance;
+
 Drive::Drive() {
   importantPoses = strchoreo::LoadPoses();
   SetupPathplanner();
@@ -51,6 +58,10 @@ void Drive::Periodic() {
   SetPosePids();
   lOffset = units::inch_t{frc::SmartDashboard::GetNumber("L OFFSET", 0)};
   rOffset = units::inch_t{frc::SmartDashboard::GetNumber("R OFFSET", 0)};
+
+   frc::SmartDashboard::PutBoolean("ReefAlignment/Active", m_reefAlignData.active);
+    frc::SmartDashboard::PutNumber("ReefAlignment/ErrorDeg", 
+        m_reefAlignData.error.convert<units::degree>().value());
 }
 
 void Drive::SimulationPeriodic() {
@@ -676,3 +687,173 @@ void Drive::ResetAllSensors()
 {
   swerveDrive.ResetPose(frc::Pose2d{});
 } 
+
+frc::Pose2d Drive::GetReefReference() const {
+    static const frc::Translation2d kBlueReefCenter{4.48_m, 4.04_m};
+    static const frc::Translation2d kRedReefCenter = 
+        pathplanner::FlippingUtil::flipFieldPosition(kBlueReefCenter);
+
+    const auto reefCenter = str::IsOnRed() ? kRedReefCenter : kBlueReefCenter;
+    const auto robotPos = swerveDrive.GetPose().Translation();
+    
+    // Calculate sector angle
+    const auto vecToReef = reefCenter - robotPos;
+    units::radian_t angle = vecToReef.Angle().Radians();
+    if(str::IsOnRed()) angle += 180_deg;
+    
+    // Quantize to 60 degree sectors
+    constexpr units::radian_t kSectorSize = 60_deg;
+    auto quantizedAngle = units::radian_t{
+    std::round(angle.value() / kSectorSize.value()) * kSectorSize.value()};
+    
+    return {reefCenter, frc::Rotation2d(quantizedAngle)};
+}
+
+bool Drive::IsFacingReef(double tolerance) const {
+    const auto reference = GetReefReference();
+    const auto angleError = (reference.Rotation() - 
+        swerveDrive.GetPose().Rotation()).Radians();
+    return units::math::abs(angleError) < units::radian_t{tolerance};
+}
+
+units::meter_t Drive::DistanceToReefWall() const {
+    const auto reference = GetReefReference();
+    const auto robotPos = swerveDrive.GetPose().Translation();
+    const auto reefVec = robotPos - reference.Translation();
+    
+    const frc::Rotation2d wallNormal = reference.Rotation() + frc::Rotation2d(180_deg);
+    // Create a unit vector in the direction of wallNormal.
+    frc::Translation2d wallNormalVector{wallNormal.Cos() * 1_m, wallNormal.Sin() * 1_m};
+    
+    // Compute the dot product manually.
+    const auto dotProduct = reefVec.X() * wallNormalVector.X() + reefVec.Y() * wallNormalVector.Y();
+    const units::meter_t distance = dotProduct - kReefCenterToWall;
+    
+    return units::math::max(distance, 0_m);
+}
+
+
+int Drive::GetReefZone() const {
+    const auto reference = GetReefReference();
+    const auto robotPos = swerveDrive.GetPose().Translation();
+    
+    const auto vecToReef = reference.Translation() - robotPos;
+    const units::meter_t distance = vecToReef.Norm();
+    
+    if(distance < 1.5_m) return 0;
+    if(distance < 3.0_m) return 1;
+    return 2;
+}
+
+frc2::CommandPtr Drive::DriveReefAlign(
+    std::function<double()> xInput,
+    std::function<double()> yInput,
+    std::function<double()> angularInput,
+    std::function<bool()> leftSide) {
+  return frc2::FunctionalCommand(
+      [this] {
+        // Initialization: reset the theta controller and mark the alignment active.
+        m_reefThetaController.Reset(swerveDrive.GetPose().Rotation().Radians());
+        m_reefAlignData.active = true;
+      },
+      [=] {
+        // Retrieve joystick inputs.
+        const double x = xInput();
+        const double y = yInput();
+        const double omegaInput = angularInput();
+
+        // Calculate the target pipe position using the reef reference.
+        const auto reference = GetReefReference();
+        const units::meter_t yOffset = leftSide() ? -kPipeOffsetY : kPipeOffsetY;
+        const auto targetPipe = reference.TransformBy(
+            frc::Transform2d{kPipeOffsetX, yOffset, 0_deg});
+
+        // Compute the vector from the robot's current position to the target pipe.
+        const auto robotPos = swerveDrive.GetPose().Translation();
+        const auto robotToTarget = targetPipe.Translation() - robotPos;
+
+        // Create the joystick vector and rotate if needed.
+        const auto joystickVec = frc::Translation2d{
+        units::meter_t{x}, units::meter_t{y}
+        }.RotateBy(str::IsOnRed() ? 180_deg : 0_deg);
+
+        // Calculate the error between the direction to target and the joystick direction.
+        const auto targetAngle = robotToTarget.Angle().Radians();
+        const auto joystickAngle = joystickVec.Angle().Radians();
+        const auto angleError = targetAngle - joystickAngle;
+
+        // Scale the error by the magnitude of the joystick vector.
+        const double magnitude = std::hypot(x, y);
+        const double alignOutput = m_reefXController.Calculate(angleError.value(), 0.0) * magnitude;
+
+        // Calculate the rotational output from the theta controller and convert it to units.
+        const units::radians_per_second_t omegaSetpoint{
+            m_reefThetaController.Calculate(
+                swerveDrive.GetPose().Rotation().Radians(),
+                reference.Rotation().Radians())
+        };
+
+        // Combine the translational joystick inputs (scaled by 3.0) with the rotational setpoint.
+        const auto chassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+            units::meters_per_second_t{x * 3.0},
+            units::meters_per_second_t{y * 3.0},
+            omegaSetpoint,
+            swerveDrive.GetPose().Rotation());
+
+        // Command the drive to use the calculated speeds.
+        swerveDrive.Drive(chassisSpeeds, false);
+      },
+      [this](bool interrupted) {
+        // When command ends or is interrupted, mark alignment as inactive.
+        m_reefAlignData.active = false;
+      },
+      [] { return false; },
+      {this}
+  ).WithName("DriveReefAlign");
+}
+
+frc2::CommandPtr Drive::AutoReefAlign() {
+  return frc2::FunctionalCommand(
+      // onInit: Reset the controllers.
+      [this] {
+        m_reefXController.Reset();
+        m_reefYController.Reset();
+        m_reefThetaController.Reset(swerveDrive.GetPose().Rotation().Radians());
+      },
+      // onExecute: Calculate PID outputs and drive.
+      [this] {
+        const auto reference = GetReefReference();
+        const auto currentPose = swerveDrive.GetPose();
+        
+        // Extract the target position from the reef reference.
+        const auto targetPos = reference.Translation();
+        
+        // Calculate PID outputs.
+        const double xOut = m_reefXController.Calculate(
+            currentPose.X().value(), targetPos.X().value());
+        const double yOut = m_reefYController.Calculate(
+            currentPose.Y().value(), targetPos.Y().value());
+        const double thetaOut = m_reefThetaController.Calculate(
+            currentPose.Rotation().Radians(), reference.Rotation().Radians());
+        
+        // Command the robot drive using the calculated outputs.
+        swerveDrive.Drive(
+            units::meters_per_second_t{xOut},
+            units::meters_per_second_t{yOut},
+            units::radians_per_second_t{thetaOut},
+            false);
+      },
+      // onEnd: Stop the robot when the command ends or is interrupted.
+      [this](bool interrupted) {
+        swerveDrive.Drive({0_mps, 0_mps, 0_rad_per_s}, false);
+      },
+      // isFinished: Command finishes when all PID controllers are at their setpoints.
+      [this] {
+        return m_reefXController.AtSetpoint() &&
+               m_reefYController.AtSetpoint() &&
+               m_reefThetaController.AtSetpoint();
+      },
+      // Requirements.
+      {this}
+  ).WithName("AutoReefAlign");
+}

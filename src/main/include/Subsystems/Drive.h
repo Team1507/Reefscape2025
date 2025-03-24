@@ -27,6 +27,8 @@
 #include "units/time.h"
 #include "units/velocity.h"
 
+#include <frc2/command/FunctionalCommand.h>
+
 class Drive : public frc2::SubsystemBase {
  public:
   Drive();
@@ -81,6 +83,20 @@ class Drive : public frc2::SubsystemBase {
   frc2::CommandPtr TuneDrivePID(std::function<bool()> isDone);
   frc2::CommandPtr WheelRadius(frc2::sysid::Direction dir);
   void SetPosePids();
+
+   // Alignment control functions
+    frc2::CommandPtr DriveReefAlign(std::function<double()> xInput,
+                                    std::function<double()> yInput,
+                                    std::function<double()> angularInput,
+                                    std::function<bool()> leftSide);
+    
+    frc2::CommandPtr AutoReefAlign();
+    
+    // Helper functions
+    frc::Pose2d GetReefReference() const;
+    bool IsFacingReef(double tolerance) const;
+    units::meter_t DistanceToReefWall() const;
+    int GetReefZone() const;
 
  private:
   str::swerve::SwerveDrive swerveDrive{};
@@ -180,6 +196,25 @@ class Drive : public frc2::SubsystemBase {
   units::meter_t rOffset{consts::yearspecific::CLAW_OFFSET_R};
 
   bool isAtGoalState;
-};
+  // Alignment PID controllers
+    frc::PIDController m_reefXController{2.0, 0.0, 0.0};
+    frc::PIDController m_reefYController{2.0, 0.0, 0.0};
+    frc::ProfiledPIDController<units::radians> m_reefThetaController{
+        8.0, 0.0, 0.2,
+        frc::TrapezoidProfile<units::radians>::Constraints{
+            10_rad_per_s, 20_rad_per_s_sq}};
 
-   
+    // Alignment state
+    struct ReefAlignData {
+        frc::Pose2d targetPose;
+        bool active = false;
+        units::radian_t error;
+        units::meters_per_second_t output;
+    } m_reefAlignData;
+
+    // Constants
+    static constexpr units::meter_t kReefCenterToWall = 0.6_m;
+    static constexpr units::meter_t kPipeOffsetX = 0.3_m;
+    static constexpr units::meter_t kPipeOffsetY = 0.2_m;
+    static constexpr units::radian_t kAlignmentTolerance = 1.0_deg;
+};

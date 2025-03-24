@@ -4,6 +4,10 @@
 #include "frc/smartdashboard/SmartDashboard.h"
 #include <iostream>
 #include <cmath>
+#include "Robot.h"
+#include "str/swerve/SwerveDrive.h"
+#include "str/DriverstationUtils.h"
+#include <frc/Timer.h>
 
 // Helper function to set a double array in NetworkTables.
 // This function is used by the inline SetRobotOrientation above.
@@ -20,6 +24,25 @@ LimeLight::LimeLight(std::string llname) : m_LLName(llname)
 void LimeLight::Periodic() 
 {
     RunLimeLight();
+     auto ntTable = nt::NetworkTableInstance::GetDefault().GetTable(m_LLName);
+    
+    // Get MegaTag data
+    auto botpose = ntTable->GetNumberArray("botpose_wpiblue", {});
+    if(botpose.size() >= 6) {
+        frc::Pose2d visionPose = toPose2D(botpose);
+        
+        if(str::IsOnRed()) {
+            visionPose = pathplanner::FlippingUtil::flipFieldPose(visionPose);
+        }
+        
+        // Get timestamp from LL latency
+        const double latency = ntTable->GetNumber("tl", 0) / 1000.0;
+        const units::second_t timestamp = frc::Timer::GetFPGATimestamp() - latency * 1_s;
+        
+        // Add to pose estimator
+        Eigen::Vector3d stdDevs{0.5, 0.5, 10.0}; // Tune based on distance
+        swerveDrive.AddVisionMeasurement(visionPose, timestamp, stdDevs);
+    }
 }
 
 int LimeLight::GetTargetId(void)
