@@ -1,4 +1,4 @@
-#include "Commands/Auto2PieceRight.h"
+#include "Commands/Auto2PieceRightRed.h"
 #include "Commands/CmdPrintText.h"
 #include "Commands/CmdDriveToPoint.h"
 #include "Commands/CmdElevatorToPosition.h"
@@ -9,10 +9,10 @@
 #include "frc2/command/ParallelCommandGroup.h"
 #include "Commands/CmdDriveClearAll.h"
 
-Auto2PieceRight::Auto2PieceRight() 
+Auto2PieceRightRed::Auto2PieceRightRed() 
 {
   AddCommands(
-    CmdPrintText("Auto 2 Right"),
+    CmdPrintText("Auto 2 Right Red"),
     CmdDriveClearAll(),
 
     //Go to reef
@@ -59,9 +59,10 @@ Auto2PieceRight::Auto2PieceRight()
     CmdWait(0.65),
 
     //Align to algae
-    CmdDriveToPoint(3.8_m, -2.15_m, -120_deg, 1_mps, true, 2_s),
+    CmdDriveToPoint(3.9_m, -2.1_m, -120_deg, 1_mps, true, 2_s),
     CmdElevatorToPosition(5),
+    CmdDriveClearAll(),
 
-    CmdPrintText("Auto 2 Right Done")
+    CmdPrintText("Auto 2 Right Red Done")
   );
 }

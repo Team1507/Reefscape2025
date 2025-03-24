@@ -10,9 +10,9 @@
 // NOTE:  Consider using this command inline, rather than writing a subclass.
 // For more information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-class Auto1PieceLeft
+class Auto1PieceMiddleAlg
     : public frc2::CommandHelper<frc2::SequentialCommandGroup,
-                                 Auto1PieceLeft> {
+                                 Auto1PieceMiddleAlg> {
  public:
-  Auto1PieceLeft();
+  Auto1PieceMiddleAlg();
 };

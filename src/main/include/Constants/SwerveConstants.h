@@ -152,6 +152,8 @@ inline constexpr units::radians_per_second_squared_t MAX_ROT_ACCEL =
     720_deg_per_s_sq;
 inline constexpr units::meters_per_second_squared_t MAX_ACCEL = 13_fps_sq;
 
+inline constexpr units::meters_per_second_t DRIVE_CREEP_SPEED = 1.5_mps;
+
 }  // namespace physical
 
 namespace gains {

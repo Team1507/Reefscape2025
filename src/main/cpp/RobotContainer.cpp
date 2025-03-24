@@ -41,13 +41,14 @@
 #include <frc2/command/ParallelCommandGroup.h>
 
 #include "commands/AutoDoNothing.h"
-#include "commands/Auto2PieceRight.h"
+#include "commands/Auto2PieceRightBlue.h"
+#include "commands/Auto2PieceRightRed.h"
 #include "commands/Auto2PieceLeft.h"
 #include "Commands/Auto3PieceRight.h"
 #include "Commands/Auto1PieceRight.h"
 #include "Commands/AutoMoveForward.h"
-#include "Commands/Auto1PieceLeft.h"
 #include "Commands/Auto1PieceMiddle.h"
+#include "Commands/Auto1PieceMiddleAlg.h"
 #include "Commands/CmdClawStop.h"
 #include "Commands/CmdPivotManual.h"
 #include "Commands/CmdPivotToPos.h"
@@ -65,17 +66,15 @@ RobotContainer::RobotContainer()
 
     m_chooser.SetDefaultOption("Auto Do Nothing", new AutoDoNothing() );
 
-    m_chooser.AddOption("Auto 2 Piece Right", new Auto2PieceRight());
+    m_chooser.AddOption("Auto 2 Piece Right Blue", new Auto2PieceRightBlue());
+
+     m_chooser.AddOption("Auto 2 Piece Right Red", new Auto2PieceRightRed());
 
     m_chooser.AddOption("Auto 2 Piece Left", new Auto2PieceLeft());
 
-    m_chooser.AddOption("Auto 3 Piece Right" , new Auto3PieceRight());
-
-    m_chooser.AddOption("Auto 1 Piece Right" , new Auto1PieceRight());
-
-    m_chooser.AddOption("Auto 1 Piece Left" , new Auto1PieceLeft());
-
     m_chooser.AddOption("Auto 1 Piece Middle" , new Auto1PieceMiddle());
+
+    m_chooser.AddOption("Auto 1 Piece Middle" , new Auto1PieceMiddleAlg());
 
     m_chooser.AddOption("Auto Move Forward" , new AutoMoveForward());
 
@@ -91,17 +90,32 @@ void RobotContainer::ConfigureBindings()
    driveSub.SetDefaultCommand(driveSub.DriveTeleop(
       [this] {
         return str::NegateIfRed(
-            frc::ApplyDeadband<double>(-driverJoystick.GetLeftY(), .05) *
+            frc::ApplyDeadband<double>(-driverJoystick.GetLeftY(), .025) *
             consts::swerve::physical::PHY_CHAR.MaxLinearSpeed());
       },
       [this] {
         return str::NegateIfRed(
-            frc::ApplyDeadband<double>(-driverJoystick.GetLeftX(), .05) *
+            frc::ApplyDeadband<double>(-driverJoystick.GetLeftX(), .025) *
             consts::swerve::physical::PHY_CHAR.MaxLinearSpeed());
       },
       [this] {
-        return frc::ApplyDeadband<double>(-driverJoystick.GetRightX(), .05) *
+        return frc::ApplyDeadband<double>(-driverJoystick.GetRightX(), .025) *
                360_deg_per_s;
+      }));
+
+  driverJoystick.RightTrigger(0.5).WhileTrue(robotcontainer.driveSub.DriveTeleop([this] {
+        return str::NegateIfRed(
+            frc::ApplyDeadband<double>(-driverJoystick.GetLeftY(), .025) *
+           consts::swerve::physical::DRIVE_CREEP_SPEED);
+      },
+      [this] {
+        return str::NegateIfRed(
+            frc::ApplyDeadband<double>(-driverJoystick.GetLeftX(), .025) *
+            consts::swerve::physical::DRIVE_CREEP_SPEED);
+      },
+      [this] {
+        return frc::ApplyDeadband<double>(-driverJoystick.GetRightX(), .025) *
+               200_deg_per_s;
       }));
 
   driverJoystick.X().WhileTrue(new CmdAlignToAprilTag(true));
@@ -116,7 +130,7 @@ void RobotContainer::ConfigureBindings()
   //Coral
    driverJoystick.RightBumper().WhileTrue(new CmdClawOuttake(-1.0));
   m_topDriver.RightTrigger(0.5).OnTrue(new CmdClawActivate(-1.0));
-  driverJoystick.RightTrigger(0.5).WhileTrue(new CmdClawStop());
+  driverJoystick.LeftTrigger(0.5).WhileTrue(new CmdClawStop());
   
   //Algae
   //m_topDriver.LeftBumper().WhileTrue(new CmdAlgaeOuttake(frc::SmartDashboard::PutNumber("AlgaeOut Power", 1)));
