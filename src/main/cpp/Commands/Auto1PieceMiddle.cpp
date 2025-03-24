@@ -35,8 +35,9 @@ Auto1PieceMiddle::Auto1PieceMiddle() {
     CmdDriveToPoint(1.2_m, 0.15_m, 0_deg, 1.5_mps, false, 3_s),
     CmdPivotToPos(2),
     CmdWait(0.65),
+    frc2::ParallelCommandGroup(
     CmdAlgaeIntake(-1.0),
-    CmdDriveToPoint(1.4_m, 0.15_m, 0_deg, 1_mps, true, 2_s),
+    CmdDriveToPoint(1.4_m, 0.15_m, 0_deg, 1_mps, true, 2_s)),
     CmdWait(1.0),
     CmdDriveToPoint(1.2_m, 0.15_m, 0_deg, 1_mps, true, 3_s),
 

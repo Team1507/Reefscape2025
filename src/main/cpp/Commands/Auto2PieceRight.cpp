@@ -45,7 +45,7 @@ Auto2PieceRight::Auto2PieceRight()
     ),
     CmdDriveToPoint(4.8_m, -1.8_m, -120_deg, 3_mps, false, 3_s),
     frc2::ParallelCommandGroup(
-    //CmdClawActivate(-1.0),
+    CmdClawActivate(-1.0),
     CmdElevatorToPosition(4)
     ),
     CmdDriveToPoint(4.1_m, -2.25_m, -120_deg, 1.5_mps, false, 3_s),
