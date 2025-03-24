@@ -752,65 +752,54 @@ frc2::CommandPtr Drive::DriveReefAlign(
     std::function<bool()> leftSide) {
   return frc2::FunctionalCommand(
       [this] {
-        // Initialization: reset the theta controller and mark the alignment active.
         m_reefThetaController.Reset(swerveDrive.GetPose().Rotation().Radians());
         m_reefAlignData.active = true;
       },
-      [=] {
-        // Retrieve joystick inputs.
+      [this, xInput, yInput, angularInput, leftSide] {
         const double x = xInput();
         const double y = yInput();
-        const double omegaInput = angularInput();
+        (void)angularInput;
 
-        // Calculate the target pipe position using the reef reference.
         const auto reference = GetReefReference();
         const units::meter_t yOffset = leftSide() ? -kPipeOffsetY : kPipeOffsetY;
         const auto targetPipe = reference.TransformBy(
             frc::Transform2d{kPipeOffsetX, yOffset, 0_deg});
 
-        // Compute the vector from the robot's current position to the target pipe.
         const auto robotPos = swerveDrive.GetPose().Translation();
         const auto robotToTarget = targetPipe.Translation() - robotPos;
 
-        // Create the joystick vector and rotate if needed.
-        const auto joystickVec = frc::Translation2d{
-        units::meter_t{x}, units::meter_t{y}
-        }.RotateBy(str::IsOnRed() ? 180_deg : 0_deg);
+        const units::meter_t xError = robotToTarget.X();
+        const units::meter_t yError = robotToTarget.Y();
 
-        // Calculate the error between the direction to target and the joystick direction.
-        const auto targetAngle = robotToTarget.Angle().Radians();
-        const auto joystickAngle = joystickVec.Angle().Radians();
-        const auto angleError = targetAngle - joystickAngle;
-
-        // Scale the error by the magnitude of the joystick vector.
         const double magnitude = std::hypot(x, y);
-        const double alignOutput = m_reefXController.Calculate(angleError.value(), 0.0) * magnitude;
+        
+        const double alignXOutput = m_reefXController.Calculate(xError.value(), 0.0) * magnitude;
+        const double alignYOutput = m_reefYController.Calculate(yError.value(), 0.0) * magnitude;
 
-        // Calculate the rotational output from the theta controller and convert it to units.
         const units::radians_per_second_t omegaSetpoint{
             m_reefThetaController.Calculate(
                 swerveDrive.GetPose().Rotation().Radians(),
                 reference.Rotation().Radians())
         };
 
-        // Combine the translational joystick inputs (scaled by 3.0) with the rotational setpoint.
+        // Scaled outputs with MAX_SPEED conversion
         const auto chassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-            units::meters_per_second_t{x * 3.0},
-            units::meters_per_second_t{y * 3.0},
+            units::meters_per_second_t{alignXOutput * consts::swerve::physical::MAX_SPEED.value()},
+            units::meters_per_second_t{alignYOutput * consts::swerve::physical::MAX_SPEED.value()},
             omegaSetpoint,
             swerveDrive.GetPose().Rotation());
 
-        // Command the drive to use the calculated speeds.
         swerveDrive.Drive(chassisSpeeds, false);
       },
       [this](bool interrupted) {
-        // When command ends or is interrupted, mark alignment as inactive.
         m_reefAlignData.active = false;
       },
       [] { return false; },
       {this}
   ).WithName("DriveReefAlign");
 }
+
+
 
 frc2::CommandPtr Drive::AutoReefAlign() {
   return frc2::FunctionalCommand(
