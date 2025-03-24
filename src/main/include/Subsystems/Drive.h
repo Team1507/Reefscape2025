@@ -16,6 +16,7 @@
 #include "frc/geometry/Pose2d.h"
 #include "frc/geometry/Translation2d.h"
 #include "frc2/command/CommandPtr.h"
+#include "frc2/command/button/Trigger.h"
 #include "networktables/BooleanTopic.h"
 #include "str/swerve/SwerveDrive.h"
 #include "str/swerve/SwerveModuleHelpers.h"
@@ -37,11 +38,11 @@ class Drive : public frc2::SubsystemBase {
   units::radian_t GetGyroYaw() const {
     return swerveDrive.GetOdomPose().Rotation().Radians();
   }
+  frc2::Trigger IsAligned();
 
-   void ResetAllSensors();
-     units::degree_t GetYaw() const;
-    void Drive2(frc::ChassisSpeeds speeds);
-
+  void ResetAllSensors();
+  units::degree_t GetYaw() const;
+  void Drive2(frc::ChassisSpeeds speeds);
 
   void SetupPathplanner();
   void AddVisionMeasurement(const frc::Pose2d& measurement,
@@ -177,5 +178,8 @@ class Drive : public frc2::SubsystemBase {
 
   units::meter_t lOffset{consts::yearspecific::CLAW_OFFSET_L};
   units::meter_t rOffset{consts::yearspecific::CLAW_OFFSET_R};
+
+  bool isAtGoalState;
 };
-  
+
+   
