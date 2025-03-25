@@ -77,7 +77,7 @@ void CmdClawActivate::Execute() {
       }
       break;
     case ClawState::RunBackwardUntilClawSeen:
-      robotcontainer.m_claw.SetClawPower(0.2);
+      robotcontainer.m_claw.SetClawPower(0.25);
       std::cout << "claw backword" << std::endl;
       if (robotcontainer.m_claw.GetClawPhotoEyeFirst()) {
         currentState = ClawState::StopMotor;
