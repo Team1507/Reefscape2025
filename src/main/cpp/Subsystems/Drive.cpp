@@ -28,6 +28,7 @@
 #include "units/length.h"
 #include "units/velocity.h"
 #include "util/choreovariables.h"
+#include "Constants/SwerveConstants.h"
 
 
 
@@ -783,11 +784,11 @@ frc2::CommandPtr Drive::DriveReefAlign(
         };
 
         // Scaled outputs with MAX_SPEED conversion
-        const auto chassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-            units::meters_per_second_t{alignXOutput * consts::swerve::physical::MAX_SPEED.value()},
-            units::meters_per_second_t{alignYOutput * consts::swerve::physical::MAX_SPEED.value()},
-            omegaSetpoint,
-            swerveDrive.GetPose().Rotation());
+      const auto chassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+        alignXOutput * consts::swerve::physical::DRIVE_MAX_SPEED, 
+        alignYOutput * consts::swerve::physical::DRIVE_MAX_SPEED, 
+        omegaSetpoint,
+        swerveDrive.GetPose().Rotation());
 
         swerveDrive.Drive(chassisSpeeds, false);
       },
