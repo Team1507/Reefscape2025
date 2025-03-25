@@ -162,12 +162,12 @@ altPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
 frc2::Trigger altPovLeft([=]() {
   return aButton.Get() && povLeftButton.Get();
 });
-altPovLeft.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_ALG_HIGH), CmdPivotToPos(2)));
+altPovLeft.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_ALG_HIGH), CmdPivotToPos(2), CmdAlgaeIntake(-1.0)));
 
 frc2::Trigger altPovRight([=]() {
   return aButton.Get() && povRightButton.Get();
 });
-altPovRight.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_ALG_LOW), CmdPivotToPos(2)));
+altPovRight.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_ALG_LOW), CmdPivotToPos(2), CmdAlgaeIntake(-1.0)));
 
 // Normal D-pad bindings (fire only when A is NOT pressed)
 frc2::Trigger normalPovUp([=]() {
@@ -178,7 +178,7 @@ normalPovUp.OnTrue(new CmdElevatorToPosition(ELEV_POS_L4));
 frc2::Trigger normalPovDown([=]() {
   return !aButton.Get() && povDownButton.Get();
 });
-normalPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
+normalPovDown.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_HOME) , CmdPivotToPos(1)));
 
 frc2::Trigger normalPovLeft([=]() {
   return !aButton.Get() && povLeftButton.Get();

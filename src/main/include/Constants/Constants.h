@@ -77,7 +77,7 @@ inline constexpr frc::Transform2d CLAW_TRANS_R{0_m, CLAW_OFFSET_R,
 
 // ********* PIVOT CONSTANTS **********//
 
-#define PIVOT_POSITION_HOME 0.29_tr
+#define PIVOT_POSITION_HOME 0_tr
 #define PIVOT_POSITION_OPEN -1.35_tr
 
 #define ALGAE_POS_HOME 1

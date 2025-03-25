@@ -45,14 +45,15 @@ Auto2PieceRightRed::Auto2PieceRightRed()
     ),
     CmdDriveToPoint(4.8_m, -1.8_m, -120_deg, 3_mps, false, 3_s),
     frc2::ParallelCommandGroup(
-    CmdClawActivate(-1.0),
+    //CmdClawActivate(-1.0),
     CmdElevatorToPosition(4)
     ),
     CmdDriveToPoint(4.1_m, -2.25_m, -120_deg, 1.5_mps, false, 3_s),
 
     //Score coral
     CmdElevatorToPosition(3),
-    CmdDriveToPoint(3.9_m, -2.48_m, -120_deg, 1_mps, true, 2_s), //was 3.9, -2.48 //then 3.8 -2.48
+    //CmdDriveToPoint(3.9_m, -2.48_m, -120_deg, 1_mps, true, 2_s), //prevois move miised left
+    CmdDriveToPoint(3.85_m, -2.44_m, -120_deg, 1_mps, true, 2_s), //work gud on our feild 3/25
     CmdWait(0.65),
     CmdClawOuttake(-1.0),
     CmdElevatorToPosition(1),
