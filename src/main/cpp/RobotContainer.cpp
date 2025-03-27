@@ -74,7 +74,7 @@ RobotContainer::RobotContainer()
 
     m_chooser.AddOption("Auto 1 Piece Middle" , new Auto1PieceMiddle());
 
-    m_chooser.AddOption("Auto 1 Piece Middle" , new Auto1PieceMiddleAlg());
+    m_chooser.AddOption("Auto 1 Piece Middle Alg" , new Auto1PieceMiddleAlg());
 
     m_chooser.AddOption("Auto Move Forward" , new AutoMoveForward());
 
