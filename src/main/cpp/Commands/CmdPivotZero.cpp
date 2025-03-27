@@ -23,5 +23,5 @@ void CmdPivotZero::End(bool interrupted) {}
 
 // Returns true when the command should end.
 bool CmdPivotZero::IsFinished() {
-  return false;
+  return true;
 }

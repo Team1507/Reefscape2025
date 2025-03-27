@@ -85,6 +85,8 @@ RobotContainer::RobotContainer()
 
 }
 
+
+
 void RobotContainer::ConfigureBindings()
 {
    driveSub.SetDefaultCommand(driveSub.DriveTeleop(
@@ -139,7 +141,7 @@ void RobotContainer::ConfigureBindings()
   driverJoystick.POVDown().OnTrue(new CmdPivotZero());
   
  driverJoystick.A().OnTrue(new CmdDriveClearAll());
-
+  m_topDriver.X().OnTrue(new CmdPivotZero());
 
 // Assume these button objects are stored persistently (here as local constants)
 const auto aButton       = m_topDriver.A();
@@ -178,7 +180,7 @@ normalPovUp.OnTrue(new CmdElevatorToPosition(ELEV_POS_L4));
 frc2::Trigger normalPovDown([=]() {
   return !aButton.Get() && povDownButton.Get();
 });
-normalPovDown.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_HOME) , CmdPivotToPos(1)));
+normalPovDown.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_HOME)));
 
 frc2::Trigger normalPovLeft([=]() {
   return !aButton.Get() && povLeftButton.Get();
