@@ -62,7 +62,7 @@ Auto2PieceRightRed::Auto2PieceRightRed()
     //Align to algae
     CmdDriveToPoint(3.9_m, -2.1_m, -120_deg, 1_mps, true, 2_s),
     CmdElevatorToPosition(5),
-    CmdDriveClearAll(),
+    //CmdDriveClearAll(),
 
     CmdPrintText("Auto 2 Right Red Done")
   );
