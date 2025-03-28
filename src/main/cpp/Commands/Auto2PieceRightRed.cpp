@@ -55,7 +55,7 @@ Auto2PieceRightRed::Auto2PieceRightRed()
     CmdElevatorToPosition(3),
     //CmdDriveToPoint(3.9_m, -2.48_m, -120_deg, 1_mps, true, 2_s), //prevois move miised left
     //CmdDriveToPoint(3.85_m, -2.44_m, -120_deg, 1_mps, true, 2_s), //work gud on our feild 3/25
-    CmdDriveToPoint(3.8_m, -2.41_m, -120_deg, 1_mps, true, 2_s), //work gud on our feild 3/25
+    CmdDriveToPoint(3.8_m, -2.43_m, -120_deg, 1_mps, true, 2_s), //work gud on our feild 3/25
     CmdWait(0.65),
     CmdClawOuttake(-1.0),
     CmdElevatorToPosition(1),
