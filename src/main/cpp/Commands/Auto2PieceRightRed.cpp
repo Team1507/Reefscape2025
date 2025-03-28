@@ -49,7 +49,8 @@ Auto2PieceRightRed::Auto2PieceRightRed()
     //CmdClawActivate(-1.0),
     CmdElevatorToPosition(4)
     ),
-    CmdDriveToPoint(4.1_m, -2.25_m, -120_deg, 1.5_mps, false, 3_s),
+    //CmdDriveToPoint(4.1_m, -2.25_m, -120_deg, 1.5_mps, false, 3_s),
+    CmdDriveToPoint(4.2_m, -2.3_m, -120_deg, 1.5_mps, false, 3_s),
 
     //Score coral
     CmdElevatorToPosition(3),
@@ -59,7 +60,8 @@ Auto2PieceRightRed::Auto2PieceRightRed()
     //CmdDriveToPoint(3.8_m, -2.43_m, -120_deg, 1_mps, true, 2_s),
     //CmdDriveToPoint(3.8_m, -2.45_m, -120_deg, 1_mps, true, 2_s),
     //CmdDriveToPoint(3.77_m, -2.45_m, -120_deg, 1_mps, true, 2_s),
-    CmdDriveToPoint(3.76_m, -2.47_m, -120_deg, 1_mps, true, 2_s),
+    //CmdDriveToPoint(3.76_m, -2.47_m, -120_deg, 1_mps, true, 2_s),
+    CmdDriveToPoint(3.76_m, -2.47_m, -121_deg, 1_mps, true, 2_s),
     CmdWait(0.65),
     CmdClawOuttake(-1.0),
     CmdElevatorToPosition(1),
