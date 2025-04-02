@@ -8,6 +8,7 @@
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <ctre/phoenix6/controls/MotionMagicVoltage.hpp>
 #include "constants/Constants.h"
+#include "constants/Presets.h"
 #include <units/angle.h>
 
 class Pivot : public frc2::SubsystemBase {

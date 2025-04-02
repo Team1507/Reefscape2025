@@ -6,8 +6,6 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "constants/Constants.h"
-#include "constants/Presets.h"
 
 /**
  * An example command.
@@ -16,13 +14,13 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class CmdElevatorPosition
-    : public frc2::CommandHelper<frc2::Command, CmdElevatorPosition> {
+class CmdUnDropRamp
+    : public frc2::CommandHelper<frc2::Command, CmdUnDropRamp> {
  public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  CmdElevatorPosition(float position);
+  CmdUnDropRamp();
 
   void Initialize() override;
 
@@ -31,13 +29,4 @@ class CmdElevatorPosition
   void End(bool interrupted) override;
 
   bool IsFinished() override;
-
-
-
-  
-
-  float m_position;
-
-
-
 };

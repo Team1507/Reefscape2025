@@ -23,7 +23,6 @@ void CmdRampDrop::Execute()
   {
     robotcontainer.m_climber.ResetRamp();
   }
-  else{robotcontainer.m_climber.DropRamp();}
 }
 
 // Called once the command ends or is interrupted.

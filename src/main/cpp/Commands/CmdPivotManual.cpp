@@ -1,6 +1,7 @@
 #include "Commands/CmdPivotManual.h"
 #include "Robot.h"
 #include "Constants/Constants.h"
+#include "constants/Presets.h"
 #include <iostream>
 #include <cmath>
 #include <units/angle.h>

@@ -52,6 +52,7 @@
 #include "Commands/CmdClawStop.h"
 #include "Commands/CmdPivotManual.h"
 #include "Commands/CmdPivotToPos.h"
+#include "Commands/CmdUnDropRamp.h"
 
 
 RobotContainer::RobotContainer() 
@@ -82,6 +83,8 @@ RobotContainer::RobotContainer()
 
 
   frc::SmartDashboard::PutData("Zero Pivot", new CmdPivotZero());
+  
+  frc::SmartDashboard::PutData("Fix Ramp", new CmdUnDropRamp());
 
 }
 
