@@ -35,7 +35,7 @@ void CmdClawOuttake::End(bool interrupted)
 
 bool CmdClawOuttake::IsFinished()
 {
-  const units::second_t timeout = units::second_t(1.0);
+  const units::second_t timeout = units::second_t(0.2);
   if(m_timer.Get() >= timeout)
   {
     return true;

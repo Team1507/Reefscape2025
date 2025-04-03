@@ -18,7 +18,7 @@
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 Auto3PieceRightBlue::Auto3PieceRightBlue() 
 {
-  (
+  AddCommands(
     CmdPrintText("Auto 3 Right Blue"),
     CmdDriveClearAll(),
 
@@ -37,8 +37,9 @@ Auto3PieceRightBlue::Auto3PieceRightBlue()
 
     //Get coral at coral station
     CmdDriveToPoint(3.7_m, -1.4_m, -60_deg, 3.5_mps, false, 5_s),
+    CmdElevatorToPosition(1),
     CmdDriveToPoint(5.7_m, -1.0_m, -125_deg, 3_mps, false, 5_s), 
-    CmdDriveToPoint(6.6_m, -0.35_m, -127_deg, 1.25_mps, true, 2_s),
+    CmdDriveToPoint(6.8_m, -0.3_m, -127_deg, 1.25_mps, true, 2_s),
     CmdClawAuto(-1.0),
  
 
@@ -64,14 +65,13 @@ Auto3PieceRightBlue::Auto3PieceRightBlue()
 
     //Go to sorce 2
     CmdDriveToPoint(5.7_m, -1.0_m, -125_deg, 4_mps, false, 5_s), 
-    CmdDriveToPoint(6.6_m, -0.35_m, -127_deg, 1.25_mps, true, 2_s),
+    CmdDriveToPoint(6.8_m, -0.3_m, -127_deg, 1.25_mps, true, 2_s),
     CmdClawAuto(-1.0),
 
     //Go to reef
-    CmdDriveToPoint(5.0_m, -1.8_m, -120_deg, 3_mps, false, 3_s),
-    CmdElevatorToPosition(4),
-    CmdDriveToPoint(4.4_m, -2.45_m, -120_deg, 1.5_mps, true, 3_s),
+    CmdDriveToPoint(4.5_m, -1.8_m, -120_deg, 3_mps, false, 3_s),
     CmdElevatorToPosition(3),
+    CmdDriveToPoint(3.4_m, -2.5_m, -120_deg, 1.5_mps, true, 3_s),
     CmdClawOuttake(1),
 
     //Home

@@ -86,6 +86,17 @@ void Pivot::SetTargetPosition(int position)
     targetPosition = PIVOT_POSITION_OPEN;
     pivotOpen = true;
   }
+  else if (position == ALGAE_POS_BARGE_HOME)
+  {
+    targetPosition = PIVOT_BARGE_HOME;
+    pivotOpen = true;
+  }
+  else if (position == ALGAE_POS_BARGE_TOLERANCE)
+  {
+    targetPosition = PIVOT_BARGE_TOLERANCE;
+    pivotOpen = true;
+  }
+
 
   m_pivotMotor.SetControl(m_mmPivot.WithPosition(targetPosition));
 

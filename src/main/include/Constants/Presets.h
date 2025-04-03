@@ -11,6 +11,7 @@
 #define ELEV_POSITION_L4 -5.7_tr     //L4
 #define ELEV_POSITION_ALG_L2 -2.5_tr       //ALgea Low -2.23 before now -2.4 , changed again now 2.45
 #define ELEV_POSITION_ALG_L3 -4.2_tr       //Algea High
+#define ELEV_POSITION_BARGE -0.03_tr
 
 #define ELEV_TOLERANCE 0.05_tr
 
@@ -29,14 +30,19 @@
 #define ELEV_POS_ALG_LOW 5
 #define ELEV_POS_ALG_HIGH 6
 #define ELEV_POS_ALG_HIGH 8
+#define ELEV_POS_BARGE  9
 
 // ********* PIVOT CONSTANTS **********//
 
 #define PIVOT_POSITION_HOME 0_tr
 #define PIVOT_POSITION_OPEN -1.35_tr
+#define PIVOT_BARGE_HOME       0_tr
+#define PIVOT_BARGE_TOLERANCE  0_tr
 
 #define ALGAE_POS_HOME 1
 #define ALGAE_POS_OPEN 2
+#define ALGAE_POS_BARGE_HOME 3
+#define ALGAE_POS_BARGE_TOLERANCE 4
 
 #define PIVOT_HOME_POSITION    0
 #define PIVOT_TOLERANCE        0.05

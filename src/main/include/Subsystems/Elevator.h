@@ -76,6 +76,7 @@ class Elevator : public frc2::SubsystemBase {
 
   bool elevatorLowAlgae;
   bool elevatorHighAlgae;
+  bool elevatorBarge;
 
  private:
 

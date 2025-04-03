@@ -15,6 +15,7 @@
 #include "Commands/CmdDriveClearAll.h"
 #include "Commands/CmdAlignToAprilTag.h"
 #include "Commands/CmdPivotZero.h"
+#include "Commands/CmdClawAuto.h"
 
 #include "Subsystems/Elevator.h"
 #include "Subsystems/Claw.h"
@@ -53,6 +54,7 @@
 #include "Commands/CmdPivotManual.h"
 #include "Commands/CmdPivotToPos.h"
 #include "Commands/CmdUnDropRamp.h"
+#include "Commands/Auto3PieceRightBlue.h"
 
 
 RobotContainer::RobotContainer() 
@@ -79,12 +81,16 @@ RobotContainer::RobotContainer()
 
     m_chooser.AddOption("Auto Move Forward" , new AutoMoveForward());
 
+    m_chooser.AddOption("Auto 3 Piece Right Blue" , new Auto3PieceRightBlue());
+
   frc::SmartDashboard::PutData("Auto Mode", &m_chooser);
 
 
   frc::SmartDashboard::PutData("Zero Pivot", new CmdPivotZero());
   
   frc::SmartDashboard::PutData("Fix Ramp", new CmdUnDropRamp());
+
+  frc::SmartDashboard::PutData("AutoCoaral", new CmdClawAuto(-1));
 
 }
 
