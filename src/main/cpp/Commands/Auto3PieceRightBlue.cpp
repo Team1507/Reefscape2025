@@ -12,6 +12,7 @@
 #include "Commands/CmdClawAuto.h"
 #include "frc2/command/ParallelCommandGroup.h"
 #include "Commands/CmdDriveClearAll.h"
+#include "Robot.h"
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.
 // For more information, see:
@@ -26,7 +27,7 @@ Auto3PieceRightBlue::Auto3PieceRightBlue()
     CmdDriveToPoint(0.5_m, -0.5_m, 0_deg, 2.5_mps, false, 5_s),
     CmdDriveToPoint(1.5_m, -1.5_m, 0_deg, 3_mps, false, 5_s),
     CmdElevatorToPosition(2),
-    CmdDriveToPoint(2.2_m, -2.2_m, -60_deg, 1.5_mps, false, 5_s), //was 2.4, -2.3
+    CmdDriveToPoint(2.2_m, -2.2_m, -60_deg, 3_mps, false, 5_s), //was 2.4, -2.3
 
     //Score coral
     CmdElevatorToPosition(3),
@@ -38,15 +39,15 @@ Auto3PieceRightBlue::Auto3PieceRightBlue()
     //Get coral at coral station
     CmdDriveToPoint(3.7_m, -1.4_m, -60_deg, 3.5_mps, false, 5_s),
     CmdElevatorToPosition(1),
-    CmdDriveToPoint(5.7_m, -1.0_m, -125_deg, 3_mps, false, 5_s), 
-    CmdDriveToPoint(6.8_m, -0.3_m, -127_deg, 1.25_mps, true, 2_s),
+    CmdDriveToPoint(6.3_m, -0.8_m, -125_deg, 3_mps, false, 5_s), 
+    CmdDriveToPoint(6.8_m, -0.28_m, -127_deg, 1.25_mps, true, 2_s),
     CmdClawAuto(-1.0),
  
 
     //Go to reef
     //CmdClawAuto(-1.0),
     CmdDriveToPoint(6_m, -0.6_m, -120_deg, 1.5_mps, false, 3_s),
-    CmdDriveToPoint(4.8_m, -1.8_m, -120_deg, 3_mps, false, 3_s),
+    CmdDriveToPoint(4.8_m, -1.8_m, -120_deg, 4_mps, false, 3_s),
     frc2::ParallelCommandGroup(
     // CmdClawActivate(-1.0),
     CmdElevatorToPosition(4)
@@ -64,14 +65,14 @@ Auto3PieceRightBlue::Auto3PieceRightBlue()
     CmdWait(0.3),
 
     //Go to sorce 2
-    CmdDriveToPoint(5.7_m, -1.0_m, -125_deg, 4_mps, false, 5_s), 
-    CmdDriveToPoint(6.8_m, -0.3_m, -127_deg, 1.25_mps, true, 2_s),
+    CmdDriveToPoint(6.0_m, -1.0_m, -125_deg, 4_mps, false, 5_s), 
+    CmdDriveToPoint(6.8_m, -0.28_m, -127_deg, 1.25_mps, true, 2_s),
     CmdClawAuto(-1.0),
 
     //Go to reef
-    CmdDriveToPoint(4.5_m, -1.8_m, -120_deg, 3_mps, false, 3_s),
+    CmdDriveToPoint(4.5_m, -1.6_m, -120_deg, 3.5_mps, false, 3_s),
     CmdElevatorToPosition(3),
-    CmdDriveToPoint(3.4_m, -2.5_m, -120_deg, 1.5_mps, true, 3_s),
+    CmdDriveToPoint(3.4_m, -2.3_m, -117_deg, 1_mps, true, 3_s),
     CmdClawOuttake(1),
 
     //Home
