@@ -71,6 +71,7 @@ class Elevator : public frc2::SubsystemBase {
   bool elevatorL2;
   bool elevatorL3;
   bool elevatorL4;
+  bool elevatorL4Auto;
 
   bool elevatorHome;
 

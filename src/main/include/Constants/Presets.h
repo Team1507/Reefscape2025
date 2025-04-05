@@ -12,6 +12,7 @@
 #define ELEV_POSITION_ALG_L2 -2.5_tr       //ALgea Low -2.23 before now -2.4 , changed again now 2.45
 #define ELEV_POSITION_ALG_L3 -4.2_tr       //Algea High
 #define ELEV_POSITION_BARGE -0.03_tr
+#define ELEV_POSITION_L4_AUTO -5.8_tr
 
 #define ELEV_TOLERANCE 0.05_tr
 
@@ -27,6 +28,7 @@
 #define ELEV_POS_L2 4
 #define ELEV_POS_L3 2
 #define ELEV_POS_L4 3
+#define ELEV_POS_L4_AUTO 10
 #define ELEV_POS_ALG_LOW 5
 #define ELEV_POS_ALG_HIGH 6
 #define ELEV_POS_ALG_HIGH 8

@@ -177,6 +177,11 @@ void Elevator::SetTargetPosition (int position)
     targetPosition = ELEV_POSITION_BARGE;
     elevatorBarge = true;
   }
+  else if(position == ELEV_POS_L4_AUTO)
+  {
+    targetPosition = ELEV_POSITION_L4_AUTO;
+    elevatorL4Auto = true;
+  }
 
   
   m_elevatorMotor.SetControl(m_mmElevator.WithPosition(targetPosition));
