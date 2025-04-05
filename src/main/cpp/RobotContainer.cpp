@@ -201,9 +201,9 @@ frc2::Trigger normalPovRight([=]() {
 });
 normalPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_L2));
 
-m_topDriver.RightBumper().OnTrue(new CmdPivotToPos(2));
-m_topDriver.LeftBumper().OnTrue(new CmdPivotToPos(1));
-
+m_topDriver.RightBumper().OnTrue(new CmdPivotToPos(1));
+m_topDriver.LeftBumper().OnTrue(new CmdPivotToPos(3));
+// m_topDriver.LeftTrigger(0.5).OnTrue(new CmdPivotToPos(2));
 }
 
 void RobotContainer::ConfigureSysIdBinds() {

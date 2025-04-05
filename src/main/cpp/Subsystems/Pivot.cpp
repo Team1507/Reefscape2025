@@ -4,11 +4,26 @@
 #include <iostream>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <units/angle.h>
+#include <rev/SparkMax.h>
+#include <rev/config/SparkMaxConfig.h>
 
 
 Pivot::Pivot() 
 {
+
+  rev::spark::SparkMaxConfig algaeconfig{};
+
+    algaeconfig
+        .Inverted(false)
+        .SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kCoast);
+        
+    m_algaeIntakeMotor.Configure(algaeconfig,
+     rev::spark::SparkMax::ResetMode::kResetSafeParameters,
+     rev::spark::SparkMax::PersistMode::kPersistParameters);
+
+
     ctre::phoenix6::configs::TalonFXConfiguration cfg{};
+  
 
   /* Configure gear ratio */
   ctre::phoenix6::configs::FeedbackConfigs &fdb = cfg.Feedback;
@@ -25,11 +40,12 @@ Pivot::Pivot()
   //READ THIS COMMENT: This is the same config as the elevator, WILL NEED TO BE TUNED
   ctre::phoenix6::configs::Slot0Configs &slot0 = cfg.Slot0;
   slot0.kS = 0.4; // Add 0.25 V output to overcome static friction
-  slot0.kV = 5.0; // A velocity target of 1 rps results in 0.12 V output
+  slot0.kV = 2.5; // A velocity target of 1 rps results in 0.12 V output
   slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
   slot0.kP = 60.0; // A position error of 0.2 rotations results in 12 V output
   slot0.kI = 0.0; // No output for integrated error
   slot0.kD = 0.5; // A velocity error of 1 rps results in 0.5 V output
+  
 
   ctre::phoenix::StatusCode status = ctre::phoenix::StatusCode::StatusCodeNotInitialized;
   for (int i = 0; i < 5; ++i) {
@@ -75,25 +91,20 @@ void Pivot::SetTargetPosition(int position)
 {
     pivotHome = pivotOpen = false;
 
-    if (position == ALGAE_POS_HOME)
+  if (position == ALGAE_POS_HOME)
   {
     //move elevator home
     targetPosition = PIVOT_POSITION_HOME;
     pivotHome = true;
   }
-  else if (position == ALGAE_POS_OPEN)
+  else if (position == ALGAE_POS_INTAKE)
   {
-    targetPosition = PIVOT_POSITION_OPEN;
+    targetPosition = PIVOT_POSITION_INTAKE;
     pivotOpen = true;
   }
-  else if (position == ALGAE_POS_BARGE_HOME)
+  else if (position == ALGAE_POS_BARGE)
   {
-    targetPosition = PIVOT_BARGE_HOME;
-    pivotOpen = true;
-  }
-  else if (position == ALGAE_POS_BARGE_TOLERANCE)
-  {
-    targetPosition = PIVOT_BARGE_TOLERANCE;
+    targetPosition = PIVOT_BARGE;
     pivotOpen = true;
   }
 
@@ -119,4 +130,10 @@ void Pivot::SetPivotBrake()
 void Pivot::ResetEncoderValue()
 {
   m_pivotMotor.SetPosition(0_tr);
+}
+
+void Pivot::SetIntakePower(double power)
+{
+    // Set the algae intake motor power
+    m_algaeIntakeMotor.Set(power);
 }

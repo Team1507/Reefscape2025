@@ -38,12 +38,9 @@ void CmdPivotManual::Execute() {
 
   if((robotcontainer.m_topDriver.GetRightY() < -PIVOT_DEADBAND))
   {
-    if (robotcontainer.m_elevator.isElevatorClearForPivot())
-    {
-      robotcontainer.m_pivot.SetPivotCoast();
-      robotcontainer.m_pivot.SetPower(-0.25);
-      m_manualPivotEnabled = true;
-    }
+    robotcontainer.m_pivot.SetPivotCoast();
+    robotcontainer.m_pivot.SetPower(-0.15);
+     m_manualPivotEnabled = true;
   }
   else if(robotcontainer.m_topDriver.GetRightY() > PIVOT_DEADBAND)
   {

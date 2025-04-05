@@ -7,6 +7,10 @@
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <ctre/phoenix6/controls/MotionMagicVoltage.hpp>
+#include <rev/SparkMax.h>
+#include <rev/config/SparkMaxConfig.h>
+#include <iostream>
+#include <frc/smartdashboard/SmartDashboard.h>          
 #include "constants/Constants.h"
 #include "constants/Presets.h"
 #include <units/angle.h>
@@ -40,6 +44,8 @@ class Pivot : public frc2::SubsystemBase {
 
   void ResetEncoderValue();
 
+  void SetIntakePower(double power);
+
 
   bool pivotHome;
   bool pivotOpen;
@@ -50,5 +56,6 @@ class Pivot : public frc2::SubsystemBase {
 
  ctre::phoenix6::hardware::TalonFX m_pivotMotor{PIVOT_FALCON_CAN_ID}; 
  ctre::phoenix6::controls::MotionMagicVoltage m_mmPivot{0_tr};
+ rev::spark::SparkMax  m_algaeIntakeMotor{CLAW_CAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
 
 };
