@@ -57,10 +57,9 @@ class Claw : public frc2::SubsystemBase {
  private:
   SparkMax  m_claw{CLAW_CAN_ID, SparkMax::MotorType::kBrushed};
 
-  SparkMax  m_pivot{PIVOT_CAN_ID, SparkMax::MotorType::kBrushed};
 
-  rev::spark::SparkRelativeEncoder m_pivotEncoder = m_pivot.GetEncoder();
-  rev::spark::SparkClosedLoopController m_pivotPID = m_pivot.GetClosedLoopController();
+
+
 
   frc::DigitalInput         m_armPhotoeyeFirst  {CLAW_PHOTO_EYE_FIRST};
   frc::DigitalInput         m_algaePhotoEye     {ALGAE_PHOTO_EYE};

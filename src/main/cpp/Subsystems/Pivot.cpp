@@ -11,15 +11,15 @@
 Pivot::Pivot() 
 {
 
-  rev::spark::SparkMaxConfig algaeconfig{};
+  SparkMaxConfig Algconfig{};
 
-    algaeconfig
+    Algconfig
         .Inverted(false)
-        .SetIdleMode(rev::spark::SparkMaxConfig::IdleMode::kCoast);
+        .SetIdleMode(SparkMaxConfig::IdleMode::kCoast);
         
-    m_algaeIntakeMotor.Configure(algaeconfig,
-     rev::spark::SparkMax::ResetMode::kResetSafeParameters,
-     rev::spark::SparkMax::PersistMode::kPersistParameters);
+    m_algMotor1.Configure(Algconfig,
+     SparkMax::ResetMode::kResetSafeParameters,
+     SparkMax::PersistMode::kPersistParameters);
 
 
     ctre::phoenix6::configs::TalonFXConfiguration cfg{};
@@ -135,5 +135,5 @@ void Pivot::ResetEncoderValue()
 void Pivot::SetIntakePower(double power)
 {
     // Set the algae intake motor power
-    m_algaeIntakeMotor.Set(power);
+   m_algMotor1.Set(power);
 }

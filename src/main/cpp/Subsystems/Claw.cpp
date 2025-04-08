@@ -16,27 +16,7 @@ Claw::Claw()
      SparkMax::ResetMode::kResetSafeParameters,
      SparkMax::PersistMode::kPersistParameters);
 
-    SparkMaxConfig pivotconfig{};
-    pivotconfig
-        .Inverted(false)
-        .SetIdleMode(SparkMaxConfig::IdleMode::kBrake)
-        .SmartCurrentLimit(50)
-        .OpenLoopRampRate(0.3);
-    pivotconfig.encoder
-        .PositionConversionFactor(100)
-        .VelocityConversionFactor(100);
-    pivotconfig.closedLoop
-        .SetFeedbackSensor(ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
-        .Pid(10.0, 0.0, 0.5) //Tuning 
-        .OutputRange(-0.09, 0.1);     
-    pivotconfig.closedLoop.maxMotion
-        .MaxVelocity(100)
-        .MaxAcceleration(150)
-        .AllowedClosedLoopError(0.1);
 
-    m_pivot.Configure(pivotconfig,
-     SparkMax::ResetMode::kResetSafeParameters,
-     SparkMax::PersistMode::kPersistParameters);
 
 
     frc::SmartDashboard::PutNumber("Pivot Current", GetAlgaeCurrent());

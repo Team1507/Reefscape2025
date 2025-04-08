@@ -31,7 +31,7 @@
 #define ELEV_POS_L4_AUTO 10
 #define ELEV_POS_ALG_LOW 5
 #define ELEV_POS_ALG_HIGH 6
-#define ELEV_POS_ALG_HIGH 8
+//#define ELEV_POS_ALG_HIGH 8
 #define ELEV_POS_BARGE  9
 
 // ********* PIVOT CONSTANTS **********//

@@ -15,6 +15,8 @@
 #include "constants/Presets.h"
 #include <units/angle.h>
 
+using namespace rev::spark;
+
 class Pivot : public frc2::SubsystemBase {
  public:
   Pivot();
@@ -56,6 +58,8 @@ class Pivot : public frc2::SubsystemBase {
 
  ctre::phoenix6::hardware::TalonFX m_pivotMotor{PIVOT_FALCON_CAN_ID}; 
  ctre::phoenix6::controls::MotionMagicVoltage m_mmPivot{0_tr};
- rev::spark::SparkMax  m_algaeIntakeMotor{CLAW_CAN_ID, rev::spark::SparkMax::MotorType::kBrushless};
+ 
+ SparkMax  m_algMotor1{PIVOT2_CAN_ID, SparkMax::MotorType::kBrushless};
+ SparkMax  m_algMotor2{PIVOT_CAN_ID, SparkMax::MotorType::kBrushless};
 
 };

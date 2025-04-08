@@ -23,23 +23,27 @@ inline constexpr frc::Transform2d CLAW_TRANS_R{0_m, CLAW_OFFSET_R,
 
 
 //**********CLIMB CONSTANTS **********//
-#define CLIMBER_CAN_ID         17       
-#define CLIMBER_BEAM_BREAK_ID  1
-#define CLIMBER_SPARK_CAN_ID   18
+#define CLIMBER_CAN_ID              17       
+#define CLIMBER_BEAM_BREAK_ID       1
+#define CLIMBER_SPARK_CAN_ID        18
 
 //********** ClAW CONSTANTS **********//
 
-#define CLAW_PHOTO_EYE_FIRST   7
-#define CLAW_CAN_ID            24
-#define ALGAE_PHOTO_EYE        3
+#define CLAW_PHOTO_EYE_FIRST        7
+#define CLAW_CAN_ID                 24
+#define ALGAE_PHOTO_EYE             3
+
+
+
 
 //Pivot
-#define PIVOT_CAN_ID           25
-#define PIVOT_FALCON_CAN_ID    51
+#define PIVOT_CAN_ID                25
+#define PIVOT2_CAN_ID               26
+#define PIVOT_FALCON_CAN_ID         51
 
 
 
 //********** ELEVATOR CONSTANTS **********//
 
-#define ELEVATOR_CAN_ID        50
-#define ELEV_HOME_SENSOR       9
+#define ELEVATOR_CAN_ID             50
+#define ELEV_HOME_SENSOR            9

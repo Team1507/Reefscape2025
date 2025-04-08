@@ -15,6 +15,7 @@
 #include "Commands/CmdDriveClearAll.h"
 #include "Commands/CmdAlignToAprilTag.h"
 #include "Commands/CmdPivotZero.h"
+#include "Commands/CmdPivotIntake.h"
 #include "Commands/CmdClawAuto.h"
 
 #include "Subsystems/Elevator.h"
@@ -145,8 +146,10 @@ void RobotContainer::ConfigureBindings()
   
   //Algae
   //m_topDriver.LeftBumper().WhileTrue(new CmdAlgaeOuttake(frc::SmartDashboard::PutNumber("AlgaeOut Power", 1)));
-  driverJoystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
-  m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
+  //driverJoystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
+  m_topDriver.LeftTrigger(0.5).WhileTrue(new CmdPivotIntake(1.0));
+  driverJoystick.LeftBumper().WhileTrue(new CmdPivotIntake(-1.0));
+  //m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
   driverJoystick.POVDown().OnTrue(new CmdPivotZero());
   
  driverJoystick.A().OnTrue(new CmdDriveClearAll());
@@ -203,7 +206,7 @@ normalPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_L2));
 
 m_topDriver.RightBumper().OnTrue(new CmdPivotToPos(1));
 m_topDriver.LeftBumper().OnTrue(new CmdPivotToPos(3));
-// m_topDriver.LeftTrigger(0.5).OnTrue(new CmdPivotToPos(2));
+ m_topDriver.LeftTrigger(0.5).OnTrue(new CmdPivotToPos(2));
 }
 
 void RobotContainer::ConfigureSysIdBinds() {
