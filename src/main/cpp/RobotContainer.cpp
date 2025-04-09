@@ -140,73 +140,93 @@ void RobotContainer::ConfigureBindings()
 
 
   //Coral
-   driverJoystick.RightBumper().WhileTrue(new CmdClawOuttake(-1.0));
+  driverJoystick.RightBumper().WhileTrue(new CmdClawOuttake(-1.0));
   m_topDriver.RightTrigger(0.5).OnTrue(new CmdClawActivate(-1.0));
   driverJoystick.LeftTrigger(0.5).WhileTrue(new CmdClawStop());
   
   //Algae
   //m_topDriver.LeftBumper().WhileTrue(new CmdAlgaeOuttake(frc::SmartDashboard::PutNumber("AlgaeOut Power", 1)));
-  //driverJoystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
-  m_topDriver.LeftTrigger(0.5).WhileTrue(new CmdPivotIntake(1.0));
-  driverJoystick.LeftBumper().WhileTrue(new CmdPivotIntake(-1.0));
-  //m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
-  driverJoystick.POVDown().OnTrue(new CmdPivotZero());
+  // driverJoystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
+  driverJoystick.LeftBumper().WhileTrue(new CmdPivotIntake(1));
+  // m_topDriver.LeftTrigger().WhileTrue(new CmdPivotIntake(-1));
+  m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
+  driverJoystick.POVRight().OnTrue(new CmdPivotZero());
   
  driverJoystick.A().OnTrue(new CmdDriveClearAll());
   m_topDriver.X().OnTrue(new CmdPivotZero());
 
 // Assume these button objects are stored persistently (here as local constants)
 const auto aButton       = m_topDriver.A();
+const auto xButton       = m_topDriver.X();
 const auto povUpButton   = m_topDriver.POVUp();
 const auto povDownButton = m_topDriver.POVDown();
 const auto povLeftButton = m_topDriver.POVLeft();
 const auto povRightButton= m_topDriver.POVRight();
 
-// Alternate bindings (only fire when A is pressed)
+// Mode Shift 1 bindings (only fire when A is pressed)
 frc2::Trigger altPovUp([=]() {
   return aButton.Get() && povUpButton.Get();
 });
-altPovUp.OnTrue(new CmdElevatorToPosition(ELEV_POS_L1));
+altPovUp.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_BARGE), CmdPivotToPos(ALGAE_POS_BARGE)));
 
 frc2::Trigger altPovDown([=]() {
   return aButton.Get() && povDownButton.Get();
 });
-altPovDown.OnTrue(new CmdElevatorToPosition(ELEV_POS_HOME));
+altPovDown.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_BARGE)));
 
 frc2::Trigger altPovLeft([=]() {
   return aButton.Get() && povLeftButton.Get();
 });
-altPovLeft.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_ALG_HIGH), CmdPivotToPos(2), CmdAlgaeIntake(-1.0)));
+altPovLeft.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_L3), CmdPivotToPos(ALGAE_POS_INTAKE)));
 
 frc2::Trigger altPovRight([=]() {
   return aButton.Get() && povRightButton.Get();
 });
-altPovRight.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_ALG_LOW), CmdPivotToPos(2), CmdAlgaeIntake(-1.0)));
-
-// Normal D-pad bindings (fire only when A is NOT pressed)
+altPovRight.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_L2), CmdPivotToPos(ALGAE_POS_INTAKE)));
+// Normal D-pad bindings (fire only when A and X is NOT pressed)
 frc2::Trigger normalPovUp([=]() {
-  return !aButton.Get() && povUpButton.Get();
+  return !aButton.Get() && !xButton.Get() && povUpButton.Get();
 });
 normalPovUp.OnTrue(new CmdElevatorToPosition(ELEV_POS_L4));
 
 frc2::Trigger normalPovDown([=]() {
-  return !aButton.Get() && povDownButton.Get();
+  return !aButton.Get() && !xButton.Get() && povDownButton.Get();
 });
-normalPovDown.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_HOME)));
+normalPovDown.OnTrue(new frc2::ParallelCommandGroup( CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_CLOSE_HOME)));
 
 frc2::Trigger normalPovLeft([=]() {
-  return !aButton.Get() && povLeftButton.Get();
+  return !aButton.Get() && !xButton.Get() && povLeftButton.Get();
 });
 normalPovLeft.OnTrue(new CmdElevatorToPosition(ELEV_POS_L3));
 
 frc2::Trigger normalPovRight([=]() {
-  return !aButton.Get() && povRightButton.Get();
+  return !aButton.Get() && !xButton.Get() && povRightButton.Get();
 });
 normalPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_L2));
 
-m_topDriver.RightBumper().OnTrue(new CmdPivotToPos(1));
-m_topDriver.LeftBumper().OnTrue(new CmdPivotToPos(3));
- m_topDriver.LeftTrigger(0.5).OnTrue(new CmdPivotToPos(2));
+// Mode Shift 2 bindings (only fire when X is pressed)
+frc2::Trigger xltPovUp([=]() {
+  return xButton.Get() && povUpButton.Get();
+});
+xltPovUp.OnTrue(new CmdPivotToPos(ALGAE_POS_FLOOR_ALGAE));
+
+frc2::Trigger xltPovDown([=]() {
+  return xButton.Get() && povDownButton.Get();
+});
+xltPovDown.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_BARGE)));
+
+frc2::Trigger xltPovLeft([=]() {
+  return xButton.Get() && povLeftButton.Get();
+});
+xltPovLeft.OnTrue(new CmdElevatorToPosition(ELEV_POS_L1));
+
+frc2::Trigger xltPovRight([=]() {
+  return xButton.Get() && povRightButton.Get();
+});
+xltPovRight.OnTrue(new frc2::ParallelCommandGroup( CmdPivotToPos(ALGAE_POS_FLOOR_CORAL)));
+
+m_topDriver.RightBumper().OnTrue(new CmdPivotToPos(3));
+m_topDriver.LeftBumper().OnTrue(new CmdPivotToPos(2));
 }
 
 void RobotContainer::ConfigureSysIdBinds() {

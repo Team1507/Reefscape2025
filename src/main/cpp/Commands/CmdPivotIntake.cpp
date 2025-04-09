@@ -40,7 +40,7 @@ void CmdPivotIntake::End(bool interrupted)
 
 // Returns true when the command should end.
 bool CmdPivotIntake::IsFinished() {
-   const units::second_t timeout = units::second_t(0.5);
+   const units::second_t timeout = units::second_t(1.5);
   if(m_timer.Get() >= timeout)
   {
     return true;

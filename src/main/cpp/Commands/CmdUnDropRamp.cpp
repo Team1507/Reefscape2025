@@ -10,7 +10,11 @@ CmdUnDropRamp::CmdUnDropRamp() {
 }
 
 // Called when the command is initially scheduled.
-void CmdUnDropRamp::Initialize() {}
+void CmdUnDropRamp::Initialize()
+{
+  m_timer.Reset(); //Resets the timer
+  m_timer.Start(); //Starts the timer
+}
 
 // Called repeatedly when this Command is scheduled to run
 void CmdUnDropRamp::Execute() 
@@ -24,6 +28,12 @@ void CmdUnDropRamp::End(bool interrupted) {}
 // Returns true when the command should end.
 bool CmdUnDropRamp::IsFinished() 
 {
-  robotcontainer.m_climber.OffRamp();
+  const units::second_t timeout = units::second_t(0.25);
+  if(m_timer.Get() >= timeout)
+  {
+    robotcontainer.m_climber.OffRamp();
+    return true;
+  }
+  else 
   return false;
 }

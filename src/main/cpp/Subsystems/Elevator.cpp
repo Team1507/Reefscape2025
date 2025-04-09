@@ -162,16 +162,16 @@ void Elevator::SetTargetPosition (int position)
     targetPosition = ELEV_POSITION_L4;
     elevatorL4 = true;
   }
-  else if (position == ELEV_POS_ALG_LOW)
-  {
-    targetPosition = ELEV_POSITION_ALG_L2;
-    elevatorLowAlgae = true;
-  }
-  else if(position == ELEV_POS_ALG_HIGH)
-  {
-    targetPosition = ELEV_POSITION_ALG_L3;
-    elevatorHighAlgae = true;
-  }
+  // else if (position == ELEV_POS_ALG_LOW)
+  // {
+  //   targetPosition = ELEV_POSITION_ALG_L2;
+  //   elevatorLowAlgae = true;
+  // }
+  // else if(position == ELEV_POS_ALG_HIGH)
+  // {
+  //   targetPosition = ELEV_POSITION_ALG_L3;
+  //   elevatorHighAlgae = true;
+  // }
   else if(position == ELEV_POS_BARGE)
   {
     targetPosition = ELEV_POSITION_BARGE;

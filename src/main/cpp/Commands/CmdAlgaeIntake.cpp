@@ -3,8 +3,13 @@
 #include <iostream>
 #include <frc/smartdashboard/SmartDashboard.h>
 
+int algaeInriment;
+
 CmdAlgaeIntake::CmdAlgaeIntake(double power)
-  : m_power(power) {
+  : m_power(power) 
+  
+{
+  AddRequirements(&robotcontainer.m_pivot);
 }
 
 void CmdAlgaeIntake::Initialize() {
@@ -32,20 +37,28 @@ void CmdAlgaeIntake::End(bool interrupted) {
   robotcontainer.m_pivot.SetIntakePower(0.0);
   m_timer.Stop();
 
-  if (robotcontainer.m_claw.GetAlgaePhotoEye()) {
-    std::cout << "CmdAlgaeIntake: Un-jamming reverse" << std::endl;
-    robotcontainer.m_pivot.SetIntakePower(-0.2);  // Small reverse
-    frc::Wait(0.2_s);  // Wait 200ms
-    robotcontainer.m_pivot.SetIntakePower(-0.05); //Holding Power Adjust as needed
-    robotcontainer.m_claw.SetBallLoaded(true);
-  }
+  // if (robotcontainer.m_claw.GetAlgaePhotoEye()) {
+  //   std::cout << "CmdAlgaeIntake: Un-jamming reverse" << std::endl;
+  //   robotcontainer.m_pivot.SetIntakePower(-0.2);  // Small reverse
+  //   frc::Wait(0.2_s);  // Wait 200ms
+  //   robotcontainer.m_pivot.SetIntakePower(-0.05); //Holding Power Adjust as needed
+  //   robotcontainer.m_claw.SetBallLoaded(true);
+  // }
 }
 
 bool CmdAlgaeIntake::IsFinished() {
   // Finish when the ball is detected
   if (robotcontainer.m_claw.GetAlgaePhotoEye()) {
-    std::cout << "CmdAlgaeIntake: Ball fully detected, intake finished" << std::endl;
-    return true;
+    if(algaeInriment > 1)
+    {    
+      std::cout << "CmdAlgaeIntake: Ball fully detected, intake finished" << std::endl;
+      return true;
+    }
+    else
+    {
+      algaeInriment++;
+    }
+
   }
   return false;
 }

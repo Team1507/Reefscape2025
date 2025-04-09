@@ -89,6 +89,8 @@ void Robot::TeleopInit() {
   if (m_autonomousCommand) {
     m_autonomousCommand->Cancel();
   }
+
+  robotcontainer.m_pivot.SetTargetPosition(1);
 }
 
 void Robot::TeleopPeriodic() {}

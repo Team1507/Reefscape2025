@@ -12,18 +12,28 @@ Pivot::Pivot()
 {
 
   SparkMaxConfig Algconfig{};
+  SparkMaxConfig AlgFollowerConfig{};
 
     Algconfig
         .Inverted(false)
-        .SetIdleMode(SparkMaxConfig::IdleMode::kCoast);
+        .SetIdleMode(SparkMaxConfig::IdleMode::kBrake)
+        .SmartCurrentLimit(18);
+
+    AlgFollowerConfig.Apply(Algconfig).Follow(m_algMotor1, true);
         
     m_algMotor1.Configure(Algconfig,
      SparkMax::ResetMode::kResetSafeParameters,
      SparkMax::PersistMode::kPersistParameters);
 
+    // m_algMotor2.Configure(AlgFollowerConfig,
+    //  SparkMax::ResetMode::kResetSafeParameters,
+    //  SparkMax::PersistMode::kPersistParameters);
+
+  
 
     ctre::phoenix6::configs::TalonFXConfiguration cfg{};
   
+   m_pivotMotor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
   /* Configure gear ratio */
   ctre::phoenix6::configs::FeedbackConfigs &fdb = cfg.Feedback;
@@ -31,8 +41,8 @@ Pivot::Pivot()
 
   /* Configure Motion Magic */
   ctre::phoenix6::configs::MotionMagicConfigs &mm = cfg.MotionMagic;
-  mm.MotionMagicCruiseVelocity = 10_tps; // 5 (mechanism) rotations per second cruise
-  mm.MotionMagicAcceleration = 15_tr_per_s_sq; // Take approximately 0.5 seconds to reach max vel
+  mm.MotionMagicCruiseVelocity = 7.5_tps; // 5 (mechanism) rotations per second cruise
+  mm.MotionMagicAcceleration = 10_tr_per_s_sq; // Take approximately 0.5 seconds to reach max vel
   // Take approximately 0.1 seconds to reach max accel 
   mm.MotionMagicJerk = 100_tr_per_s_cu;
 
@@ -40,7 +50,7 @@ Pivot::Pivot()
   //READ THIS COMMENT: This is the same config as the elevator, WILL NEED TO BE TUNED
   ctre::phoenix6::configs::Slot0Configs &slot0 = cfg.Slot0;
   slot0.kS = 0.4; // Add 0.25 V output to overcome static friction
-  slot0.kV = 2.5; // A velocity target of 1 rps results in 0.12 V output
+  slot0.kV = 1.5; // A velocity target of 1 rps results in 0.12 V output
   slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
   slot0.kP = 60.0; // A position error of 0.2 rotations results in 12 V output
   slot0.kI = 0.0; // No output for integrated error
@@ -95,19 +105,31 @@ void Pivot::SetTargetPosition(int position)
   {
     //move elevator home
     targetPosition = PIVOT_POSITION_HOME;
-    pivotHome = true;
   }
   else if (position == ALGAE_POS_INTAKE)
   {
     targetPosition = PIVOT_POSITION_INTAKE;
-    pivotOpen = true;
+    
   }
   else if (position == ALGAE_POS_BARGE)
   {
     targetPosition = PIVOT_BARGE;
-    pivotOpen = true;
+    
   }
-
+  else if (position == ALGAE_POS_FLOOR_CORAL)
+  {
+    targetPosition = PIVOT_FLOOR_CORAL;
+    
+  }
+  else if (position == ALGAE_POS_FLOOR_ALGAE)
+  {
+    targetPosition = PIVOT_FLOOR_ALGAE;
+    
+  }
+  else if (position == ALGAE_POS_CLOSE_HOME)
+  {
+    targetPosition = PIVOT_CLOSE_HOME;
+  }
 
   m_pivotMotor.SetControl(m_mmPivot.WithPosition(targetPosition));
 
