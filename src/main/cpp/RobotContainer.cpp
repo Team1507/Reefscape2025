@@ -56,6 +56,7 @@
 #include "Commands/CmdPivotToPos.h"
 #include "Commands/CmdUnDropRamp.h"
 #include "Commands/Auto3PieceRightBlue.h"
+#include "Commands/AutoMiddleBarge.h"
 
 
 RobotContainer::RobotContainer() 
@@ -83,6 +84,8 @@ RobotContainer::RobotContainer()
     m_chooser.AddOption("Auto Move Forward" , new AutoMoveForward());
 
     m_chooser.AddOption("Auto 3 Piece Right Blue" , new Auto3PieceRightBlue());
+
+    
 
   frc::SmartDashboard::PutData("Auto Mode", &m_chooser);
 
@@ -167,7 +170,7 @@ const auto povRightButton= m_topDriver.POVRight();
 frc2::Trigger altPovUp([=]() {
   return aButton.Get() && povUpButton.Get();
 });
-altPovUp.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_BARGE), CmdPivotToPos(ALGAE_POS_BARGE)));
+altPovUp.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_BARGE)));
 
 frc2::Trigger altPovDown([=]() {
   return aButton.Get() && povDownButton.Get();
@@ -177,12 +180,12 @@ altPovDown.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_
 frc2::Trigger altPovLeft([=]() {
   return aButton.Get() && povLeftButton.Get();
 });
-altPovLeft.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_L3), CmdPivotToPos(ALGAE_POS_INTAKE)));
+altPovLeft.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_ALG_HIGH), CmdPivotToPos(ALGAE_POS_BARGE)));
 
 frc2::Trigger altPovRight([=]() {
   return aButton.Get() && povRightButton.Get();
 });
-altPovRight.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_L2), CmdPivotToPos(ALGAE_POS_INTAKE)));
+altPovRight.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_BARGE)));
 // Normal D-pad bindings (fire only when A and X is NOT pressed)
 frc2::Trigger normalPovUp([=]() {
   return !aButton.Get() && !xButton.Get() && povUpButton.Get();

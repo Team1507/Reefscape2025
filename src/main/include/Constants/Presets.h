@@ -13,6 +13,7 @@
 #define ELEV_POSITION_CORAL_FLOOR -5.0_tr       //Algea High
 #define ELEV_POSITION_BARGE -6_tr
 #define ELEV_POSITION_L4_AUTO -5.8_tr
+#define ELEV_POSITION_ALG_HIGH -1.9_tr
 
 #define ELEV_TOLERANCE 0.05_tr
 
@@ -31,17 +32,17 @@
 #define ELEV_POS_L4_AUTO 10
 //#define ELEV_POS_ALG_FLOOR 5
  //#define ELEV_POS_CORAL_FLOOR 6
-//#define ELEV_POS_ALG_HIGH 8
+#define ELEV_POS_ALG_HIGH 8
 #define ELEV_POS_BARGE  9
 
 // ********* PIVOT CONSTANTS **********//
 
 #define PIVOT_POSITION_HOME 0_tr
 #define PIVOT_POSITION_INTAKE 0.837_tr
-#define PIVOT_BARGE       0.28_tr
+#define PIVOT_BARGE       0.4_tr
 #define PIVOT_FLOOR_CORAL 0_tr
 #define PIVOT_FLOOR_ALGAE 0_tr
-#define PIVOT_CLOSE_HOME 0.125_tr
+#define PIVOT_CLOSE_HOME 0.105_tr
 
 #define ALGAE_POS_HOME 1
 #define ALGAE_POS_INTAKE 2

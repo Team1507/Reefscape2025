@@ -8,6 +8,7 @@
 #include "Commands/CmdClawAuto.h"
 #include "frc2/command/ParallelCommandGroup.h"
 #include "Commands/CmdDriveClearAll.h"
+#include "Commands/CmdPivotToPos.h"
 
 Auto2PieceRightRed::Auto2PieceRightRed() 
 {
@@ -16,6 +17,7 @@ Auto2PieceRightRed::Auto2PieceRightRed()
     CmdDriveClearAll(),
 
     //Go to reef
+    CmdPivotToPos(1),
     CmdDriveToPoint(0.5_m, -0.5_m, 0_deg, 1.5_mps, false, 5_s),
     CmdDriveToPoint(1.5_m, -1.5_m, 0_deg, 3_mps, false, 5_s),
     CmdElevatorToPosition(2),

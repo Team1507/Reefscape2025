@@ -90,7 +90,15 @@ void Robot::TeleopInit() {
     m_autonomousCommand->Cancel();
   }
 
-  robotcontainer.m_pivot.SetTargetPosition(1);
+  if (!robotcontainer.m_claw.GetAlgaePhotoEye())
+  {
+    robotcontainer.m_pivot.SetTargetPosition(1);
+  }
+  else
+  {
+    robotcontainer.m_pivot.SetTargetPosition(3);
+  }
+  
 }
 
 void Robot::TeleopPeriodic() {}

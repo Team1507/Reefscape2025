@@ -22,26 +22,30 @@ Auto1PieceMiddleAlg::Auto1PieceMiddleAlg() {
     CmdPrintText("Auto 1 Alg Middle"),
     CmdDriveClearAll(),
 
+    CmdPivotToPos(1),
     CmdDriveToPoint(1.3_m, 0_m, 0_deg, 1.5_mps, false, 3_s),
     CmdElevatorToPosition(3),
     CmdWait(0.65),
     CmdDriveToPoint(1.5_m, 0_m, 0_deg, 1_mps, true, 2_s),
     CmdWait(0.65),
     CmdClawOuttake(-1.0),
-    CmdElevatorToPosition(5),
+    CmdElevatorToPosition(1),
     CmdWait(0.65),
 
     //Align to Algae
-    CmdDriveToPoint(1.2_m, 0.15_m, 0_deg, 1.5_mps, false, 3_s),
-    CmdPivotToPos(2),
-    CmdWait(0.65),
+    CmdDriveToPoint(1.2_m, 0.15_m, 0_deg, 1.5_mps, true, 3_s),
+    CmdPivotToPos(3),
+    // CmdWait(0.65),
     frc2::ParallelCommandGroup(
     CmdAlgaeIntake(-1.0),
-    CmdDriveToPoint(1.45_m, 0.15_m, 0_deg, 1_mps, true, 2_s)),
-    CmdWait(1.0),
-    CmdElevatorToPosition(7),
-    CmdDriveToPoint(1.2_m, 0.15_m, 0_deg, 1_mps, false, 3_s),
-    CmdDriveToPoint(0.8_m, 0.3_m, 90_deg, 1_mps, true, 3_s),
+    CmdDriveToPoint(1.5_m, 0.15_m, 0_deg, 1_mps, true, 2_s)),
+    // CmdWait(1.0),
+    // CmdElevatorToPosition(7),
+    CmdDriveToPoint(1.2_m, 0.15_m, 0_deg, 1_mps, true, 3_s),
+
+    //Go to Barge
+    CmdDriveToPoint(0.6_m, -1.0_m, -90_deg, 1.5_mps, false, 3_s),
+    CmdDriveToPoint(0.0_m, -2.0_m, -180_deg, 1.5_mps, true, 3_s),
 
 
     CmdPrintText("Auto 1 Middle Alg End")

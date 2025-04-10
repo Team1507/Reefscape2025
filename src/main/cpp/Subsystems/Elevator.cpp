@@ -17,7 +17,7 @@ Elevator::Elevator()
 
   /* Configure Motion Magic */
   ctre::phoenix6::configs::MotionMagicConfigs &mm = cfg.MotionMagic;
-  mm.MotionMagicCruiseVelocity = 10_tps; // 5 (mechanism) rotations per second cruise
+  mm.MotionMagicCruiseVelocity = 13_tps; // 5 (mechanism) rotations per second cruise
   mm.MotionMagicAcceleration = 15_tr_per_s_sq; // Take approximately 0.5 seconds to reach max vel
   // Take approximately 0.1 seconds to reach max accel 
   mm.MotionMagicJerk = 100_tr_per_s_cu;
@@ -28,7 +28,7 @@ Elevator::Elevator()
   slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
   slot0.kP = 60.0; // A position error of 0.2 rotations results in 12 V output
   slot0.kI = 0.0; // No output for integrated error
-  slot0.kD = 0.5; // A velocity error of 1 rps results in 0.5 V output
+  slot0.kD = 0.75; // A velocity error of 1 rps results in 0.5 V output
 
   ctre::phoenix::StatusCode status = ctre::phoenix::StatusCode::StatusCodeNotInitialized;
   for (int i = 0; i < 5; ++i) {
@@ -167,11 +167,11 @@ void Elevator::SetTargetPosition (int position)
   //   targetPosition = ELEV_POSITION_ALG_L2;
   //   elevatorLowAlgae = true;
   // }
-  // else if(position == ELEV_POS_ALG_HIGH)
-  // {
-  //   targetPosition = ELEV_POSITION_ALG_L3;
-  //   elevatorHighAlgae = true;
-  // }
+  else if(position == ELEV_POS_ALG_HIGH)
+  {
+    targetPosition = ELEV_POSITION_ALG_HIGH;
+    elevatorHighAlgae = true;
+  }
   else if(position == ELEV_POS_BARGE)
   {
     targetPosition = ELEV_POSITION_BARGE;

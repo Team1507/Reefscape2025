@@ -75,6 +75,7 @@ Auto3PieceRightBlue::Auto3PieceRightBlue()
     CmdDriveToPoint(4.5_m, -1.6_m, -120_deg, 3.5_mps, false, 3_s),
     CmdElevatorToPosition(10),
     CmdDriveToPoint(3.53_m, -2.3_m, -117_deg, 1_mps, true, 3_s),
+    CmdWait(0.05),
     CmdClawOuttake(1),
 
     //Home

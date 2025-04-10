@@ -8,6 +8,7 @@
 #include "Commands/CmdClawAuto.h"
 #include "frc2/command/ParallelCommandGroup.h"
 #include "Commands/CmdDriveClearAll.h"
+#include "Commands/CmdPivotToPos.h"
 
 Auto2PieceRightBlue::Auto2PieceRightBlue() 
 {
@@ -16,6 +17,7 @@ Auto2PieceRightBlue::Auto2PieceRightBlue()
     CmdDriveClearAll(),
 
     //Go to reef
+    CmdPivotToPos(1),
     CmdDriveToPoint(0.5_m, -0.5_m, 0_deg, 1.5_mps, false, 5_s),
     CmdDriveToPoint(1.5_m, -1.5_m, 0_deg, 3_mps, false, 5_s),
     CmdElevatorToPosition(2),
@@ -62,8 +64,8 @@ Auto2PieceRightBlue::Auto2PieceRightBlue()
 
     //Align to algae
     CmdDriveToPoint(3.9_m, -2.1_m, -120_deg, 1_mps, true, 2_s),
-    CmdElevatorToPosition(5),
-    CmdDriveClearAll(),
+    // CmdElevatorToPosition(5),
+    // CmdDriveClearAll(),
 
     CmdPrintText("Auto 2 Right Done Blue")
   );
