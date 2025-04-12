@@ -34,7 +34,7 @@ Auto1PieceMiddleAlg::Auto1PieceMiddleAlg() {
     CmdWait(0.65),
 
     //Align to Algae
-    CmdDriveToPoint(1.2_m, 0.15_m, 0_deg, 1.5_mps, true, 3_s),
+    CmdDriveToPoint(1.2_m, 0.15_m, 0_deg, 1.7_mps, true, 3_s),
     CmdPivotToPos(3),
     // CmdWait(0.65),
     frc2::ParallelCommandGroup(
@@ -45,34 +45,38 @@ Auto1PieceMiddleAlg::Auto1PieceMiddleAlg() {
     CmdDriveToPoint(1.2_m, 0.15_m, 0_deg, 1_mps, true, 3_s),
 
     //Go to Barge
-    CmdDriveToPoint(0.6_m, -1.0_m, -90_deg, 1.5_mps, false, 3_s),
-    CmdDriveToPoint(0.0_m, -2.0_m, -180_deg, 1.5_mps, true, 3_s),
+    frc2::ParallelCommandGroup( CmdDriveToPoint(0.6_m, -1.0_m, -90_deg, 1.7_mps, false, 3_s),
+    CmdElevatorToPosition(4) ),
+    CmdDriveToPoint(0.0_m, -2.0_m, -180_deg, 1.7_mps, true, 3_s),
     CmdElevatorToPosition(9),
-    CmdWait(1.0),
+    CmdWait(0.7),
     CmdPivotIntake(1.0),
 
     //align to algae
-    frc2::ParallelCommandGroup(
+    // frc2::ParallelCommandGroup(
       CmdElevatorToPosition(1), 
-      CmdPivotToPos(6)),
-    CmdDriveToPoint(1.7_m, -1.5_m, 60_deg, 1.5_mps, false, 3_s),
+      // CmdPivotToPos(6)),
+    CmdDriveToPoint(1.7_m, -1.5_m, 60_deg, 1.7_mps, false, 3_s),
     frc2::ParallelCommandGroup(
-      CmdDriveToPoint(2.3_m, -1.2_m, 60_deg, 1.5_mps, true, 3_s),
+      CmdDriveToPoint(2.1_m, -1.2_m, 60_deg, 1.7_mps, true, 3_s),
       CmdElevatorToPosition(8)),
     CmdPivotToPos(3),
     frc2::ParallelCommandGroup(
       CmdAlgaeIntake(-1.0),
-      CmdDriveToPoint(2.3_m, -0.7_m, 60_deg, 1_mps, true, 3_s)),
+      CmdDriveToPoint(2.4_m, -0.7_m, 60_deg, 1_mps, true, 3_s)),
 
     //score in barge
     CmdDriveToPoint(2.2_m, -0.9_m, 60_deg, 1_mps, true, 3_s),
-    CmdDriveToPoint(0.0_m, -2.0_m, 180_deg, 1.5_mps, true, 3_s),
+    CmdDriveToPoint(0.0_m, -2.0_m, 180_deg, 1.7_mps, true, 3_s),
     CmdElevatorToPosition(9),
-    CmdWait(1.0),
+    CmdWait(0.7),
     CmdPivotIntake(1.0),
-    CmdElevatorToPosition(1),
+    frc2::ParallelCommandGroup(
+      CmdElevatorToPosition(1),
+      CmdPivotToPos(6),
+      CmdDriveToPoint(0.5_m, -2.0_m, 180_deg, 1.7_mps, true, 3_s)),
 
-
+    CmdDriveClearAll(),
     CmdPrintText("Auto 1 Middle Alg End")
   );
 }

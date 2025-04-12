@@ -64,7 +64,7 @@ RobotContainer::RobotContainer()
   ConfigureBindings();
 
   m_elevator.SetDefaultCommand(CmdElevatorManualPower(0));
-  m_pivot.SetDefaultCommand(CmdPivotManual());
+  m_pivot.SetDefaultCommand(CmdPivotManual(0));
   
 
     m_chooser.AddOption("Auto Do Nothing", new AutoDoNothing() );
@@ -210,7 +210,7 @@ normalPovRight.OnTrue(new CmdElevatorToPosition(ELEV_POS_L2));
 frc2::Trigger xltPovUp([=]() {
   return xButton.Get() && povUpButton.Get();
 });
-xltPovUp.OnTrue(new CmdPivotToPos(ALGAE_POS_FLOOR_ALGAE));
+xltPovUp.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_FLOOR_ALGAE)));
 
 frc2::Trigger xltPovDown([=]() {
   return xButton.Get() && povDownButton.Get();
@@ -228,7 +228,7 @@ frc2::Trigger xltPovRight([=]() {
 xltPovRight.OnTrue(new frc2::ParallelCommandGroup(CmdPivotToPos(ALGAE_POS_FLOOR_CORAL), CmdElevatorToPosition(ELEV_POS_HOME)));
 
 m_topDriver.RightBumper().OnTrue(new CmdPivotToPos(3));
-m_topDriver.LeftBumper().OnTrue(new CmdPivotToPos(2));
+m_topDriver.LeftBumper().OnTrue(new CmdPivotToPos(7));
 }
 
 void RobotContainer::ConfigureSysIdBinds() {

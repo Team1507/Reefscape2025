@@ -41,8 +41,8 @@ Pivot::Pivot()
 
   /* Configure Motion Magic */
   ctre::phoenix6::configs::MotionMagicConfigs &mm = cfg.MotionMagic;
-  mm.MotionMagicCruiseVelocity = 7.5_tps; // 5 (mechanism) rotations per second cruise
-  mm.MotionMagicAcceleration = 10_tr_per_s_sq; // Take approximately 0.5 seconds to reach max vel
+  mm.MotionMagicCruiseVelocity = 5_tps; // 5 (mechanism) rotations per second cruise
+  mm.MotionMagicAcceleration = 7.5_tr_per_s_sq; // Take approximately 0.5 seconds to reach max vel
   // Take approximately 0.1 seconds to reach max accel 
   mm.MotionMagicJerk = 100_tr_per_s_cu;
 
@@ -50,9 +50,9 @@ Pivot::Pivot()
   //READ THIS COMMENT: This is the same config as the elevator, WILL NEED TO BE TUNED
   ctre::phoenix6::configs::Slot0Configs &slot0 = cfg.Slot0;
   slot0.kS = 0.4; // Add 0.25 V output to overcome static friction
-  slot0.kV = 1.5; // A velocity target of 1 rps results in 0.12 V output
+  slot0.kV = 0.75; // A velocity target of 1 rps results in 0.12 V output
   slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-  slot0.kP = 60.0; // A position error of 0.2 rotations results in 12 V output
+  slot0.kP = 45.0; // A position error of 0.2 rotations results in 12 V output
   slot0.kI = 0.0; // No output for integrated error
   slot0.kD = 0.5; // A velocity error of 1 rps results in 0.5 V output
   
@@ -129,6 +129,10 @@ void Pivot::SetTargetPosition(int position)
   else if (position == ALGAE_POS_CLOSE_HOME)
   {
     targetPosition = PIVOT_CLOSE_HOME;
+  }
+  else if (position == ALGAE_POS_PROSESS)
+  {
+    targetPosition = PIVOT_PROSESS;
   }
 
   m_pivotMotor.SetControl(m_mmPivot.WithPosition(targetPosition));

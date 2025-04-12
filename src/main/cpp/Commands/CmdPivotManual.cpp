@@ -11,9 +11,11 @@
 // For example, if a full joystick deflection should move the pivot 1 turn, set it to 1.0.
 #define MANUAL_POSITION_SCALE 0.3
 
-CmdPivotManual::CmdPivotManual() {
+CmdPivotManual::CmdPivotManual(float power) {
   // Declare dependency on the pivot subsystem.
   AddRequirements(&robotcontainer.m_pivot);
+  m_power = power;
+  m_manualPivotEnabled = false;
 }
 
 void CmdPivotManual::Initialize() {

@@ -8,7 +8,7 @@
  */
 class CmdPivotManual : public frc2::CommandHelper<frc2::Command, CmdPivotManual> {
  public:
-  CmdPivotManual();
+  CmdPivotManual(float position);
 
   void Initialize() override;
   void Execute() override;
@@ -16,5 +16,7 @@ class CmdPivotManual : public frc2::CommandHelper<frc2::Command, CmdPivotManual>
   bool IsFinished() override;
 
   private:
+  float m_power;
+  
   bool m_manualPivotEnabled;
 };

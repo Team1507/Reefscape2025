@@ -40,17 +40,17 @@ void CmdAlgaeIntake::End(bool interrupted) {
 
 bool CmdAlgaeIntake::IsFinished() {
   // Finish when the ball is detected
-  if (robotcontainer.m_algMotor.GetAlgaePhotoEye()) {
-    if(algaeInriment > 1)
-    {    
+  if (robotcontainer.m_algMotor.GetAlgaePhotoEye() || robotcontainer.driverJoystick.LeftBumper().Get()) {
+    // if(algaeInriment > 1)
+    // {    
       std::cout << "CmdAlgaeIntake: Ball fully detected, intake finished" << std::endl;
       //  robotcontainer.m_algMotor.SetIntakePower(-0.05); //Holding Power Adjust as needed
       return true;
-    }
-    else
-    {
-      algaeInriment++;
-    }
+    // }
+    // else
+    // {
+    //   algaeInriment++;
+    // }
 
   }
   return false;

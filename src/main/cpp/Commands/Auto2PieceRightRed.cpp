@@ -69,10 +69,13 @@ Auto2PieceRightRed::Auto2PieceRightRed()
     CmdElevatorToPosition(1),
     CmdWait(0.65),
 
-    //Align to algae
-    CmdDriveToPoint(3.9_m, -2.1_m, -120_deg, 1_mps, true, 2_s),
-    CmdElevatorToPosition(5),
-    //CmdDriveClearAll(),
+    //Back to Station
+    frc2::ParallelCommandGroup(
+      CmdDriveToPoint(6.5_m, -0.35_m, -127_deg, 2_mps, true, 2_s),
+      CmdClawActivate(-1.0)),
+
+    //BAck To Reef
+    CmdDriveToPoint(3.53_m, -2.3_m, -117_deg, 1_mps, true, 3_s),
 
     CmdPrintText("Auto 2 Right Red Done")
   );

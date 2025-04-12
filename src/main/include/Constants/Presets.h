@@ -43,6 +43,7 @@
 #define PIVOT_FLOOR_CORAL 1.6_tr
 #define PIVOT_FLOOR_ALGAE 1.44_tr
 #define PIVOT_CLOSE_HOME 0.1_tr
+#define PIVOT_PROSESS 1.22_tr
 
 #define ALGAE_POS_HOME 1
 #define ALGAE_POS_SCORE 2
@@ -50,6 +51,7 @@
 #define ALGAE_POS_FLOOR_CORAL 4
 #define ALGAE_POS_FLOOR_ALGAE 5
 #define ALGAE_POS_CLOSE_HOME 6
+#define ALGAE_POS_PROSESS 7
 
 #define PIVOT_HOME_POSITION    0
 #define PIVOT_TOLERANCE        0.05

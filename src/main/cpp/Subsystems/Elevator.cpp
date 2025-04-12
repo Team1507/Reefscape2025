@@ -17,16 +17,16 @@ Elevator::Elevator()
 
   /* Configure Motion Magic */
   ctre::phoenix6::configs::MotionMagicConfigs &mm = cfg.MotionMagic;
-  mm.MotionMagicCruiseVelocity = 13_tps; // 5 (mechanism) rotations per second cruise
-  mm.MotionMagicAcceleration = 15_tr_per_s_sq; // Take approximately 0.5 seconds to reach max vel
+  mm.MotionMagicCruiseVelocity = 10_tps; // 5 (mechanism) rotations per second cruise
+  mm.MotionMagicAcceleration = 13_tr_per_s_sq; // Take approximately 0.5 seconds to reach max vel
   // Take approximately 0.1 seconds to reach max accel 
   mm.MotionMagicJerk = 100_tr_per_s_cu;
 
   ctre::phoenix6::configs::Slot0Configs &slot0 = cfg.Slot0;
   slot0.kS = 0.4; // Add 0.25 V output to overcome static friction
-  slot0.kV = 5.0; // A velocity target of 1 rps results in 0.12 V output
+  slot0.kV = 4.5; // A velocity target of 1 rps results in 0.12 V output
   slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-  slot0.kP = 60.0; // A position error of 0.2 rotations results in 12 V output
+  slot0.kP = 55.0; // A position error of 0.2 rotations results in 12 V output
   slot0.kI = 0.0; // No output for integrated error
   slot0.kD = 0.75; // A velocity error of 1 rps results in 0.5 V output
 
