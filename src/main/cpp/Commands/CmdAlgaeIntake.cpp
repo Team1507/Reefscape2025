@@ -9,7 +9,7 @@ CmdAlgaeIntake::CmdAlgaeIntake(double power)
   : m_power(power) 
   
 {
-  AddRequirements(&robotcontainer.m_pivot);
+  AddRequirements(&robotcontainer.m_algMotor);
 }
 
 void CmdAlgaeIntake::Initialize() {
@@ -19,13 +19,13 @@ void CmdAlgaeIntake::Initialize() {
 
   //Taken out of execute to prevent overwriting the scheduler
   // Force always into Intake Mode
-  m_mode = Mode::Intake;
+  // m_mode = Mode::Intake;
   std::cout << "CmdAlgaeIntake: Mode set to Intake" << std::endl;
-  if (robotcontainer.m_claw.GetAlgaePhotoEye()) {
-    robotcontainer.m_pivot.SetIntakePower(-0.2);  // Creep intake
+  if (robotcontainer.m_algMotor.GetAlgaePhotoEye()) {
+    robotcontainer.m_algMotor.SetIntakePower(-0.2);  // Creep intake
     std::cout << "CmdAlgaeIntake: Algae detected, creeping intake" << std::endl;
   } else {
-    robotcontainer.m_pivot.SetIntakePower(-0.9);  // Full speed intake
+    robotcontainer.m_algMotor.SetIntakePower(-0.9);  // Full speed intake
     std::cout << "CmdAlgaeIntake: Full power intake" << std::endl;
   }
 }
@@ -34,24 +34,17 @@ void CmdAlgaeIntake::Execute() {}
 
 void CmdAlgaeIntake::End(bool interrupted) {
   std::cout << "CmdAlgaeIntake::End" << std::endl;
-  robotcontainer.m_pivot.SetIntakePower(0.0);
+  robotcontainer.m_algMotor.SetIntakePower(-0.05); //Holding Power Adjust as needed
   m_timer.Stop();
-
-   if (robotcontainer.m_claw.GetAlgaePhotoEye()) {
-  //   std::cout << "CmdAlgaeIntake: Un-jamming reverse" << std::endl;
-  //   robotcontainer.m_pivot.SetIntakePower(-0.2);  // Small reverse
-  //   frc::Wait(0.2_s);  // Wait 200ms
-    robotcontainer.m_pivot.SetIntakePower(-0.05); //Holding Power Adjust as needed
-  //   robotcontainer.m_claw.SetBallLoaded(true);
-   }
 }
 
 bool CmdAlgaeIntake::IsFinished() {
   // Finish when the ball is detected
-  if (robotcontainer.m_claw.GetAlgaePhotoEye()) {
+  if (robotcontainer.m_algMotor.GetAlgaePhotoEye()) {
     if(algaeInriment > 1)
     {    
       std::cout << "CmdAlgaeIntake: Ball fully detected, intake finished" << std::endl;
+      //  robotcontainer.m_algMotor.SetIntakePower(-0.05); //Holding Power Adjust as needed
       return true;
     }
     else

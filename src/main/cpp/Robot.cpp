@@ -90,13 +90,13 @@ void Robot::TeleopInit() {
     m_autonomousCommand->Cancel();
   }
 
-  if (!robotcontainer.m_claw.GetAlgaePhotoEye())
+  if (robotcontainer.m_algMotor.GetAlgaePhotoEye())
   {
-    robotcontainer.m_pivot.SetTargetPosition(1);
+    robotcontainer.m_pivot.SetTargetPosition(3);
   }
   else
   {
-    robotcontainer.m_pivot.SetTargetPosition(3);
+    robotcontainer.m_pivot.SetTargetPosition(1);
   }
   
 }

@@ -46,7 +46,7 @@ class Pivot : public frc2::SubsystemBase {
 
   void ResetEncoderValue();
 
-  void SetIntakePower(double power);
+  //void SetIntakePower(double power);
 
 
   bool pivotHome;
@@ -59,7 +59,7 @@ class Pivot : public frc2::SubsystemBase {
  ctre::phoenix6::hardware::TalonFX m_pivotMotor{PIVOT_FALCON_CAN_ID}; 
  ctre::phoenix6::controls::MotionMagicVoltage m_mmPivot{0_tr};
  
- SparkMax  m_algMotor1{PIVOT_CAN_ID, SparkMax::MotorType::kBrushless};
+//  SparkMax  m_algMotor1{PIVOT_CAN_ID, SparkMax::MotorType::kBrushless};
  //SparkMax  m_algMotor2{PIVOT_CAN_ID, SparkMax::MotorType::kBrushless};
 
 };

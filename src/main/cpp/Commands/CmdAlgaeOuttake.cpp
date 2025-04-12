@@ -21,14 +21,14 @@ void CmdAlgaeOuttake::Initialize()
 
 void CmdAlgaeOuttake::Execute() 
 {
-  robotcontainer.m_pivot.SetIntakePower(m_power);
+  robotcontainer.m_algMotor.SetIntakePower(m_power);
 }
 
 void CmdAlgaeOuttake::End(bool interrupted) 
 {
   std::cout << "CmdAlgaeOuttake has ended" << std::endl;
   
-  robotcontainer.m_pivot.SetIntakePower(0.0);
+  robotcontainer.m_algMotor.SetIntakePower(0.0);
   m_timer.Stop(); //Ends the timer
 }
 
@@ -38,7 +38,7 @@ bool CmdAlgaeOuttake::IsFinished()
   if(m_timer.Get() >= timeout)
   {
     return true;
-    robotcontainer.m_pivot.SetIntakePower(0.0);
+    robotcontainer.m_algMotor.SetIntakePower(0.0);
   }
   else 
   {

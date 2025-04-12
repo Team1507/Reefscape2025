@@ -27,6 +27,7 @@
 #include "str/vision/VisionSystem.h"
 #include "Subsystems/LimeLight.h"
 #include "Subsystems/Pivot.h"
+#include "Subsystems/AlgMotor.h"
 
 class RobotContainer {
  public:
@@ -47,6 +48,8 @@ class RobotContainer {
   Drive& GetDrive();
 
   Pivot m_pivot;
+
+  AlgMotor m_algMotor;
 
   LimeLight      m_limelight2{"limelight-vtwo"};   
    

@@ -156,7 +156,6 @@ void RobotContainer::ConfigureBindings()
   driverJoystick.POVRight().OnTrue(new CmdPivotZero());
   
  driverJoystick.A().OnTrue(new CmdDriveClearAll());
-  m_topDriver.X().OnTrue(new CmdPivotZero());
 
 // Assume these button objects are stored persistently (here as local constants)
 const auto aButton       = m_topDriver.A();
@@ -180,12 +179,12 @@ altPovDown.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_
 frc2::Trigger altPovLeft([=]() {
   return aButton.Get() && povLeftButton.Get();
 });
-altPovLeft.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_ALG_HIGH), CmdPivotToPos(ALGAE_POS_BARGE)));
+altPovLeft.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_ALG_HIGH), CmdPivotToPos(ALGAE_POS_BARGE), CmdAlgaeIntake(-1.0)));
 
 frc2::Trigger altPovRight([=]() {
   return aButton.Get() && povRightButton.Get();
 });
-altPovRight.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_BARGE)));
+altPovRight.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_BARGE), CmdAlgaeIntake(-1.0)));
 // Normal D-pad bindings (fire only when A and X is NOT pressed)
 frc2::Trigger normalPovUp([=]() {
   return !aButton.Get() && !xButton.Get() && povUpButton.Get();
@@ -221,12 +220,12 @@ xltPovDown.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_
 frc2::Trigger xltPovLeft([=]() {
   return xButton.Get() && povLeftButton.Get();
 });
-xltPovLeft.OnTrue(new CmdElevatorToPosition(ELEV_POS_L1));
+xltPovLeft.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_SCORE)));
 
 frc2::Trigger xltPovRight([=]() {
   return xButton.Get() && povRightButton.Get();
 });
-xltPovRight.OnTrue(new frc2::ParallelCommandGroup( CmdPivotToPos(ALGAE_POS_FLOOR_CORAL)));
+xltPovRight.OnTrue(new frc2::ParallelCommandGroup(CmdPivotToPos(ALGAE_POS_FLOOR_CORAL), CmdElevatorToPosition(ELEV_POS_HOME)));
 
 m_topDriver.RightBumper().OnTrue(new CmdPivotToPos(3));
 m_topDriver.LeftBumper().OnTrue(new CmdPivotToPos(2));

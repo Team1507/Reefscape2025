@@ -24,32 +24,7 @@ class Claw : public frc2::SubsystemBase {
   bool GetClawPhotoEyeFirst(void);
 
   bool IsCoralReady();
-
-/// --- ALGAE INTAKE ---
-  void SetAlgaePower(double power);
-
-  double GetAlgaePower();
-
-  float GetAlgaeCurrent();
-  float GetAlgaeTemp();
-
-  bool GetAlgaePhotoEye();
-
- // --- ALGAE PIVOT ---
-  //void SetPosition(double position);
-  void   SetPower(double power);
-
-  // double GetPosition();
   
-  // void ZeroEncoder(void);
-
-  // float GetPivotCurrent();
-  // float GetPivotTemp();
-
-  bool IsBallLoaded() const;
-  void SetBallLoaded(bool loaded);
-  
-  bool m_ballLoaded = false;
   bool m_clawStop = false;
   
   bool isCoralReady;
@@ -62,7 +37,7 @@ class Claw : public frc2::SubsystemBase {
 
 
   frc::DigitalInput         m_armPhotoeyeFirst  {CLAW_PHOTO_EYE_FIRST};
-  frc::DigitalInput         m_algaePhotoEye     {ALGAE_PHOTO_EYE};
+  // frc::DigitalInput         m_algaePhotoEye     {ALGAE_PHOTO_EYE};
 
   
 

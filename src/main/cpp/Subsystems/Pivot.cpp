@@ -11,19 +11,19 @@
 Pivot::Pivot() 
 {
 
-  SparkMaxConfig Algconfig{};
-  SparkMaxConfig AlgFollowerConfig{};
+  // SparkMaxConfig Algconfig{};
+  // SparkMaxConfig AlgFollowerConfig{};
 
-    Algconfig
-        .Inverted(false)
-        .SetIdleMode(SparkMaxConfig::IdleMode::kBrake)
-        .SmartCurrentLimit(18);
+  //   Algconfig
+  //       .Inverted(false)
+  //       .SetIdleMode(SparkMaxConfig::IdleMode::kBrake)
+  //       .SmartCurrentLimit(18);
 
-    AlgFollowerConfig.Apply(Algconfig).Follow(m_algMotor1, true);
+  //   AlgFollowerConfig.Apply(Algconfig).Follow(m_algMotor1, true);
         
-    m_algMotor1.Configure(Algconfig,
-     SparkMax::ResetMode::kResetSafeParameters,
-     SparkMax::PersistMode::kPersistParameters);
+  //   m_algMotor1.Configure(Algconfig,
+  //    SparkMax::ResetMode::kResetSafeParameters,
+  //    SparkMax::PersistMode::kPersistParameters);
 
     // m_algMotor2.Configure(AlgFollowerConfig,
     //  SparkMax::ResetMode::kResetSafeParameters,
@@ -106,9 +106,9 @@ void Pivot::SetTargetPosition(int position)
     //move elevator home
     targetPosition = PIVOT_POSITION_HOME;
   }
-  else if (position == ALGAE_POS_INTAKE)
+  else if (position == ALGAE_POS_SCORE)
   {
-    targetPosition = PIVOT_POSITION_INTAKE;
+    targetPosition = PIVOT_POSITION_SCORE;
     
   }
   else if (position == ALGAE_POS_BARGE)
@@ -154,8 +154,8 @@ void Pivot::ResetEncoderValue()
   m_pivotMotor.SetPosition(0_tr);
 }
 
-void Pivot::SetIntakePower(double power)
-{
-    // Set the algae intake motor power
-   m_algMotor1.Set(power);
-}
+// void Pivot::SetIntakePower(double power)
+// {
+//     // Set the algae intake motor power
+//    m_algMotor1.Set(power);
+// }

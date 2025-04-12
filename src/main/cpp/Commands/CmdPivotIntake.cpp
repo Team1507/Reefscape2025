@@ -24,7 +24,7 @@ void CmdPivotIntake::Initialize()
   m_timer.Reset(); //Resets the timer
   m_timer.Start(); //Starts the timer
 
-  robotcontainer.m_pivot.SetIntakePower(m_power);
+  robotcontainer.m_algMotor.SetIntakePower(m_power);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -34,13 +34,13 @@ void CmdPivotIntake::Execute() {}
 void CmdPivotIntake::End(bool interrupted) 
 {
   std::cout << "CmdPivotIntake has ended" << std::endl;
-  robotcontainer.m_pivot.SetIntakePower(0); //Stop the intake
+  robotcontainer.m_algMotor.SetIntakePower(0); //Stop the intake
   m_timer.Stop(); //Stop the timer
 }
 
 // Returns true when the command should end.
 bool CmdPivotIntake::IsFinished() {
-   const units::second_t timeout = units::second_t(1.5);
+   const units::second_t timeout = units::second_t(0.5);
   if(m_timer.Get() >= timeout)
   {
     return true;

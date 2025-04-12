@@ -16,12 +16,6 @@ Claw::Claw()
      SparkMax::ResetMode::kResetSafeParameters,
      SparkMax::PersistMode::kPersistParameters);
 
-
-
-
-    frc::SmartDashboard::PutNumber("Pivot Current", GetAlgaeCurrent());
-    frc::SmartDashboard::PutNumber("Pivot Temp", GetAlgaeTemp());
-
 }
 
 // This method will be called once per scheduler run
@@ -29,7 +23,7 @@ void Claw::Periodic()
 {
     frc::SmartDashboard::PutBoolean("Claw Photo Eye", GetClawPhotoEyeFirst());
 
-    frc::SmartDashboard::PutBoolean("Algae Photo Eye", GetAlgaePhotoEye()); 
+   // frc::SmartDashboard::PutBoolean("Algae Photo Eye", GetAlgaePhotoEye()); 
     
     frc::SmartDashboard::PutBoolean("Coral", IsCoralReady()); 
 
@@ -56,38 +50,4 @@ bool Claw::GetClawPhotoEyeFirst(void)
 bool Claw::IsCoralReady()
 {
     return isCoralReady;
-}
-
-// --- ALGAE INTAKE ---
-
-float Claw::GetAlgaeCurrent()
-{
-    return m_claw.GetOutputCurrent();
-}
-bool Claw::GetAlgaePhotoEye()
-{
-    return m_algaePhotoEye.Get();
-}
-float Claw::GetAlgaeTemp()
-{
-    return m_claw.GetMotorTemperature();
-}
-double Claw::GetAlgaePower()
-{
-    return m_claw.Get();
-}
-
-void Claw::SetAlgaePower(double power)
-{
-    m_claw.Set(power);
-}
-
- bool Claw::IsBallLoaded() const 
-{
-  return m_ballLoaded;
-}
-
-void Claw::SetBallLoaded(bool loaded)
-{
-    m_ballLoaded = loaded;
 }
