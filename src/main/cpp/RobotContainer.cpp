@@ -169,7 +169,7 @@ const auto povRightButton= m_topDriver.POVRight();
 frc2::Trigger altPovUp([=]() {
   return aButton.Get() && povUpButton.Get();
 });
-altPovUp.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_BARGE)));
+altPovUp.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_BARGE), CmdPivotToPos(ALGAE_POS_BARGE)));
 
 frc2::Trigger altPovDown([=]() {
   return aButton.Get() && povDownButton.Get();

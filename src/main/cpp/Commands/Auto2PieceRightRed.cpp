@@ -26,7 +26,7 @@ Auto2PieceRightRed::Auto2PieceRightRed()
     //Score coral
     CmdElevatorToPosition(3),
     //CmdDriveToPoint(2.45_m, -2.48_m, -60_deg, 1_mps, true, 3_s), //was 2.48, -2.47 //then 2.28, -2.57 //then 2.38, -2.52 //then 2.43, -2.5 //then 2.46, -2.48
-    CmdDriveToPoint(2.40_m, -2.51_m, -60_deg, 1_mps, true, 3_s),
+    CmdDriveToPoint(2.43_m, -2.5_m, -60_deg, 1_mps, true, 3_s), //2.40_m, -2.51_m
     CmdWait(0.65),
     CmdClawOuttake(-1.0),
     CmdElevatorToPosition(1),
@@ -36,7 +36,7 @@ Auto2PieceRightRed::Auto2PieceRightRed()
     CmdDriveToPoint(3.7_m, -1.4_m, -60_deg, 3.5_mps, false, 5_s),
     CmdDriveToPoint(6_m, -0.8_m, -125_deg, 3_mps, false, 5_s),
     frc2::ParallelCommandGroup(   
-    CmdDriveToPoint(6.6_m, -0.35_m, -127_deg, 1.25_mps, true, 2_s),
+    CmdDriveToPoint(6.75_m, -0.25_m, -127_deg, 1.25_mps, true, 2_s),
     CmdClawActivate(-1.0)
     ),
  
@@ -46,11 +46,12 @@ Auto2PieceRightRed::Auto2PieceRightRed()
     CmdClawActivate(-1.0),
     CmdDriveToPoint(6_m, -0.6_m, -120_deg, 1.5_mps, false, 3_s)
     ),
-    CmdDriveToPoint(4.8_m, -1.8_m, -120_deg, 3_mps, false, 3_s),
-    frc2::ParallelCommandGroup(
+    frc2::ParallelCommandGroup( CmdDriveToPoint(4.8_m, -1.8_m, -120_deg, 3_mps, false, 3_s),
+    CmdClawActivate(-1)),
+    //frc2::ParallelCommandGroup(
     //CmdClawActivate(-1.0),
-    CmdElevatorToPosition(4)
-    ),
+    CmdElevatorToPosition(4),
+    //),
     //CmdDriveToPoint(4.1_m, -2.25_m, -120_deg, 1.5_mps, false, 3_s),
     CmdDriveToPoint(4.2_m, -2.3_m, -120_deg, 1.5_mps, false, 3_s),
 
