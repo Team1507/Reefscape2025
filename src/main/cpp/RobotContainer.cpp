@@ -174,17 +174,17 @@ altPovUp.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_BA
 frc2::Trigger altPovDown([=]() {
   return aButton.Get() && povDownButton.Get();
 });
-altPovDown.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_BARGE)));
+altPovDown.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_INTAKE)));
 
 frc2::Trigger altPovLeft([=]() {
   return aButton.Get() && povLeftButton.Get();
 });
-altPovLeft.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_ALG_HIGH), CmdPivotToPos(ALGAE_POS_BARGE), CmdAlgaeIntake(-1.0)));
+altPovLeft.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_ALG_HIGH), CmdPivotToPos(ALGAE_POS_INTAKE), CmdAlgaeIntake(-1.0)));
 
 frc2::Trigger altPovRight([=]() {
   return aButton.Get() && povRightButton.Get();
 });
-altPovRight.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_BARGE), CmdAlgaeIntake(-1.0)));
+altPovRight.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_INTAKE), CmdAlgaeIntake(-1.0)));
 // Normal D-pad bindings (fire only when A and X is NOT pressed)
 frc2::Trigger normalPovUp([=]() {
   return !aButton.Get() && !xButton.Get() && povUpButton.Get();
@@ -215,7 +215,7 @@ xltPovUp.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HO
 frc2::Trigger xltPovDown([=]() {
   return xButton.Get() && povDownButton.Get();
 });
-xltPovDown.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_BARGE)));
+xltPovDown.OnTrue(new frc2::ParallelCommandGroup(CmdElevatorToPosition(ELEV_POS_HOME), CmdPivotToPos(ALGAE_POS_INTAKE)));
 
 frc2::Trigger xltPovLeft([=]() {
   return xButton.Get() && povLeftButton.Get();
@@ -227,7 +227,7 @@ frc2::Trigger xltPovRight([=]() {
 });
 xltPovRight.OnTrue(new frc2::ParallelCommandGroup(CmdPivotToPos(ALGAE_POS_FLOOR_CORAL), CmdElevatorToPosition(ELEV_POS_HOME)));
 
-m_topDriver.RightBumper().OnTrue(new CmdPivotToPos(3));
+m_topDriver.RightBumper().OnTrue(new CmdPivotToPos(ALGAE_POS_BARGE));
 m_topDriver.LeftBumper().OnTrue(new CmdPivotToPos(7));
 }
 

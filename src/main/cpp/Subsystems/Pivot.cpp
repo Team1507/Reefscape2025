@@ -134,6 +134,10 @@ void Pivot::SetTargetPosition(int position)
   {
     targetPosition = PIVOT_PROSESS;
   }
+  else if (position == ALGAE_POS_INTAKE)
+  {
+    targetPosition = PIVOT_INTAKE;
+  }
 
   m_pivotMotor.SetControl(m_mmPivot.WithPosition(targetPosition));
 

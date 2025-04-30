@@ -21,6 +21,7 @@ void CmdClawActivate::Initialize() {
   // Force the command to always run in Intake mode
   m_operationMode = OperationMode::Intake;
   currentState = ClawState::RunClawFull;
+  robotcontainer.m_algMotor.SetIntakePower(0);
   std::cout << "CmdClawActivate: Mode set to Intake" << std::endl;
 }
 
