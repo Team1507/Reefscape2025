@@ -105,16 +105,16 @@ void RobotContainer::ConfigureBindings()
    driveSub.SetDefaultCommand(driveSub.DriveTeleop(
       [this] {
         return str::NegateIfRed(
-            frc::ApplyDeadband<double>(-driverJoystick.GetLeftY() * .3, .025) *
+            frc::ApplyDeadband<double>(-driverJoystick.GetLeftY(), .025) *
             consts::swerve::physical::PHY_CHAR.MaxLinearSpeed());
       },
       [this] {
         return str::NegateIfRed(
-            frc::ApplyDeadband<double>(-driverJoystick.GetLeftX() * .3, .025) *
+            frc::ApplyDeadband<double>(-driverJoystick.GetLeftX(), .025) *
             consts::swerve::physical::PHY_CHAR.MaxLinearSpeed());
       },
       [this] {
-        return frc::ApplyDeadband<double>(-driverJoystick.GetRightX() * .3, .025) *
+        return frc::ApplyDeadband<double>(-driverJoystick.GetRightX(), .025) *
                360_deg_per_s;
       }));
 
