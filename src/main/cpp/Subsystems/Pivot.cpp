@@ -2,6 +2,7 @@
 #include "Constants/Constants.h"
 #include "constants/Presets.h"
 #include <iostream>
+#include <cmath>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <units/angle.h>
 #include <rev/SparkMax.h>
@@ -32,7 +33,17 @@ Pivot::Pivot()
   
 
     ctre::phoenix6::configs::TalonFXConfiguration cfg{};
+   // ctre::phoenix6::configs::CANcoderConfiguration canCoderCfg{};
   
+    //Encocder Config
+ // canCoderCfg.MagnetSensor.MagnetOffset = 0.0_tr;  // adjust if needed to zero the sensor
+  //canCoderCfg.MagnetSensor.SensorDirection = ctre::phoenix6::signals::SensorDirectionValue::CounterClockwise_Positive;
+
+
+
+  // cfg.Feedback.FeedbackSensorSource = ctre::phoenix6::signals::FeedbackSensorSourceValue::FusedCANcoder;
+   // cfg.Feedback.FeedbackRemoteSensorID = m_pivotCancoder.GetDeviceID(); // CANCoder ID for the pivot motor
+
    m_pivotMotor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
   /* Configure gear ratio */
@@ -73,7 +84,7 @@ void Pivot::Periodic()
 
   frc::SmartDashboard::PutNumber("Pivot position", GetPivotPosition());
   frc::SmartDashboard::PutNumber("Pivot Temp", GetTemperature());
-
+  frc::SmartDashboard::PutNumber("Encoder Pos", std::round(GetEncoderPosition() * 1000.0) / 1000.0);
 }
 
 
@@ -96,6 +107,12 @@ double Pivot::GetPivotPosition()
 {
   return m_pivotMotor.GetPosition().GetValueAsDouble();
 }
+
+double Pivot::GetEncoderPosition()
+{
+  return m_pivotCancoder.GetPosition().GetValueAsDouble();
+}
+
 
 void Pivot::SetTargetPosition(int position)
 {

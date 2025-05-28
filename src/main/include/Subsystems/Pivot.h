@@ -6,6 +6,8 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <ctre/phoenix6/TalonFX.hpp>
+#include <ctre/phoenix6/core/CoreCANcoder.hpp>
+#include "ctre/phoenix6/CANcoder.hpp"
 #include <ctre/phoenix6/controls/MotionMagicVoltage.hpp>
 #include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
@@ -14,6 +16,7 @@
 #include "constants/Constants.h"
 #include "constants/Presets.h"
 #include <units/angle.h>
+
 
 using namespace rev::spark;
 
@@ -27,6 +30,8 @@ class Pivot : public frc2::SubsystemBase {
   void Periodic() override;
 
   double GetPivotPosition();
+
+  double GetEncoderPosition();
 
   void SetPosition(double position);
 
@@ -58,6 +63,8 @@ class Pivot : public frc2::SubsystemBase {
 
  ctre::phoenix6::hardware::TalonFX m_pivotMotor{PIVOT_FALCON_CAN_ID}; 
  ctre::phoenix6::controls::MotionMagicVoltage m_mmPivot{0_tr};
+
+ ctre::phoenix6::hardware::CANcoder m_pivotCancoder{CANCODER_PIVOT_ID};
  
 //  SparkMax  m_algMotor1{PIVOT_CAN_ID, SparkMax::MotorType::kBrushless};
  //SparkMax  m_algMotor2{PIVOT_CAN_ID, SparkMax::MotorType::kBrushless};

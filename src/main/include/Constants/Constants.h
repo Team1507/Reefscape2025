@@ -39,6 +39,7 @@ inline constexpr frc::Transform2d CLAW_TRANS_R{0_m, CLAW_OFFSET_R,
 //Pivot
 #define ALG_MOTOR_CAN_ID                25
 #define PIVOT_FALCON_CAN_ID         51
+#define CANCODER_PIVOT_ID          43
 
 
 
