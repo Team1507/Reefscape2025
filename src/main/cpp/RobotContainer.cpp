@@ -118,23 +118,23 @@ void RobotContainer::ConfigureBindings()
                360_deg_per_s;
       }));
 
-  driverJoystick.RightTrigger(0.5).WhileTrue(robotcontainer.driveSub.DriveTeleop([this] {
-        return str::NegateIfRed(
-            frc::ApplyDeadband<double>(-driverJoystick.GetLeftY(), .025) *
-           consts::swerve::physical::DRIVE_CREEP_SPEED);
-      },
-      [this] {
-        return str::NegateIfRed(
-            frc::ApplyDeadband<double>(-driverJoystick.GetLeftX(), .025) *
-            consts::swerve::physical::DRIVE_CREEP_SPEED);
-      },
-      [this] {
-        return frc::ApplyDeadband<double>(-driverJoystick.GetRightX(), .025) *
-               200_deg_per_s;
-      }));
+  // driverJoystick.RightTrigger(0.5).WhileTrue(robotcontainer.driveSub.DriveTeleop([this] {
+  //       return str::NegateIfRed(
+  //           frc::ApplyDeadband<double>(-driverJoystick.GetLeftY(), .025) *
+  //          consts::swerve::physical::DRIVE_CREEP_SPEED);
+  //     },
+  //     [this] {
+  //       return str::NegateIfRed(
+  //           frc::ApplyDeadband<double>(-driverJoystick.GetLeftX(), .025) *
+  //           consts::swerve::physical::DRIVE_CREEP_SPEED);
+  //     },
+  //     [this] {
+  //       return frc::ApplyDeadband<double>(-driverJoystick.GetRightX(), .025) *
+  //              200_deg_per_s;
+  //     }));
 
-  driverJoystick.X().WhileTrue(new CmdAlignToAprilTag(true));
-  driverJoystick.B().WhileTrue(new CmdAlignToAprilTag(false));
+  // driverJoystick.X().WhileTrue(new CmdAlignToAprilTag(true));
+  // driverJoystick.B().WhileTrue(new CmdAlignToAprilTag(false));
 
   //Climber
   //m_topDriver.Y().WhileTrue(new CmdClimberActivate(frc::SmartDashboard::PutNumber("Climber Power", 0.35)));
@@ -144,26 +144,27 @@ void RobotContainer::ConfigureBindings()
 
   //Coral
   driverJoystick.RightBumper().WhileTrue(new CmdClawOuttake(-1.0));
-  m_topDriver.RightTrigger(0.5).OnTrue(new CmdClawActivate(-1.0));
-  driverJoystick.LeftTrigger(0.5).WhileTrue(new CmdClawStop());
+  driverJoystick.RightTrigger(0.5).OnTrue(new CmdClawActivate(-1.0));
+  m_topDriver.LeftTrigger(0.5).WhileTrue(new CmdClawStop());
   
   //Algae
   //m_topDriver.LeftBumper().WhileTrue(new CmdAlgaeOuttake(frc::SmartDashboard::PutNumber("AlgaeOut Power", 1)));
   // driverJoystick.LeftBumper().OnTrue(new CmdAlgaeOuttake(1.0));
   driverJoystick.LeftBumper().WhileTrue(new CmdPivotIntake(1));
   // m_topDriver.LeftTrigger().WhileTrue(new CmdPivotIntake(-1));
-  m_topDriver.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
-  driverJoystick.POVRight().OnTrue(new CmdPivotZero());
+  driverJoystick.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
+  m_topDriver.POVRight().OnTrue(new CmdPivotZero());
   
  driverJoystick.A().OnTrue(new CmdDriveClearAll());
 
 // Assume these button objects are stored persistently (here as local constants)
-const auto aButton       = m_topDriver.A();
-const auto xButton       = m_topDriver.X();
-const auto povUpButton   = m_topDriver.POVUp();
-const auto povDownButton = m_topDriver.POVDown();
-const auto povLeftButton = m_topDriver.POVLeft();
-const auto povRightButton= m_topDriver.POVRight();
+
+const auto aButton       = driverJoystick.A();
+const auto xButton       = driverJoystick.X();
+const auto povUpButton   = driverJoystick.POVUp();
+const auto povDownButton = driverJoystick.POVDown();
+const auto povLeftButton = driverJoystick.POVLeft();
+const auto povRightButton= driverJoystick.POVRight();
 
 // Mode Shift 1 bindings (only fire when A is pressed)
 frc2::Trigger altPovUp([=]() {
