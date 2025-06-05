@@ -155,7 +155,7 @@ void RobotContainer::ConfigureBindings()
   driverJoystick.LeftTrigger(0.5).OnTrue(new CmdAlgaeIntake(-1.0));
   m_topDriver.POVRight().OnTrue(new CmdPivotZero());
   
- driverJoystick.A().OnTrue(new CmdDriveClearAll());
+ m_topDriver.A().OnTrue(new CmdDriveClearAll());
 
 // Assume these button objects are stored persistently (here as local constants)
 
