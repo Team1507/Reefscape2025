@@ -9,65 +9,59 @@
 #include <rev/config/SparkMaxConfig.h>
 
 
-Pivot::Pivot() 
-{
+Pivot::Pivot() {
+    // === CANcoder Configuration ===
+//    ctre::phoenix6::configs::CANcoderConfiguration canCoderCfg{};
 
-  // SparkMaxConfig Algconfig{};
-  // SparkMaxConfig AlgFollowerConfig{};
+    // Set direction (e.g., CCW positive)
+    // canCoderCfg.MagnetSensor.SensorDirection =
+    //     ctre::phoenix6::signals::SensorDirectionValue::Clockwise_Positive;
 
-  //   Algconfig
-  //       .Inverted(false)
-  //       .SetIdleMode(SparkMaxConfig::IdleMode::kBrake)
-  //       .SmartCurrentLimit(18);
+    // // (Optional) Adjust magnet offset if needed to zero position
+    // // canCoderCfg.MagnetSensor.MagnetOffset = 0.0_tr;
 
-  //   AlgFollowerConfig.Apply(Algconfig).Follow(m_algMotor1, true);
-        
-  //   m_algMotor1.Configure(Algconfig,
-  //    SparkMax::ResetMode::kResetSafeParameters,
-  //    SparkMax::PersistMode::kPersistParameters);
+    // // Apply CANCoder config
+    // ctre::phoenix::StatusCode canStatus = ctre::phoenix::StatusCode::StatusCodeNotInitialized;
+    // for (int i = 0; i < 5; ++i) {
+    //     canStatus = m_pivotCancoder.GetConfigurator().Apply(canCoderCfg);
+    //     if (canStatus.IsOK()) break;
+    // }
+    // if (!canStatus.IsOK()) {
+    //     std::cout << "Failed to configure CANCoder: " << canStatus.GetName() << std::endl;
+    // }
 
-    // m_algMotor2.Configure(AlgFollowerConfig,
-    //  SparkMax::ResetMode::kResetSafeParameters,
-    //  SparkMax::PersistMode::kPersistParameters);
-
-  
-
+    // === TalonFX Configuration ===
     ctre::phoenix6::configs::TalonFXConfiguration cfg{};
-   // ctre::phoenix6::configs::CANcoderConfiguration canCoderCfg{};
-  
-    //Encocder Config
- // canCoderCfg.MagnetSensor.MagnetOffset = 0.0_tr;  // adjust if needed to zero the sensor
-  //canCoderCfg.MagnetSensor.SensorDirection = ctre::phoenix6::signals::SensorDirectionValue::CounterClockwise_Positive;
 
+    // Use fused CANCoder as the feedback source
+  //  cfg.Feedback.FeedbackSensorSource =
+       // ctre::phoenix6::signals::FeedbackSensorSourceValue::FusedCANcoder;
+   // cfg.Feedback.FeedbackRemoteSensorID = m_pivotCancoder.GetDeviceID();
+   // cfg.Feedback.RotorToSensorRatio = 12.8;
+    
 
+    // Set the gear ratio: number of motor rotations per mechanism rotation
+    cfg.Feedback.SensorToMechanismRatio = 12.8;
 
-  // cfg.Feedback.FeedbackSensorSource = ctre::phoenix6::signals::FeedbackSensorSourceValue::FusedCANcoder;
-   // cfg.Feedback.FeedbackRemoteSensorID = m_pivotCancoder.GetDeviceID(); // CANCoder ID for the pivot motor
+    // Set neutral mode to brake
+    m_pivotMotor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
 
-   m_pivotMotor.SetNeutralMode(ctre::phoenix6::signals::NeutralModeValue::Brake);
+    // === Motion Magic Configuration ===
+    ctre::phoenix6::configs::MotionMagicConfigs &mm = cfg.MotionMagic;
+    mm.MotionMagicCruiseVelocity = 3_tps;             // 5 rotations per second
+    mm.MotionMagicAcceleration = 6.0_tr_per_s_sq;     // ~0.5 sec to max velocity
+    mm.MotionMagicJerk = 90_tr_per_s_cu;             // ~0.1 sec to max accel
 
-  /* Configure gear ratio */
-  ctre::phoenix6::configs::FeedbackConfigs &fdb = cfg.Feedback;
-  fdb.SensorToMechanismRatio = 12.8; // 12.8 rotor rotations per mechanism rotation
+    // === Slot 0 PID Config ===
+    ctre::phoenix6::configs::Slot0Configs &slot0 = cfg.Slot0;
+    slot0.kS = 0.4;
+    slot0.kV = 0.75;
+    slot0.kA = 0.01;
+    slot0.kP = 55.0;
+    slot0.kI = 0.0;
+    slot0.kD = 0.5;
 
-  /* Configure Motion Magic */
-  ctre::phoenix6::configs::MotionMagicConfigs &mm = cfg.MotionMagic;
-  mm.MotionMagicCruiseVelocity = 5_tps; // 5 (mechanism) rotations per second cruise
-  mm.MotionMagicAcceleration = 7.5_tr_per_s_sq; // Take approximately 0.5 seconds to reach max vel
-  // Take approximately 0.1 seconds to reach max accel 
-  mm.MotionMagicJerk = 100_tr_per_s_cu;
-
-
-  //READ THIS COMMENT: This is the same config as the elevator, WILL NEED TO BE TUNED
-  ctre::phoenix6::configs::Slot0Configs &slot0 = cfg.Slot0;
-  slot0.kS = 0.4; // Add 0.25 V output to overcome static friction
-  slot0.kV = 0.75; // A velocity target of 1 rps results in 0.12 V output
-  slot0.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
-  slot0.kP = 45.0; // A position error of 0.2 rotations results in 12 V output
-  slot0.kI = 0.0; // No output for integrated error
-  slot0.kD = 0.5; // A velocity error of 1 rps results in 0.5 V output
-  
-
+    // Apply TalonFX configuration
   ctre::phoenix::StatusCode status = ctre::phoenix::StatusCode::StatusCodeNotInitialized;
   for (int i = 0; i < 5; ++i) {
     status = m_pivotMotor.GetConfigurator().Apply(cfg);
@@ -78,10 +72,11 @@ Pivot::Pivot()
   }
 }
 
+
+
 // This method will be called once per scheduler run
 void Pivot::Periodic() 
 {
-
   frc::SmartDashboard::PutNumber("Pivot position", GetPivotPosition());
   frc::SmartDashboard::PutNumber("Pivot Temp", GetTemperature());
   frc::SmartDashboard::PutNumber("Encoder Pos", std::round(GetEncoderPosition() * 1000.0) / 1000.0);
@@ -116,6 +111,7 @@ double Pivot::GetEncoderPosition()
 
 void Pivot::SetTargetPosition(int position)
 {
+    //double canTurns = m_pivotCancoder.GetPosition().GetValueAsDouble(); 
     pivotHome = pivotOpen = false;
 
   if (position == ALGAE_POS_HOME)
@@ -156,7 +152,7 @@ void Pivot::SetTargetPosition(int position)
     targetPosition = PIVOT_INTAKE;
   }
 
-  m_pivotMotor.SetControl(m_mmPivot.WithPosition(targetPosition));
+ m_pivotMotor.SetControl(m_mmPivot.WithPosition({targetPosition}));
 
 }
 

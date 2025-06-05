@@ -58,3 +58,4 @@
 #define PIVOT_HOME_POSITION    0
 #define PIVOT_TOLERANCE        0.05
 #define PIVOT_MANUAL_POWER     0.3
+

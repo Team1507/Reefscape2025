@@ -65,6 +65,7 @@ void Elevator::Periodic()
   frc::SmartDashboard::PutBoolean("Elevator High Algae", elevatorHighAlgae);
   frc::SmartDashboard::PutBoolean("Elevator All Clear", isElevatorClearForPivot());
 
+  
 
 }
 
